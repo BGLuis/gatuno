@@ -12,6 +12,7 @@ import { AppConfigService } from 'src/app-config/app-config.service';
 import { Role } from 'src/users/entitys/role.entity';
 import { StoredTokenDto } from './dto/stored-token.dto';
 import { JwtPayloadBuilder } from './builders/jwt-payload.builder';
+import type { StringValue } from 'ms';
 
 @Injectable()
 export class AuthService {
@@ -100,14 +101,14 @@ export class AuthService {
                 payload,
                 {
                     secret: this.configService.jwtAccessSecret,
-                    expiresIn: this.configService.jwtAccessExpiration,
+                    expiresIn: this.configService.jwtAccessExpiration as StringValue,
                 },
             ),
             this.jwtService.signAsync(
                 payload,
                 {
                     secret: this.configService.jwtRefreshSecret,
-                    expiresIn: this.configService.jwtRefreshExpiration,
+                    expiresIn: this.configService.jwtRefreshExpiration as StringValue,
                 },
             ),
         ]);

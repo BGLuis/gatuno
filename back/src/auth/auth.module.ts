@@ -13,6 +13,7 @@ import { JwtAuthGuard } from './guard/jwt-auth.guard';
 import { WsJwtGuard } from './guard/ws-jwt.guard';
 import { PassportModule } from '@nestjs/passport';
 import { DataEncryptionProvider } from 'src/encryption/data-encryption.provider';
+import type { StringValue } from 'ms';
 import { JwtRefreshStrategy } from './strategy/jwt-refresh.strategy';
 import { CreateAdminEvent } from './events/create-admin.event';
 import { Role } from 'src/users/entitys/role.entity';
@@ -29,7 +30,7 @@ import { Role } from 'src/users/entitys/role.entity';
       useFactory: async (appConfigService: AppConfigService) => ({
         secret: appConfigService.jwtAccessSecret,
         signOptions: {
-          expiresIn: appConfigService.jwtAccessExpiration,
+          expiresIn: appConfigService.jwtAccessExpiration as StringValue,
         },
       }),
     }),
