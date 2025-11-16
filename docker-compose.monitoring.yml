@@ -3,7 +3,7 @@ version: '3.8'
 services:
   # Prometheus - Coleta de métricas
   prometheus:
-    image: prom/prometheus:latest
+    image: prom/prometheus:v3.1.0
     container_name: gatuno-prometheus
     volumes:
       - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml
@@ -24,7 +24,7 @@ services:
 
   # Grafana - Visualização de métricas
   grafana:
-    image: grafana/grafana:latest
+    image: grafana/grafana:11.4.0
     container_name: gatuno-grafana
     environment:
       - GF_SECURITY_ADMIN_USER=admin
@@ -46,7 +46,7 @@ services:
 
   # AlertManager (opcional) - Gerenciamento de alertas
   alertmanager:
-    image: prom/alertmanager:latest
+    image: prom/alertmanager:v0.28.0
     container_name: gatuno-alertmanager
     volumes:
       - ./monitoring/alertmanager.yml:/etc/alertmanager/alertmanager.yml

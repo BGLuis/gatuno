@@ -43,7 +43,7 @@ services:
       - "traefik.docker.network=traefik_traefik-proxy-net"
       - "traefik.http.services.api.loadbalancer.server.port=3000"
   redis:
-    image: "redis:8.0-alpine"
+    image: "redis:7.4-alpine"
     container_name: gatuno-redis
     restart: always
     command: redis-server
@@ -53,7 +53,7 @@ services:
       - gatuno-net
 
   redis-commander:
-    image: ghcr.io/joeferner/redis-commander:latest
+    image: ghcr.io/joeferner/redis-commander:0.8.1
     container_name: gatuno-redis-commander
     environment:
       - REDIS_HOSTS=local:redis:6379
@@ -65,7 +65,7 @@ services:
       - gatuno-net
 
   database-master:
-    image: mysql:8.0
+    image: mysql:8.4
     container_name: gatuno-database
     restart: always
     healthcheck:
@@ -90,7 +90,7 @@ services:
       - gatuno-net
 
   database-slave-1:
-    image: mysql:8.0
+    image: mysql:8.4
     container_name: gatuno-database-slave-1
     restart: always
     ports:
@@ -111,7 +111,7 @@ services:
       - gatuno-net
 
   database-slave-2:
-    image: mysql:8.0
+    image: mysql:8.4
     container_name: gatuno-database-slave-2
     restart: always
     ports:
@@ -132,7 +132,7 @@ services:
       - gatuno-net
 
   phpmyadmin:
-    image: phpmyadmin/phpmyadmin
+    image: phpmyadmin:5.2
     container_name: gatuno-phpmyadmin
     ports:
       - "${PHPMYADMIN_PORT}:80"
@@ -146,7 +146,7 @@ services:
       - gatuno-net
 
   selenium-hub:
-    image: selenium/hub:latest
+    image: selenium/hub:4.27
     restart: always
     ports:
       - "${SELENIUM_HUB_PORT_1}:4442"
@@ -158,7 +158,7 @@ services:
     - gatuno-net
 
   node-docker:
-    image: selenium/node-docker:latest
+    image: selenium/node-docker:4.27.0
     restart: always
     shm_size: 5g
     depends_on:
