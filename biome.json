@@ -1,0 +1,90 @@
+{
+    "$schema": "https://biomejs.dev/schemas/1.9.4/schema.json",
+    "organizeImports": {
+        "enabled": true
+    },
+    "linter": {
+        "enabled": true,
+        "rules": {
+            "recommended": true,
+            "complexity": {
+                "noExcessiveCognitiveComplexity": {
+                    "level": "warn",
+                    "options": {
+                        "maxAllowedComplexity": 15
+                    }
+                },
+                "noVoid": "off",
+                "useLiteralKeys": "off"
+            },
+            "correctness": {
+                "noUnusedImports": "warn",
+                "noUnusedVariables": "warn",
+                "useExhaustiveDependencies": "warn",
+                "noUndeclaredVariables": "off"
+            },
+            "style": {
+                "noNonNullAssertion": "off",
+                "useConst": "error",
+                "noParameterAssign": "warn",
+                "useImportType": "error",
+                "useExportType": "error",
+                "noUnusedTemplateLiteral": "warn"
+            },
+            "suspicious": {
+                "noExplicitAny": "off",
+                "noConfusingVoidType": "off",
+                "noEmptyBlockStatements": "warn",
+                "noConsole": "warn",
+                "noDebugger": "error",
+                "noDoubleEquals": "error",
+                "noImplicitAnyLet": "warn"
+            },
+            "security": {
+                "noDangerouslySetInnerHtml": "error"
+            },
+            "performance": {
+                "noAccumulatingSpread": "warn",
+                "noDelete": "warn"
+            },
+            "nursery": {
+                "noSecrets": "warn"
+            }
+        }
+    },
+    "formatter": {
+        "enabled": true,
+        "indentStyle": "tab",
+        "indentWidth": 4,
+        "lineWidth": 100
+    },
+    "javascript": {
+        "formatter": {
+            "quoteStyle": "single",
+            "trailingCommas": "all",
+            "semicolons": "always"
+        }
+    },
+    "json": {
+        "formatter": {
+            "indentStyle": "space",
+            "indentWidth": 2
+        }
+    },
+    "files": {
+        "ignore": [
+            "node_modules",
+            "dist",
+            "coverage",
+            ".angular",
+            ".jscpd-report",
+            "*.min.js",
+            "*.min.css"
+        ]
+    },
+    "vcs": {
+        "enabled": true,
+        "clientKind": "git",
+        "useIgnoreFile": true
+    }
+}

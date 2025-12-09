@@ -1,0 +1,30 @@
+{
+  "$schema": "https://raw.githubusercontent.com/stryker-mutator/stryker/master/packages/core/schema/stryker-schema.json",
+  "mutate": [
+    "src/app/**/*.ts",
+    "!src/app/**/*.spec.ts",
+    "!src/app/**/*.module.ts",
+    "!src/main.ts",
+    "!src/main.server.ts",
+    "!src/server.ts",
+    "!src/test.ts",
+    "!src/environments/**"
+  ],
+  "testRunner": "karma",
+  "karma": {
+    "projectType": "angular-cli",
+    "configFile": "karma.conf.js"
+  },
+  "reporters": ["html", "clear-text", "progress", "dashboard"],
+  "htmlReporter": {
+    "fileName": "mutation-report.html"
+  },
+  "thresholds": {
+    "high": 80,
+    "low": 60,
+    "break": 50
+  },
+  "concurrency": 2,
+  "coverageAnalysis": "perTest",
+  "timeoutMS": 60000
+}

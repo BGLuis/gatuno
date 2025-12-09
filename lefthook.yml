@@ -1,0 +1,45 @@
+# Lefthook - Git Hooks Manager
+# https://github.com/evilmartians/lefthook
+
+pre-commit:
+    parallel: true
+    commands:
+        lint-back:
+            glob: 'back/src/**/*.ts'
+            run: cd back && npm run lint
+            stage_fixed: true
+
+        lint-front:
+            glob: 'front/src/**/*.ts'
+            run: cd front && npm run lint
+            stage_fixed: true
+
+        format-check:
+            glob: '**/*.{ts,js,json,html,scss,css}'
+            run: npx biome check --write {staged_files}
+            stage_fixed: true
+
+        duplicated-code:
+            run: npx jscpd --config .jscpd.json
+
+        type-check-back:
+            glob: 'back/src/**/*.ts'
+            run: cd back && npx tsc --noEmit
+
+        type-check-front:
+            glob: 'front/src/**/*.ts'
+            run: cd front && npx tsc --noEmit
+
+pre-push:
+    parallel: false
+    commands:
+        test-back:
+            run: cd back && npm run test -- --passWithNoTests
+
+        test-front:
+            run: cd front && npm run test:headless
+
+commit-msg:
+    commands:
+        commitlint:
+            run: npx commitlint --edit {1}

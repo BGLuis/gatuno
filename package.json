@@ -1,0 +1,37 @@
+{
+    "name": "gatuno-workspace",
+    "version": "1.0.0",
+    "private": true,
+    "description": "Gatuno monorepo - Quality tools configuration",
+    "scripts": {
+        "prepare": "lefthook install",
+        "lint": "npm run lint:back && npm run lint:front",
+        "lint:back": "cd back && npm run lint",
+        "lint:front": "cd front && npm run lint",
+        "format": "biome format --write .",
+        "format:check": "biome format .",
+        "check": "biome check --write .",
+        "check:ci": "biome check .",
+        "duplicates": "jscpd --config .jscpd.json",
+        "duplicates:report": "jscpd --config .jscpd.json --reporters html",
+        "test": "npm run test:back && npm run test:front",
+        "test:back": "cd back && npm run test",
+        "test:front": "cd front && npm run test:headless",
+        "test:cov": "cd back && npm run test:cov",
+        "mutation:back": "cd back && npx stryker run",
+        "mutation:front": "cd front && npx stryker run",
+        "quality": "npm run check && npm run duplicates && npm run lint && npm run test",
+        "quality:full": "npm run quality && npm run mutation:back",
+        "commitlint": "commitlint --edit"
+    },
+    "devDependencies": {
+        "@biomejs/biome": "^1.9.4",
+        "@commitlint/cli": "^19.8.1",
+        "@commitlint/config-conventional": "^19.8.1",
+        "jscpd": "^4.0.5",
+        "lefthook": "^1.10.10"
+    },
+    "engines": {
+        "node": ">=18.0.0"
+    }
+}

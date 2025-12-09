@@ -1,0 +1,36 @@
+{
+    "threshold": 5,
+    "reporters": [
+        "console",
+        "json"
+    ],
+    "ignore": [
+        "**/node_modules/**",
+        "**/dist/**",
+        "**/coverage/**",
+        "**/*.spec.ts",
+        "**/*.test.ts",
+        "**/*.e2e-spec.ts",
+        "**/test/**",
+        "**/*.d.ts",
+        "**/migrations/**"
+    ],
+    "absolute": true,
+    "gitignore": true,
+    "format": [
+        "typescript",
+        "javascript",
+        "html",
+        "scss"
+    ],
+    "path": [
+        "back/src",
+        "front/src"
+    ],
+    "minLines": 10,
+    "minTokens": 50,
+    "output": ".jscpd-report",
+    "blame": true,
+    "silent": false,
+    "exitCode": 1
+}
