@@ -1,0 +1,43 @@
+name: gatuno
+description: 'O Gatuno é um sistema desenvolvido para organizar e compartilhar uma coleção pessoal de e-books em uma rede local.'
+publish_to: 'none'
+
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.11.1
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  cupertino_icons: ^1.0.8
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  flutter_lints: ^6.0.0
+
+flutter:
+  uses-material-design: true
+
+  assets:
+      - assets/
+  fonts:
+    - family: Inknut Antiqua
+      fonts:
+        - asset: assets/fonts/InknutAntiqua/InknutAntiqua-Light.ttf
+          weight: 300
+        - asset: assets/fonts/InknutAntiqua/InknutAntiqua-Regular.ttf
+          weight: 400
+        - asset: assets/fonts/InknutAntiqua/InknutAntiqua-Medium.ttf
+          weight: 500
+        - asset: assets/fonts/InknutAntiqua/InknutAntiqua-SemiBold.ttf
+          weight: 600
+        - asset: assets/fonts/InknutAntiqua/InknutAntiqua-Bold.ttf
+          weight: 700
+        - asset: assets/fonts/InknutAntiqua/InknutAntiqua-ExtraBold.ttf
+          weight: 800
+        - asset: assets/fonts/InknutAntiqua/InknutAntiqua-Black.ttf
+          weight: 900
