@@ -46,6 +46,8 @@ class AuthRepositoryImpl implements AuthRepository {
         _logTag,
       );
       throw ApiExceptionHandler.handle(e);
+    } on AppExceptions {
+      rethrow;
     } catch (e, stackTrace) {
       AppLogger.e('SignIn unexpected error for $email', e, stackTrace, _logTag);
       throw AuthException('An unexpected error occurred during signIn');
@@ -82,6 +84,8 @@ class AuthRepositoryImpl implements AuthRepository {
         _logTag,
       );
       throw ApiExceptionHandler.handle(e);
+    } on AppExceptions {
+      rethrow;
     } catch (e, stackTrace) {
       AppLogger.e('SignUp unexpected error for $email', e, stackTrace, _logTag);
       throw AuthException('An unexpected error occurred during signup');
@@ -122,6 +126,8 @@ class AuthRepositoryImpl implements AuthRepository {
         _logTag,
       );
       throw ApiExceptionHandler.handle(e);
+    } on AppExceptions {
+      rethrow;
     } catch (e, stackTrace) {
       AppLogger.e('Token refresh unexpected error', e, stackTrace, _logTag);
       throw AuthException('An unexpected error occurred during token refresh');

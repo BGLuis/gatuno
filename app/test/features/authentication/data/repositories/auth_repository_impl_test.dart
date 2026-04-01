@@ -64,6 +64,24 @@ void main() {
       },
     );
 
+    test('signIn throws ServerException on unexpected status code', () async {
+      when(
+        () =>
+            mockDio.post<Map<String, dynamic>>(any(), data: any(named: 'data')),
+      ).thenAnswer(
+        (_) async => Response(
+          data: {'some': 'data'},
+          statusCode: 202, // Not 200 or 201
+          requestOptions: RequestOptions(path: ''),
+        ),
+      );
+
+      expect(
+        () => repository.signIn('a', 'b'),
+        throwsA(isA<ServerException>()),
+      );
+    });
+
     test('signUp returns void on success', () async {
       when(
         () =>
