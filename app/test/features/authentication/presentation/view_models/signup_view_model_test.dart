@@ -50,12 +50,12 @@ void main() {
       expect(viewModel.errorMessage, 'Exception: Signup failed');
     });
 
-    test('clearError resets error message', () {
+    test('clearError resets error message', () async {
       when(
         () => mockAuthService.signUp(any(), any()),
       ).thenThrow(Exception('Error'));
 
-      viewModel.signUp('test@example.com', 'Password123!');
+      await viewModel.signUp('test@example.com', 'Password123!');
       viewModel.clearError();
 
       expect(viewModel.errorMessage, null);

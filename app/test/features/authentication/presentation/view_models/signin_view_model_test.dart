@@ -44,12 +44,12 @@ void main() {
       expect(viewModel.errorMessage, 'Exception: Invalid credentials');
     });
 
-    test('clearError resets error message', () {
+    test('clearError resets error message', () async {
       when(
         () => mockAuthService.signIn('test@example.com', 'wrong'),
       ).thenThrow(Exception('Error'));
 
-      viewModel.signIn('test@example.com', 'wrong');
+      await viewModel.signIn('test@example.com', 'wrong');
       viewModel.clearError();
 
       expect(viewModel.errorMessage, null);
