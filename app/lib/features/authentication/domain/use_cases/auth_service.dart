@@ -59,6 +59,10 @@ class AuthService {
     AppLogger.i('Tokens cleared successfully', _logTag);
   }
 
+  Future<String?> getAccessToken() async {
+    return _authStorage.getAccessToken();
+  }
+
   Future<bool> isAuthenticated() async {
     final token = await _authStorage.getAccessToken();
     final authenticated = token != null && token.isNotEmpty;

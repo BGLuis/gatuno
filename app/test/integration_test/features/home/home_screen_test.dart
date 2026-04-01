@@ -31,6 +31,7 @@ void main() {
     expect(find.text('Welcome to Gatuno!'), findsOneWidget);
     expect(find.byIcon(Icons.login), findsOneWidget);
     expect(find.byIcon(Icons.account_circle_outlined), findsNothing);
+    verify(() => mockAuthService.isAuthenticated()).called(1);
   });
 
   testWidgets('HomePage renders correctly as authenticated', (
@@ -45,6 +46,7 @@ void main() {
     expect(find.text('Welcome to Gatuno!'), findsOneWidget);
     expect(find.byIcon(Icons.account_circle_outlined), findsOneWidget);
     expect(find.byIcon(Icons.login), findsNothing);
+    verify(() => mockAuthService.isAuthenticated()).called(1);
   });
 
   testWidgets('HomePage login button navigates to signin', (
@@ -61,5 +63,6 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.text('Signin Page'), findsOneWidget);
+    verify(() => mockAuthService.isAuthenticated()).called(1);
   });
 }

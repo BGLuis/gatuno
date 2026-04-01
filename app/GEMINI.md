@@ -48,3 +48,9 @@
 - **Testing & Verification:**
   - Updated `HomePage` integration tests to match the current UI implementation (Login icon for guest, Profile icon for authenticated).
   - Stubbed `AuthService.isAuthenticated()` in tests to prevent `Mocktail` failures during `initState`.
+- **Infrastructure & Quality:**
+  - Refactored `DioClient` to remove internal `AuthStorage` instantiation, favoring dependency injection.
+  - Extracted authentication interceptor setup into a standalone function `setupAuthInterceptor` in `core/network/interceptors/auth_interceptor.dart`.
+  - Improved DI configuration in `initDI` to wire `DioClient`, `AuthService`, and interceptors using `GetIt`.
+  - Exposed `getAccessToken` in `AuthService` to provide a clean interface for the authentication interceptor.
+  - Enhanced `HomePage` integration tests with interaction verification using `Mocktail`.
