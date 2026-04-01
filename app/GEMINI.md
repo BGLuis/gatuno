@@ -45,3 +45,6 @@
   - Implemented comprehensive unit tests for `AuthService`, `AuthRepositoryImpl`, `AuthResponse`, `AuthStorage`, `ApiExceptionHandler`, and `DioClient`.
   - Achieved **85.27%** code coverage with 65 passing tests.
   - Improved `AuthRepositoryImpl` exception handling to ensure `AppExceptions` (like `ValidationException` and `ServerException`) are rethrown instead of being swallowed by generic catch blocks.
+- **Testing & Verification:**
+  - Updated `HomePage` integration tests to match the current UI implementation (Login icon for guest, Profile icon for authenticated).
+  - Stubbed `AuthService.isAuthenticated()` in tests to prevent `Mocktail` failures during `initState`.
