@@ -1,4 +1,4 @@
-package com.example.gatuno
+package com.gatuno.app
 
 import io.flutter.embedding.android.FlutterActivity
 
