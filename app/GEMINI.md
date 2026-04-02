@@ -84,3 +84,9 @@
   - Improved DI configuration in `initDI` to wire `DioClient`, `AuthService`, and interceptors using `GetIt`.
   - Exposed `getAccessToken` in `AuthService` to provide a clean interface for the authentication interceptor.
   - Enhanced `HomePage` integration tests with interaction verification using `Mocktail`.
+- **Authentication - Tokens:**
+  - Implemented `AuthInterceptor` with automatic token refresh on 401 errors.
+  - Added concurrent refresh request management in `AuthInterceptor` to prevent redundant calls.
+  - Implemented request retry mechanism after successful token refresh.
+  - Updated `AuthRepository` and `AuthService` to use cookie-based refresh and logout as required by the backend (`GET` request with `Cookie: refreshToken=...`).
+  - Added unit tests for the updated authentication repository and service.

@@ -108,8 +108,10 @@ void main() {
       };
 
       when(
-        () =>
-            mockDio.post<Map<String, dynamic>>(any(), data: any(named: 'data')),
+        () => mockDio.get<Map<String, dynamic>>(
+          any(),
+          options: any(named: 'options'),
+        ),
       ).thenAnswer(
         (_) async => Response(
           data: responseData,
@@ -122,6 +124,45 @@ void main() {
 
       expect(result.accessToken, 'new_access');
       expect(result.refreshToken, 'new_refresh');
+
+      verify(
+        () => mockDio.get<Map<String, dynamic>>(
+          any(),
+          options: any(
+            named: 'options',
+            that: isA<Options>().having(
+              (o) => o.headers?['Cookie'],
+              'Cookie header',
+              'refreshToken=old_refresh',
+            ),
+          ),
+        ),
+      ).called(1);
+    });
+
+    test('logout calls GET with Cookie header', () async {
+      when(
+        () => mockDio.get<dynamic>(any(), options: any(named: 'options')),
+      ).thenAnswer(
+        (_) async =>
+            Response(statusCode: 200, requestOptions: RequestOptions(path: '')),
+      );
+
+      await repository.logout('some_refresh');
+
+      verify(
+        () => mockDio.get<dynamic>(
+          any(),
+          options: any(
+            named: 'options',
+            that: isA<Options>().having(
+              (o) => o.headers?['Cookie'],
+              'Cookie header',
+              'refreshToken=some_refresh',
+            ),
+          ),
+        ),
+      ).called(1);
     });
 
     test('handles DioException using ApiExceptionHandler', () async {

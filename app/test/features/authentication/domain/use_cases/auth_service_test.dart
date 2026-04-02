@@ -70,14 +70,17 @@ void main() {
         var notificationCount = 0;
         authService.addListener(() => notificationCount++);
 
-        when(() => mockAuthRepository.logout()).thenAnswer((_) async {});
+        when(
+          () => mockAuthStorage.getRefreshToken(),
+        ).thenAnswer((_) async => 'refresh_token');
+        when(() => mockAuthRepository.logout(any())).thenAnswer((_) async {});
         when(() => mockAuthStorage.clearTokens()).thenAnswer((_) async => {});
 
         await authService.logout();
 
         expect(authService.authenticated, false);
         expect(notificationCount, greaterThan(0));
-        verify(() => mockAuthRepository.logout()).called(1);
+        verify(() => mockAuthRepository.logout('refresh_token')).called(1);
         verify(() => mockAuthStorage.clearTokens()).called(1);
       },
     );

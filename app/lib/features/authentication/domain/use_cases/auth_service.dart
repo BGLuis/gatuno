@@ -83,8 +83,9 @@ class AuthService extends ChangeNotifier {
   Future<void> logout() async {
     AppLogger.i('Performing logout', _logTag);
     try {
+      final refreshToken = await _authStorage.getRefreshToken();
       // Call backend logout if possible
-      await _authRepository.logout();
+      await _authRepository.logout(refreshToken);
     } catch (e) {
       // We log but still clear tokens locally
       AppLogger.w(

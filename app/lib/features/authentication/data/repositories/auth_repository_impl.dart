@@ -105,10 +105,17 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
-  Future<void> logout() async {
+  Future<void> logout(String? refreshToken) async {
     AppLogger.i('Logout attempt in repository', _logTag);
     try {
-      final response = await _dio.get<dynamic>(ApiConstants.logout);
+      final response = await _dio.get<dynamic>(
+        ApiConstants.logout,
+        options: Options(
+          headers: refreshToken != null
+              ? {'Cookie': 'refreshToken=$refreshToken'}
+              : null,
+        ),
+      );
 
       if (response.statusCode != 200 && response.statusCode != 201) {
         AppLogger.w(
@@ -136,9 +143,9 @@ class AuthRepositoryImpl implements AuthRepository {
   Future<AuthTokens> refreshToken(String refreshToken) async {
     AppLogger.i('Token refresh attempt', _logTag);
     try {
-      final response = await _dio.post<Map<String, dynamic>>(
+      final response = await _dio.get<Map<String, dynamic>>(
         ApiConstants.refreshToken,
-        data: {'refresh_token': refreshToken},
+        options: Options(headers: {'Cookie': 'refreshToken=$refreshToken'}),
       );
 
       final data = response.data;
