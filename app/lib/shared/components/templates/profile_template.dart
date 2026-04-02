@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gatuno/shared/components/atoms/app_loading_indicator.dart';
 
 class ProfileTemplate extends StatelessWidget {
   final String title;
@@ -19,7 +20,7 @@ class ProfileTemplate extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(title: Text(title)),
       body: isLoading
-          ? const Center(child: CircularProgressIndicator())
+          ? const Center(child: AppLoadingIndicator(size: 40))
           : SingleChildScrollView(
               padding: const EdgeInsets.all(16.0),
               child: Column(

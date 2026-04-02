@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gatuno/shared/components/atoms/app_loading_indicator.dart';
 
 class AppButton extends StatelessWidget {
   final String text;
@@ -14,23 +15,18 @@ class AppButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
     return ElevatedButton(
       onPressed: isLoading ? null : onPressed,
       style: ElevatedButton.styleFrom(
         padding: const EdgeInsets.symmetric(vertical: 16),
-        backgroundColor: Theme.of(context).colorScheme.primary,
-        foregroundColor: Theme.of(context).colorScheme.onPrimary,
+        backgroundColor: colorScheme.primary,
+        foregroundColor: colorScheme.onPrimary,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
       ),
       child: isLoading
-          ? const SizedBox(
-              height: 20,
-              width: 20,
-              child: CircularProgressIndicator(
-                strokeWidth: 2,
-                color: Colors.white,
-              ),
-            )
+          ? AppLoadingIndicator(size: 20, color: colorScheme.onPrimary)
           : Text(
               text,
               style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
