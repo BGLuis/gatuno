@@ -16,13 +16,21 @@ class AppClickableAction extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onPressed,
+    return Semantics(
+      button: true,
+      label: tooltip,
       child: Tooltip(
         message: tooltip,
-        child: Padding(
-          padding: padding,
-          child: Center(child: child),
+        child: Material(
+          type: MaterialType.transparency,
+          child: InkResponse(
+            onTap: onPressed,
+            radius: 24,
+            child: Padding(
+              padding: padding,
+              child: Center(widthFactor: 1.0, heightFactor: 1.0, child: child),
+            ),
+          ),
         ),
       ),
     );
