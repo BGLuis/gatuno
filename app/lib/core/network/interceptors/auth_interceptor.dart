@@ -7,7 +7,7 @@ void setupAuthInterceptor(DioClient dioClient, AuthService authService) {
     InterceptorsWrapper(
       onRequest: (options, handler) async {
         final token = await authService.getAccessToken();
-        if (token != null) {
+        if (token != null && token.isNotEmpty) {
           options.headers['Authorization'] = 'Bearer $token';
         }
         return handler.next(options);
