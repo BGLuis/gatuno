@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
@@ -17,20 +16,32 @@ class MockInterceptors extends Mock implements Interceptors {}
 class MockRequestInterceptorHandler extends Mock
     implements RequestInterceptorHandler {}
 
+class MockErrorInterceptorHandler extends Mock
+    implements ErrorInterceptorHandler {}
+
 class FakeRequestOptions extends Fake implements RequestOptions {}
 
 class FakeInterceptor extends Fake implements Interceptor {}
+
+class FakeResponse extends Fake implements Response<dynamic> {}
+
+class FakeDioException extends Fake implements DioException {}
 
 void main() {
   late DioClient dioClient;
   late AuthService authService;
   late Dio dio;
   late Interceptors interceptors;
-  late MockRequestInterceptorHandler handler;
+  late MockRequestInterceptorHandler requestHandler;
+  late MockErrorInterceptorHandler errorHandler;
 
   setUpAll(() {
     registerFallbackValue(FakeRequestOptions());
     registerFallbackValue(FakeInterceptor());
+    registerFallbackValue(FakeResponse());
+    registerFallbackValue(
+      DioException(requestOptions: RequestOptions(path: '/')),
+    );
   });
 
   setUp(() {
@@ -38,83 +49,138 @@ void main() {
     authService = MockAuthService();
     dio = MockDio();
     interceptors = MockInterceptors();
-    handler = MockRequestInterceptorHandler();
+    requestHandler = MockRequestInterceptorHandler();
+    errorHandler = MockErrorInterceptorHandler();
 
     when(() => dioClient.dio).thenReturn(dio);
     when(() => dio.interceptors).thenReturn(interceptors);
   });
 
-  test(
-    'should NOT add Authorization header when token is empty string',
-    () async {
-      // Arrange
+  AuthInterceptor getInterceptor() {
+    return AuthInterceptor(dioClient: dioClient, authService: authService);
+  }
+
+  group('onRequest', () {
+    test(
+      'should NOT add Authorization header when token is empty string',
+      () async {
+        final options = RequestOptions(path: '/test');
+        when(() => authService.getAccessToken()).thenAnswer((_) async => '');
+        when(() => requestHandler.next(any())).thenAnswer((_) {});
+
+        getInterceptor().onRequest(options, requestHandler);
+
+        await Future<void>.delayed(Duration.zero);
+        expect(options.headers['Authorization'], isNull);
+      },
+    );
+
+    test('should add Authorization header when token is valid', () async {
       final options = RequestOptions(path: '/test');
-      final completer = Completer<void>();
+      when(
+        () => authService.getAccessToken(),
+      ).thenAnswer((_) async => 'valid_token');
+      when(() => requestHandler.next(any())).thenAnswer((_) {});
 
-      late Interceptor authInterceptor;
-      when(() => interceptors.add(any())).thenAnswer((invocation) {
-        authInterceptor = invocation.positionalArguments[0] as Interceptor;
-      });
+      getInterceptor().onRequest(options, requestHandler);
 
-      setupAuthInterceptor(dioClient, authService);
-
-      when(() => authService.getAccessToken()).thenAnswer((_) async => '');
-      when(() => handler.next(any())).thenAnswer((_) => completer.complete());
-
-      // Act
-      authInterceptor.onRequest(options, handler);
-      await completer.future;
-
-      // Assert
-      expect(options.headers['Authorization'], isNull);
-    },
-  );
-
-  test('should add Authorization header when token is valid', () async {
-    // Arrange
-    final options = RequestOptions(path: '/test');
-    final completer = Completer<void>();
-
-    late Interceptor authInterceptor;
-    when(() => interceptors.add(any())).thenAnswer((invocation) {
-      authInterceptor = invocation.positionalArguments[0] as Interceptor;
+      await Future<void>.delayed(Duration.zero);
+      expect(options.headers['Authorization'], 'Bearer valid_token');
     });
-
-    setupAuthInterceptor(dioClient, authService);
-
-    when(
-      () => authService.getAccessToken(),
-    ).thenAnswer((_) async => 'valid_token');
-    when(() => handler.next(any())).thenAnswer((_) => completer.complete());
-
-    // Act
-    authInterceptor.onRequest(options, handler);
-    await completer.future;
-
-    // Assert
-    expect(options.headers['Authorization'], 'Bearer valid_token');
   });
 
-  test('should NOT add Authorization header when token is null', () async {
-    // Arrange
-    final options = RequestOptions(path: '/test');
-    final completer = Completer<void>();
+  group('onError', () {
+    test(
+      'should retry request if token was refreshed by another request',
+      () async {
+        final options = RequestOptions(
+          path: '/test',
+          headers: {'Authorization': 'Bearer old_token'},
+        );
+        final error = DioException(
+          requestOptions: options,
+          response: Response<dynamic>(requestOptions: options, statusCode: 401),
+        );
 
-    late Interceptor authInterceptor;
-    when(() => interceptors.add(any())).thenAnswer((invocation) {
-      authInterceptor = invocation.positionalArguments[0] as Interceptor;
+        when(
+          () => authService.getAccessToken(),
+        ).thenAnswer((_) async => 'new_token');
+
+        final response = Response<dynamic>(
+          requestOptions: options,
+          statusCode: 200,
+        );
+        when(() => dio.fetch<dynamic>(any())).thenAnswer((_) async => response);
+        when(() => errorHandler.resolve(any())).thenAnswer((_) {});
+
+        getInterceptor().onError(error, errorHandler);
+
+        await Future<void>.delayed(Duration.zero);
+        verify(() => dio.fetch<dynamic>(options)).called(1);
+        verify(() => errorHandler.resolve(response)).called(1);
+      },
+    );
+
+    test('should perform refresh and retry if token is the same', () async {
+      final options = RequestOptions(
+        path: '/test',
+        headers: {'Authorization': 'Bearer old_token'},
+      );
+      final error = DioException(
+        requestOptions: options,
+        response: Response<dynamic>(requestOptions: options, statusCode: 401),
+      );
+
+      when(
+        () => authService.getAccessToken(),
+      ).thenAnswer((_) async => 'old_token');
+      when(() => authService.performTokenRefresh()).thenAnswer((_) async {});
+
+      final response = Response<dynamic>(
+        requestOptions: options,
+        statusCode: 200,
+      );
+      when(() => dio.fetch<dynamic>(any())).thenAnswer((_) async => response);
+      when(() => errorHandler.resolve(any())).thenAnswer((_) {});
+
+      getInterceptor().onError(error, errorHandler);
+
+      await Future<void>.delayed(Duration.zero);
+      verify(() => authService.performTokenRefresh()).called(1);
+      verify(() => dio.fetch<dynamic>(options)).called(1);
+      verify(() => errorHandler.resolve(response)).called(1);
     });
 
-    setupAuthInterceptor(dioClient, authService);
+    test('should forward refresh error when refresh fails', () async {
+      final options = RequestOptions(
+        path: '/test',
+        headers: {'Authorization': 'Bearer old_token'},
+      );
+      final error = DioException(
+        requestOptions: options,
+        response: Response<dynamic>(requestOptions: options, statusCode: 401),
+      );
 
-    when(() => authService.getAccessToken()).thenAnswer((_) async => null);
-    when(() => handler.next(any())).thenAnswer((_) => completer.complete());
+      final refreshError = DioException(
+        requestOptions: RequestOptions(path: '/refresh'),
+        message: 'Refresh failed',
+        type: DioExceptionType.badResponse,
+      );
 
-    // Act
-    authInterceptor.onRequest(options, handler);
-    await completer.future;
+      when(
+        () => authService.getAccessToken(),
+      ).thenAnswer((_) async => 'old_token');
+      when(() => authService.performTokenRefresh()).thenThrow(refreshError);
+      when(() => errorHandler.next(any())).thenAnswer((_) {});
 
-    // Assert
-    expect(options.headers['Authorization'], isNull);
+      getInterceptor().onError(error, errorHandler);
+
+      await Future<void>.delayed(Duration.zero);
+
+      final captured =
+          verify(() => errorHandler.next(captureAny())).captured.first
+              as DioException;
+      expect(captured.message, contains('Refresh failed'));
+    });
   });
 }

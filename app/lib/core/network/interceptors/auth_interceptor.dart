@@ -62,9 +62,18 @@ class AuthInterceptor extends Interceptor {
         return handler.resolve(response);
       } catch (e) {
         _refreshFuture = null;
-        // If refresh fails, the AuthService.performTokenRefresh already handles logout
-        // and we just pass the original 401 error or the refresh error.
-        return handler.next(err);
+        // If refresh fails, the AuthService.performTokenRefresh already handles logout.
+        // We forward the refresh failure (if it's a DioException) or a new DioException wrapping the error,
+        // so callers can see the real reason why refresh failed.
+        final forwardError = e is DioException
+            ? e
+            : DioException(
+                requestOptions: err.requestOptions,
+                error: e,
+                type: DioExceptionType.unknown,
+                message: 'Token refresh failed: $e',
+              );
+        return handler.next(forwardError);
       }
     }
     return handler.next(err);
