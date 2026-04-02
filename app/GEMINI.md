@@ -11,6 +11,7 @@
 - **Logging:**
   - Introduced a centralized `AppLogger` utility in `core/logging/logger.dart` using `dart:developer`.
   - Integrated comprehensive logging across the `auth` feature (Repository, Service, ViewModels).
+  - Implemented PII redaction for email addresses in logs using `AppLogger.redactEmail`, which gates full email visibility behind `kDebugMode`.
 - **Project Renaming:**
   - Rebranded package/bundle identifier to `com.gatuno.app` across Android (build.gradle, MainActivity) and iOS (project.pbxproj).
 

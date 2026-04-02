@@ -10,7 +10,8 @@ class AuthService {
   AuthService(this._authRepository, this._authStorage);
 
   Future<bool> signIn(String email, String password) async {
-    AppLogger.i('Performing signIn for: $email', _logTag);
+    final redactedEmail = AppLogger.redactEmail(email);
+    AppLogger.i('Performing signIn for: $redactedEmail', _logTag);
     try {
       final response = await _authRepository.signIn(email, password);
 
@@ -19,11 +20,14 @@ class AuthService {
         refreshToken: response.refreshToken,
       );
 
-      AppLogger.i('SignIn completed and tokens saved for: $email', _logTag);
+      AppLogger.i(
+        'SignIn completed and tokens saved for: $redactedEmail',
+        _logTag,
+      );
       return true;
     } catch (e, stackTrace) {
       AppLogger.e(
-        'SignIn failed in AuthService for: $email',
+        'SignIn failed in AuthService for: $redactedEmail',
         e,
         stackTrace,
         _logTag,
@@ -33,18 +37,19 @@ class AuthService {
   }
 
   Future<bool> signUp(String email, String password) async {
-    AppLogger.i('Performing signUp for: $email', _logTag);
+    final redactedEmail = AppLogger.redactEmail(email);
+    AppLogger.i('Performing signUp for: $redactedEmail', _logTag);
     try {
       await _authRepository.signUp(email, password);
       AppLogger.i(
-        'SignUp success, performing auto-signIn for: $email',
+        'SignUp success, performing auto-signIn for: $redactedEmail',
         _logTag,
       );
       // Auto-signIn after successful signup
       return signIn(email, password);
     } catch (e, stackTrace) {
       AppLogger.e(
-        'SignUp failed in AuthService for: $email',
+        'SignUp failed in AuthService for: $redactedEmail',
         e,
         stackTrace,
         _logTag,

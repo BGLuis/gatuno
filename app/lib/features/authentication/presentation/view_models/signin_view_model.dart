@@ -15,7 +15,8 @@ class SignInViewModel extends ChangeNotifier {
   String? get errorMessage => _errorMessage;
 
   Future<bool> signIn(String email, String password) async {
-    AppLogger.i('SignIn requested for: $email', _logTag);
+    final redactedEmail = AppLogger.redactEmail(email);
+    AppLogger.i('SignIn requested for: $redactedEmail', _logTag);
     _isLoading = true;
     _errorMessage = null;
     notifyListeners();
@@ -23,14 +24,14 @@ class SignInViewModel extends ChangeNotifier {
     try {
       final success = await _authService.signIn(email, password);
       _isLoading = false;
-      AppLogger.i('SignIn result for $email: $success', _logTag);
+      AppLogger.i('SignIn result for $redactedEmail: $success', _logTag);
       notifyListeners();
       return success;
     } catch (e, stackTrace) {
       _isLoading = false;
       _errorMessage = e.toString();
       AppLogger.e(
-        'SignIn error for $email: $_errorMessage',
+        'SignIn error for $redactedEmail: $_errorMessage',
         e,
         stackTrace,
         _logTag,

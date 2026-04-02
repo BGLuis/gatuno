@@ -15,7 +15,8 @@ class SignUpViewModel extends ChangeNotifier {
   String? get errorMessage => _errorMessage;
 
   Future<bool> signUp(String email, String password) async {
-    AppLogger.i('SignUp requested for: $email', _logTag);
+    final redactedEmail = AppLogger.redactEmail(email);
+    AppLogger.i('SignUp requested for: $redactedEmail', _logTag);
     _isLoading = true;
     _errorMessage = null;
     notifyListeners();
@@ -23,14 +24,14 @@ class SignUpViewModel extends ChangeNotifier {
     try {
       final success = await _authService.signUp(email, password);
       _isLoading = false;
-      AppLogger.i('SignUp result for $email: $success', _logTag);
+      AppLogger.i('SignUp result for $redactedEmail: $success', _logTag);
       notifyListeners();
       return success;
     } catch (e, stackTrace) {
       _isLoading = false;
       _errorMessage = e.toString();
       AppLogger.e(
-        'SignUp error for $email: $_errorMessage',
+        'SignUp error for $redactedEmail: $_errorMessage',
         e,
         stackTrace,
         _logTag,

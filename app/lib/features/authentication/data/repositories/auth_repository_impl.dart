@@ -14,7 +14,8 @@ class AuthRepositoryImpl implements AuthRepository {
 
   @override
   Future<AuthTokens> signIn(String email, String password) async {
-    AppLogger.i('SignIn attempt for: $email', _logTag);
+    final redactedEmail = AppLogger.redactEmail(email);
+    AppLogger.i('SignIn attempt for: $redactedEmail', _logTag);
     try {
       final response = await _dio.post<Map<String, dynamic>>(
         ApiConstants.signIn,
@@ -24,11 +25,11 @@ class AuthRepositoryImpl implements AuthRepository {
       final data = response.data;
       if ((response.statusCode == 200 || response.statusCode == 201) &&
           data is Map<String, dynamic>) {
-        AppLogger.i('SignIn success for: $email', _logTag);
+        AppLogger.i('SignIn success for: $redactedEmail', _logTag);
         return AuthResponse.fromJson(data);
       } else {
         AppLogger.e(
-          'SignIn failed: Invalid response format for $email',
+          'SignIn failed: Invalid response format for $redactedEmail',
           null,
           null,
           _logTag,
@@ -40,7 +41,7 @@ class AuthRepositoryImpl implements AuthRepository {
       }
     } on DioException catch (e) {
       AppLogger.e(
-        'SignIn DioException for $email: ${e.message}',
+        'SignIn DioException for $redactedEmail: ${e.message}',
         e,
         e.stackTrace,
         _logTag,
@@ -49,14 +50,20 @@ class AuthRepositoryImpl implements AuthRepository {
     } on AppExceptions {
       rethrow;
     } catch (e, stackTrace) {
-      AppLogger.e('SignIn unexpected error for $email', e, stackTrace, _logTag);
+      AppLogger.e(
+        'SignIn unexpected error for $redactedEmail',
+        e,
+        stackTrace,
+        _logTag,
+      );
       throw AuthException('An unexpected error occurred during signIn');
     }
   }
 
   @override
   Future<void> signUp(String email, String password) async {
-    AppLogger.i('SignUp attempt for: $email', _logTag);
+    final redactedEmail = AppLogger.redactEmail(email);
+    AppLogger.i('SignUp attempt for: $redactedEmail', _logTag);
     try {
       final response = await _dio.post<Map<String, dynamic>>(
         ApiConstants.signUp,
@@ -65,7 +72,7 @@ class AuthRepositoryImpl implements AuthRepository {
 
       if (response.statusCode != 200 && response.statusCode != 201) {
         AppLogger.e(
-          'SignUp failed for $email: ${response.statusMessage}',
+          'SignUp failed for $redactedEmail: ${response.statusMessage}',
           null,
           null,
           _logTag,
@@ -75,10 +82,10 @@ class AuthRepositoryImpl implements AuthRepository {
           statusCode: response.statusCode,
         );
       }
-      AppLogger.i('SignUp success for: $email', _logTag);
+      AppLogger.i('SignUp success for: $redactedEmail', _logTag);
     } on DioException catch (e) {
       AppLogger.e(
-        'SignUp DioException for $email: ${e.message}',
+        'SignUp DioException for $redactedEmail: ${e.message}',
         e,
         e.stackTrace,
         _logTag,
@@ -87,7 +94,12 @@ class AuthRepositoryImpl implements AuthRepository {
     } on AppExceptions {
       rethrow;
     } catch (e, stackTrace) {
-      AppLogger.e('SignUp unexpected error for $email', e, stackTrace, _logTag);
+      AppLogger.e(
+        'SignUp unexpected error for $redactedEmail',
+        e,
+        stackTrace,
+        _logTag,
+      );
       throw AuthException('An unexpected error occurred during signup');
     }
   }
