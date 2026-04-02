@@ -88,7 +88,7 @@ class _SignInFormState extends State<SignInForm> {
               const SizedBox(height: 16),
               TextButton(
                 onPressed: widget.onSignUp,
-                child: Text(l10n.authDontHaveAccount),
+                child: Text(l10n.authDoNotHaveAccount),
               ),
             ],
           ],

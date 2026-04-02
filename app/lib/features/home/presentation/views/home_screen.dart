@@ -1,59 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 import 'package:gatuno/l10n/app_localizations.dart';
-import '../../../authentication/domain/use_cases/auth_service.dart';
-import '../../../../core/di/injection.dart';
+import '../view_models/home_view_model.dart';
+import '../../../../shared/components/organisms/home_app_bar.dart';
+import '../../../../shared/components/templates/home_template.dart';
 
-class HomePage extends StatefulWidget {
+class HomePage extends StatelessWidget {
   const HomePage({super.key});
-
-  @override
-  State<HomePage> createState() => _HomePageState();
-}
-
-class _HomePageState extends State<HomePage> {
-  bool _isAuthenticated = false;
-  bool _isLoading = true;
-
-  @override
-  void initState() {
-    super.initState();
-    _checkAuthStatus();
-  }
-
-  Future<void> _checkAuthStatus() async {
-    final status = await sl<AuthService>().isAuthenticated();
-    if (mounted) {
-      setState(() {
-        _isAuthenticated = status;
-        _isLoading = false;
-      });
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+    final viewModel = context.watch<HomeViewModel>();
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(l10n.homeTitle),
-        actions: [
-          if (!_isLoading)
-            _isAuthenticated
-                ? IconButton(
-                    icon: const Icon(Icons.account_circle_outlined),
-                    tooltip: l10n.homeProfile,
-                    onPressed: () {
-                      // Profile placeholder action
-                    },
-                  )
-                : IconButton(
-                    icon: const Icon(Icons.login),
-                    tooltip: l10n.authSignInButton,
-                    onPressed: () => context.go('/auth/signin'),
-                  ),
-        ],
+    return HomeTemplate(
+      appBar: HomeAppBar(
+        title: l10n.homeTitle,
+        isAuthenticated: viewModel.isAuthenticated,
+        isLoading: !viewModel.isInitialized,
+        displayName: viewModel.displayName,
+        onProfilePressed: () => context.push('/users/me'),
+        onSignInPressed: () => context.push('/auth/signin'),
+        profileTooltip: l10n.homeProfile,
+        signInTooltip: l10n.authSignInButton,
       ),
       body: Center(child: Text(l10n.homeWelcome)),
     );

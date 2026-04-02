@@ -68,7 +68,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get authCreateAccountButton => 'CREATE ACCOUNT';
 
   @override
-  String get authDontHaveAccount => 'Don\'t have an account? Sign Up';
+  String get authDoNotHaveAccount => 'Don\'t have an account? Sign Up';
 
   @override
   String get authAlreadyHaveAccount => 'Already have an account? Sign In';
@@ -81,6 +81,15 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get homeProfile => 'Profile';
+
+  @override
+  String get userMeTitle => 'My Profile';
+
+  @override
+  String get userMeSensitiveContent => 'Sensitive Content';
+
+  @override
+  String get userMeSensitiveContentDesc => 'Show books with sensitive content';
 
   @override
   String get commonLogout => 'Sign Out';

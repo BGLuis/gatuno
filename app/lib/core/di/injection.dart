@@ -3,6 +3,8 @@ import '../network/dio_client.dart';
 import '../network/interceptors/auth_interceptor.dart';
 import '../../features/authentication/authentication_injection.dart';
 import '../../features/authentication/domain/use_cases/auth_service.dart';
+import '../../features/users/users_injection.dart';
+import '../../features/home/home_injection.dart';
 
 final GetIt sl = GetIt.instance;
 
@@ -12,6 +14,8 @@ Future<void> initDI() async {
 
   // Features
   initAuthenticationInjection(sl);
+  initUsersInjection(sl);
+  initHomeInjection(sl);
 
   // Set up interceptors (AuthService is registered in initAuthenticationInjection)
   setupAuthInterceptor(sl<DioClient>(), sl<AuthService>());

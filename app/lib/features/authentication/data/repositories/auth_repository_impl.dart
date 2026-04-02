@@ -105,6 +105,34 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
+  Future<void> logout() async {
+    AppLogger.i('Logout attempt in repository', _logTag);
+    try {
+      final response = await _dio.get<dynamic>(ApiConstants.logout);
+
+      if (response.statusCode != 200 && response.statusCode != 201) {
+        AppLogger.w(
+          'Logout returned unexpected status: ${response.statusCode}',
+          _logTag,
+        );
+      } else {
+        AppLogger.i('Logout successful in backend', _logTag);
+      }
+    } on DioException catch (e) {
+      // If logout fails on backend (e.g. token expired), we still want to log it
+      // but the service will still clear local tokens
+      AppLogger.w('Logout backend call failed: ${e.message}', _logTag);
+    } catch (e, stackTrace) {
+      AppLogger.e(
+        'Unexpected error during logout backend call',
+        e,
+        stackTrace,
+        _logTag,
+      );
+    }
+  }
+
+  @override
   Future<AuthTokens> refreshToken(String refreshToken) async {
     AppLogger.i('Token refresh attempt', _logTag);
     try {

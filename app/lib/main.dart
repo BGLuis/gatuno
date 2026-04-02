@@ -1,14 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:provider/provider.dart';
 import 'l10n/app_localizations.dart';
 import 'core/theme/theme.dart';
 import 'core/di/injection.dart';
+import 'features/authentication/domain/use_cases/auth_service.dart';
 import 'router.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await initDI();
-  runApp(const App());
+  runApp(
+    MultiProvider(
+      providers: [ChangeNotifierProvider.value(value: sl<AuthService>())],
+      child: const App(),
+    ),
+  );
 }
 
 class App extends StatelessWidget {

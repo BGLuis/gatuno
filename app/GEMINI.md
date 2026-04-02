@@ -46,11 +46,38 @@
   - Resolved `intl` versioning conflicts between local dependencies and the Flutter SDK.
   - Enhanced `PumpApp` test helper to support localization context.
   - Implemented comprehensive unit tests for `AuthService`, `AuthRepositoryImpl`, `AuthResponse`, `AuthStorage`, `ApiExceptionHandler`, and `DioClient`.
-  - Achieved **85.27%** code coverage with 65 passing tests.
+  - Achieved **83.8%** code coverage with 105 passing tests.
   - Improved `AuthRepositoryImpl` exception handling to ensure `AppExceptions` (like `ValidationException` and `ServerException`) are rethrown instead of being swallowed by generic catch blocks.
 - **Testing & Verification:**
   - Updated `HomePage` integration tests to match the current UI implementation (Login icon for guest, Profile icon for authenticated).
   - Stubbed `AuthService.isAuthenticated()` in tests to prevent `Mocktail` failures during `initState`.
+
+## Features
+- **Users - Profile:**
+  - Implemented `/users/me` route to display current user profile.
+  - Developed a custom `JwtDecoder` utility in `core/utils/jwt_decoder.dart` to extract user info from access tokens.
+  - Implemented `MeViewModel` and `MePage` with a mocked initials-based avatar.
+  - Added a "Sensitive Content" toggle that persists in `UserStorage` and remains enabled even after logout.
+  - Integrated `MePage` with `GoRouter` using `context.push()` to allow easy navigation back to `/home`.
+
+- **Home:**
+  - Refactored `HomePage` to follow Atomic Design using `HomeAppBar` (organism) and `HomeTemplate` (template).
+  - Implemented `HomeViewModel` to reactively update the UI when authentication state changes.
+  - Improved `AppBar` to show "Profile" or "Sign In" icons instantly based on `AuthService` state.
+
+## Design Patterns
+- **Atomic Design:**
+  - Adopted Atomic Design for UI components in `shared/components/`.
+  - **Atoms:** Low-level components like `AppButton`, `AppAvatar`, `AppSwitch`, `AppClickableAction`.
+  - **Molecules:** Groups of atoms like `UserProfileHeader`, `UserProfileIcon`, `LoginIcon`.
+  - **Organisms:** Complex UI sections like `MeSettingsList`, `SignInForm`, `HomeAppBar`.
+  - **Templates:** Page layouts like `ProfileTemplate`, `AuthTemplate`, `HomeTemplate`.
+  - **Pages:** Feature-specific views that wire view models to templates, like `MePage` and `HomePage`.
+
+## Infrastructure & Quality
+- **Reactive Auth State:**
+  - Refactored `AuthService` to extend `ChangeNotifier` and provide synchronous `authenticated` and `isInitialized` properties.
+  - Provided `AuthService` globally via `MultiProvider` in `main.dart` to allow the entire app to react to auth state changes.
 - **Infrastructure & Quality:**
   - Refactored `DioClient` to remove internal `AuthStorage` instantiation, favoring dependency injection.
   - Extracted authentication interceptor setup into a standalone function `setupAuthInterceptor` in `core/network/interceptors/auth_interceptor.dart`.

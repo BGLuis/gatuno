@@ -206,11 +206,11 @@ abstract class AppLocalizations {
   /// **'CREATE ACCOUNT'**
   String get authCreateAccountButton;
 
-  /// No description provided for @authDontHaveAccount.
+  /// No description provided for @authDoNotHaveAccount.
   ///
   /// In en, this message translates to:
   /// **'Don\'t have an account? Sign Up'**
-  String get authDontHaveAccount;
+  String get authDoNotHaveAccount;
 
   /// No description provided for @authAlreadyHaveAccount.
   ///
@@ -235,6 +235,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Profile'**
   String get homeProfile;
+
+  /// No description provided for @userMeTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'My Profile'**
+  String get userMeTitle;
+
+  /// No description provided for @userMeSensitiveContent.
+  ///
+  /// In en, this message translates to:
+  /// **'Sensitive Content'**
+  String get userMeSensitiveContent;
+
+  /// No description provided for @userMeSensitiveContentDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Show books with sensitive content'**
+  String get userMeSensitiveContentDesc;
 
   /// No description provided for @commonLogout.
   ///

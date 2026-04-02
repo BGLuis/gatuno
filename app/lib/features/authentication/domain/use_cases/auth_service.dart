@@ -1,13 +1,33 @@
+import 'package:flutter/foundation.dart';
 import '../repositories/auth_repository.dart';
 import '../../data/data_sources/auth_local_data_source.dart';
 import '../../../../core/logging/logger.dart';
 
-class AuthService {
+class AuthService extends ChangeNotifier {
   final AuthRepository _authRepository;
   final AuthStorage _authStorage;
   static const String _logTag = 'AuthService';
 
-  AuthService(this._authRepository, this._authStorage);
+  bool _isInitialized = false;
+  bool _isAuthenticated = false;
+
+  AuthService(this._authRepository, this._authStorage) {
+    _initAuth();
+  }
+
+  bool get isInitialized => _isInitialized;
+  bool get authenticated => _isAuthenticated;
+
+  Future<void> _initAuth() async {
+    final token = await _authStorage.getAccessToken();
+    _isAuthenticated = token != null && token.isNotEmpty;
+    _isInitialized = true;
+    AppLogger.d(
+      'AuthService initialized: authenticated = $_isAuthenticated',
+      _logTag,
+    );
+    notifyListeners();
+  }
 
   Future<bool> signIn(String email, String password) async {
     final redactedEmail = AppLogger.redactEmail(email);
@@ -24,6 +44,8 @@ class AuthService {
         'SignIn completed and tokens saved for: $redactedEmail',
         _logTag,
       );
+      _isAuthenticated = true;
+      notifyListeners();
       return true;
     } catch (e, stackTrace) {
       AppLogger.e(
@@ -60,8 +82,20 @@ class AuthService {
 
   Future<void> logout() async {
     AppLogger.i('Performing logout', _logTag);
+    try {
+      // Call backend logout if possible
+      await _authRepository.logout();
+    } catch (e) {
+      // We log but still clear tokens locally
+      AppLogger.w(
+        'Backend logout failed, clearing local tokens anyway: $e',
+        _logTag,
+      );
+    }
     await _authStorage.clearTokens();
+    _isAuthenticated = false;
     AppLogger.i('Tokens cleared successfully', _logTag);
+    notifyListeners();
   }
 
   Future<String?> getAccessToken() async {
@@ -71,8 +105,14 @@ class AuthService {
   Future<bool> isAuthenticated() async {
     final token = await _authStorage.getAccessToken();
     final authenticated = token != null && token.isNotEmpty;
-    AppLogger.d('Auth check: authenticated = $authenticated', _logTag);
-    return authenticated;
+
+    if (_isAuthenticated != authenticated) {
+      _isAuthenticated = authenticated;
+      notifyListeners();
+    }
+
+    _isInitialized = true;
+    return _isAuthenticated;
   }
 
   Future<void> performTokenRefresh() async {
@@ -89,7 +129,9 @@ class AuthService {
         accessToken: response.accessToken,
         refreshToken: response.refreshToken,
       );
+      _isAuthenticated = true;
       AppLogger.i('Token refresh success', _logTag);
+      notifyListeners();
     } catch (e, stackTrace) {
       AppLogger.e('Token refresh failed, logging out', e, stackTrace, _logTag);
       await logout();

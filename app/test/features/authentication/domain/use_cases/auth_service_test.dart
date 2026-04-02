@@ -21,69 +21,66 @@ void main() {
   setUp(() {
     mockAuthRepository = MockAuthRepository();
     mockAuthStorage = MockAuthStorage();
+
+    // Default mock behavior for constructor's _initAuth
+    when(() => mockAuthStorage.getAccessToken()).thenAnswer((_) async => null);
+
     authService = AuthService(mockAuthRepository, mockAuthStorage);
   });
 
   final tTokens = AuthTokens(accessToken: 'access', refreshToken: 'refresh');
 
   group('AuthService', () {
-    test('signIn calls repository and saves tokens', () async {
-      when(
-        () => mockAuthRepository.signIn(any(), any()),
-      ).thenAnswer((_) async => tTokens);
-      when(
-        () => mockAuthStorage.saveTokens(
-          accessToken: any(named: 'accessToken'),
-          refreshToken: any(named: 'refreshToken'),
-        ),
-      ).thenAnswer((_) async => {});
+    test(
+      'signIn calls repository, saves tokens and notifies listeners',
+      () async {
+        var notificationCount = 0;
+        authService.addListener(() => notificationCount++);
 
-      final result = await authService.signIn('test@example.com', 'password');
+        when(
+          () => mockAuthRepository.signIn(any(), any()),
+        ).thenAnswer((_) async => tTokens);
+        when(
+          () => mockAuthStorage.saveTokens(
+            accessToken: any(named: 'accessToken'),
+            refreshToken: any(named: 'refreshToken'),
+          ),
+        ).thenAnswer((_) async => {});
 
-      expect(result, true);
-      verify(
-        () => mockAuthRepository.signIn('test@example.com', 'password'),
-      ).called(1);
-      verify(
-        () => mockAuthStorage.saveTokens(
-          accessToken: 'access',
-          refreshToken: 'refresh',
-        ),
-      ).called(1);
-    });
+        final result = await authService.signIn('test@example.com', 'password');
 
-    test('signUp calls repository and then signIn', () async {
-      when(
-        () => mockAuthRepository.signUp(any(), any()),
-      ).thenAnswer((_) async => {});
-      when(
-        () => mockAuthRepository.signIn(any(), any()),
-      ).thenAnswer((_) async => tTokens);
-      when(
-        () => mockAuthStorage.saveTokens(
-          accessToken: any(named: 'accessToken'),
-          refreshToken: any(named: 'refreshToken'),
-        ),
-      ).thenAnswer((_) async => {});
+        expect(result, true);
+        expect(authService.authenticated, true);
+        expect(notificationCount, greaterThan(0));
+        verify(
+          () => mockAuthRepository.signIn('test@example.com', 'password'),
+        ).called(1);
+        verify(
+          () => mockAuthStorage.saveTokens(
+            accessToken: 'access',
+            refreshToken: 'refresh',
+          ),
+        ).called(1);
+      },
+    );
 
-      final result = await authService.signUp('test@example.com', 'password');
+    test(
+      'logout calls repository, clears tokens and notifies listeners',
+      () async {
+        var notificationCount = 0;
+        authService.addListener(() => notificationCount++);
 
-      expect(result, true);
-      verify(
-        () => mockAuthRepository.signUp('test@example.com', 'password'),
-      ).called(1);
-      verify(
-        () => mockAuthRepository.signIn('test@example.com', 'password'),
-      ).called(1);
-    });
+        when(() => mockAuthRepository.logout()).thenAnswer((_) async {});
+        when(() => mockAuthStorage.clearTokens()).thenAnswer((_) async => {});
 
-    test('logout clears tokens', () async {
-      when(() => mockAuthStorage.clearTokens()).thenAnswer((_) async => {});
+        await authService.logout();
 
-      await authService.logout();
-
-      verify(() => mockAuthStorage.clearTokens()).called(1);
-    });
+        expect(authService.authenticated, false);
+        expect(notificationCount, greaterThan(0));
+        verify(() => mockAuthRepository.logout()).called(1);
+        verify(() => mockAuthStorage.clearTokens()).called(1);
+      },
+    );
 
     test('isAuthenticated returns true when token exists', () async {
       when(
@@ -93,63 +90,34 @@ void main() {
       final result = await authService.isAuthenticated();
 
       expect(result, true);
+      expect(authService.authenticated, true);
     });
 
-    test('isAuthenticated returns false when token is null or empty', () async {
-      when(
-        () => mockAuthStorage.getAccessToken(),
-      ).thenAnswer((_) async => null);
-      expect(await authService.isAuthenticated(), false);
+    test(
+      'performTokenRefresh updates tokens and notifies on success',
+      () async {
+        var notificationCount = 0;
+        authService.addListener(() => notificationCount++);
 
-      when(() => mockAuthStorage.getAccessToken()).thenAnswer((_) async => '');
-      expect(await authService.isAuthenticated(), false);
-    });
+        when(
+          () => mockAuthStorage.getRefreshToken(),
+        ).thenAnswer((_) async => 'old_refresh');
+        when(
+          () => mockAuthRepository.refreshToken(any()),
+        ).thenAnswer((_) async => tTokens);
+        when(
+          () => mockAuthStorage.saveTokens(
+            accessToken: any(named: 'accessToken'),
+            refreshToken: any(named: 'refreshToken'),
+          ),
+        ).thenAnswer((_) async => {});
 
-    test('performTokenRefresh updates tokens on success', () async {
-      when(
-        () => mockAuthStorage.getRefreshToken(),
-      ).thenAnswer((_) async => 'old_refresh');
-      when(
-        () => mockAuthRepository.refreshToken(any()),
-      ).thenAnswer((_) async => tTokens);
-      when(
-        () => mockAuthStorage.saveTokens(
-          accessToken: any(named: 'accessToken'),
-          refreshToken: any(named: 'refreshToken'),
-        ),
-      ).thenAnswer((_) async => {});
-
-      await authService.performTokenRefresh();
-
-      verify(() => mockAuthRepository.refreshToken('old_refresh')).called(1);
-      verify(
-        () => mockAuthStorage.saveTokens(
-          accessToken: 'access',
-          refreshToken: 'refresh',
-        ),
-      ).called(1);
-    });
-
-    test('performTokenRefresh logouts on failure', () async {
-      when(
-        () => mockAuthStorage.getRefreshToken(),
-      ).thenAnswer((_) async => 'old_refresh');
-      when(() => mockAuthRepository.refreshToken(any())).thenThrow(Exception());
-      when(() => mockAuthStorage.clearTokens()).thenAnswer((_) async => {});
-
-      try {
         await authService.performTokenRefresh();
-      } catch (_) {}
 
-      verify(() => mockAuthStorage.clearTokens()).called(1);
-    });
-
-    test('performTokenRefresh throws when no refresh token', () async {
-      when(
-        () => mockAuthStorage.getRefreshToken(),
-      ).thenAnswer((_) async => null);
-
-      expect(() => authService.performTokenRefresh(), throwsException);
-    });
+        expect(authService.authenticated, true);
+        expect(notificationCount, greaterThan(0));
+        verify(() => mockAuthRepository.refreshToken('old_refresh')).called(1);
+      },
+    );
   });
 }

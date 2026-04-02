@@ -62,7 +62,7 @@ class _SignUpPageState extends State<SignUpPage> {
       listenable: _viewModel,
       builder: (context, _) {
         return AuthTemplate(
-          onBack: () => context.go('/home'),
+          onBack: () => context.pop(),
           logo: AppIcons.logo(height: 80),
           title: Text(
             l10n.authSignUpTitle,
