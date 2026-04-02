@@ -10,11 +10,16 @@ void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
   group('Injection', () {
+    setUp(() async {
+      await sl.reset();
+    });
+
+    tearDown(() async {
+      await sl.reset();
+    });
+
     test('initDI registers all dependencies', () async {
       FlutterSecureStorage.setMockInitialValues({});
-
-      // Ensure GetIt is clean
-      await sl.reset();
 
       await initDI();
 

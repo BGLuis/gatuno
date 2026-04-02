@@ -18,7 +18,8 @@ void main() {
   late MockAuthService mockAuthService;
   late MockHomeViewModel mockHomeViewModel;
 
-  setUpAll(() async {
+  setUp(() async {
+    await di.sl.reset();
     mockAuthService = MockAuthService();
     mockHomeViewModel = MockHomeViewModel();
 
@@ -36,7 +37,7 @@ void main() {
     when(() => mockHomeViewModel.displayName).thenReturn(null);
   });
 
-  tearDownAll(() async {
+  tearDown(() async {
     await di.sl.reset();
   });
 
