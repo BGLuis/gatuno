@@ -1,5 +1,6 @@
 import 'dart:convert';
 import '../../core/logging/logger.dart';
+import 'exceptions.dart';
 
 class JwtDecoder {
   static const String _logTag = 'JwtDecoder';
@@ -8,19 +9,24 @@ class JwtDecoder {
     try {
       final parts = token.split('.');
       if (parts.length != 3) {
-        throw Exception('Invalid token: expected 3 parts, got ${parts.length}');
+        throw InvalidJwtException(
+          message: 'Invalid token: expected 3 parts, got ${parts.length}',
+        );
       }
 
       final payload = _decodeBase64(parts[1]);
       final payloadMap = json.decode(payload);
       if (payloadMap is! Map<String, dynamic>) {
-        throw Exception('Invalid payload: expected a JSON object');
+        throw InvalidJwtException(
+          message: 'Invalid payload: expected a JSON object',
+        );
       }
 
       return payloadMap;
     } catch (e, stackTrace) {
+      if (e is InvalidJwtException) rethrow;
       AppLogger.e('Error decoding JWT', e, stackTrace, _logTag);
-      rethrow;
+      throw InvalidJwtException(message: 'Error decoding JWT: $e');
     }
   }
 
@@ -52,7 +58,7 @@ class JwtDecoder {
         output += '=';
         break;
       default:
-        throw Exception('Illegal base64url string!');
+        throw InvalidJwtException(message: 'Illegal base64url string!');
     }
 
     return utf8.decode(base64Url.decode(output));

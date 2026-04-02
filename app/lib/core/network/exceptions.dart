@@ -1,23 +1,13 @@
 import 'package:dio/dio.dart';
+import '../../features/authentication/exceptions/exceptions.dart';
+import '../exceptions/exceptions.dart';
 
-abstract class AppExceptions implements Exception {
-  final String message;
-  final int? statusCode;
-
-  AppExceptions(this.message, {this.statusCode});
-
-  @override
-  String toString() => message;
-}
+export '../../features/authentication/exceptions/exceptions.dart';
+export '../exceptions/exceptions.dart';
 
 class NetworkException extends AppExceptions {
   NetworkException({String? message})
     : super(message ?? 'No internet connection or server unreachable');
-}
-
-class UnauthorizedException extends AppExceptions {
-  UnauthorizedException({String? message})
-    : super(message ?? 'Invalid credentials', statusCode: 401);
 }
 
 class ValidationException extends AppExceptions {
@@ -29,10 +19,6 @@ class ValidationException extends AppExceptions {
 class ServerException extends AppExceptions {
   ServerException({String? message, int? statusCode})
     : super(message ?? 'Internal server error', statusCode: statusCode ?? 500);
-}
-
-class AuthException extends AppExceptions {
-  AuthException(super.message);
 }
 
 class ApiExceptionHandler {
