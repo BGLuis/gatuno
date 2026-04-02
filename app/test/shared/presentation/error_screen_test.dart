@@ -45,7 +45,11 @@ void main() {
         ),
       );
 
-      await tester.tap(find.text('Go Back'));
+      final l10n = AppLocalizations.of(
+        tester.element(find.byType(ErrorScreen)),
+      )!;
+
+      await tester.tap(find.text(l10n.errorBack));
       await tester.pumpAndSettle();
 
       expect(find.text('Home'), findsOneWidget);
