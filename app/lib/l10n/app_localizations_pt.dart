@@ -94,7 +94,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get commonLogout => 'Sair';
 
   @override
-  String get commonLoading => 'Loading...';
+  String get commonLoading => 'Carregando...';
 
   @override
   String get errorTitle => 'Algo deu errado';
