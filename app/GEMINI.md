@@ -31,6 +31,8 @@
   - The app is now accessible without mandatory signIn, allowing direct access to `/home`.
   - Updated `HomePage` to handle dynamic authentication states, showing an `IconButton` for "Sign In" (guest) or "Profile" (authenticated).
   - Added a "Go Back" button to `AuthTemplate` (shared by `SignInPage` and `SignUpPage`) to allow easy navigation back to `/home`.
+  - Refactored `errorBuilder` in `router.dart` to use a generic, user-friendly `ErrorScreen` while logging detailed exception info via `AppLogger.e`.
+  - Localized the `ErrorScreen` with "Something went wrong" messages in both English and Portuguese.
 - **Environment Variables:**
   - Introduced `API_BASE_URL` environment variable using `String.fromEnvironment`.
   - Configured `http://localhost:3000` as the default value in `ApiConstants`.

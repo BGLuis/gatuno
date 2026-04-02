@@ -24,5 +24,9 @@
   "homeWelcome": "Welcome to Gatuno!",
   "homeProfile": "Profile",
   "commonLogout": "Sign Out",
-  "commonLoading": "Loading..."
+  "commonLoading": "Loading...",
+  "errorTitle": "Something went wrong",
+  "errorMessage": "An unexpected error occurred.",
+  "errorRetry": "Retry",
+  "errorBack": "Go Back"
 }

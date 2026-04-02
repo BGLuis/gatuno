@@ -87,4 +87,16 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get commonLoading => 'Loading...';
+
+  @override
+  String get errorTitle => 'Something went wrong';
+
+  @override
+  String get errorMessage => 'An unexpected error occurred.';
+
+  @override
+  String get errorRetry => 'Retry';
+
+  @override
+  String get errorBack => 'Go Back';
 }

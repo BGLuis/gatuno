@@ -1,8 +1,9 @@
-import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'features/authentication/presentation/views/signin_screen.dart';
 import 'features/authentication/presentation/views/signup_screen.dart';
 import 'features/home/presentation/views/home_screen.dart';
+import 'shared/presentation/error_screen.dart';
+import 'core/logging/logger.dart';
 
 final GoRouter appRouter = GoRouter(
   initialLocation: '/home',
@@ -17,6 +18,8 @@ final GoRouter appRouter = GoRouter(
       builder: (context, state) => const SignUpPage(),
     ),
   ],
-  errorBuilder: (context, state) =>
-      Scaffold(body: Center(child: Text('Error: ${state.error}'))),
+  errorBuilder: (context, state) {
+    AppLogger.e('Router Error: ${state.uri}', state.error, null, 'ROUTER');
+    return ErrorScreen(error: state.error);
+  },
 );

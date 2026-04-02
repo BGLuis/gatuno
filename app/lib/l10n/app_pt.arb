@@ -24,5 +24,9 @@
   "homeWelcome": "Bem-vindo ao Gatuno!",
   "homeProfile": "Perfil",
   "commonLogout": "Sair",
-  "commonLoading": "Carregando..."
+  "commonLoading": "Loading...",
+  "errorTitle": "Algo deu errado",
+  "errorMessage": "Ocorreu um erro inesperado.",
+  "errorRetry": "Tentar novamente",
+  "errorBack": "Voltar"
 }
