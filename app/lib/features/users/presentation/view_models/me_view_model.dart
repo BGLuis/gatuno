@@ -1,9 +1,9 @@
-import 'package:flutter/foundation.dart';
+import '../../../../core/base/safe_change_notifier.dart';
 import '../../domain/use_cases/user_service.dart';
 import '../../data/models/user_model.dart';
 import '../../../../core/logging/logger.dart';
 
-class MeViewModel extends ChangeNotifier {
+class MeViewModel extends SafeChangeNotifier {
   final UserService _userService;
   static const String _logTag = 'MeViewModel';
 

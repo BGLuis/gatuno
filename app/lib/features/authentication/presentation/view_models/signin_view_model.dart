@@ -1,8 +1,8 @@
-import 'package:flutter/foundation.dart';
+import '../../../../core/base/safe_change_notifier.dart';
 import '../../domain/use_cases/auth_service.dart';
 import '../../../../core/logging/logger.dart';
 
-class SignInViewModel extends ChangeNotifier {
+class SignInViewModel extends SafeChangeNotifier {
   final AuthService _authService;
   static const String _logTag = 'SignInViewModel';
 
