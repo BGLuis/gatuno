@@ -40,7 +40,7 @@ class JwtDecoder {
   }
 
   static String _decodeBase64(String str) {
-    String output = str.replaceAll('-', '+').replaceAll('_', '/');
+    String output = str;
 
     switch (output.length % 4) {
       case 0:
