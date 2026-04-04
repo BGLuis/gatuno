@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
@@ -77,15 +78,45 @@ void main() {
 
     test('should add Authorization header when token is valid', () async {
       final options = RequestOptions(path: '/test');
-      when(
-        () => authService.getAccessToken(),
-      ).thenAnswer((_) async => 'valid_token');
+
+      // Create a non-expired valid-looking token (3 parts)
+      final exp = (DateTime.now().millisecondsSinceEpoch ~/ 1000) + 3600;
+      final payload = base64Url
+          .encode(utf8.encode('{"exp": $exp}'))
+          .replaceAll('=', '');
+      final token = 'header.$payload.signature';
+
+      when(() => authService.getAccessToken()).thenAnswer((_) async => token);
       when(() => requestHandler.next(any())).thenAnswer((_) {});
 
       getInterceptor().onRequest(options, requestHandler);
 
       await Future<void>.delayed(Duration.zero);
-      expect(options.headers['Authorization'], 'Bearer valid_token');
+      expect(options.headers['Authorization'], 'Bearer $token');
+      // Should NOT call performTokenRefresh because it's not near expiry
+      verifyNever(() => authService.performTokenRefresh());
+    });
+
+    test('should trigger eager refresh when token is near expiry', () async {
+      final options = RequestOptions(path: '/test');
+
+      // Create a token that expires in 1 minute (within the 2-minute threshold)
+      final exp = (DateTime.now().millisecondsSinceEpoch ~/ 1000) + 60;
+      final payload = base64Url
+          .encode(utf8.encode('{"exp": $exp}'))
+          .replaceAll('=', '');
+      final token = 'header.$payload.signature';
+
+      when(() => authService.getAccessToken()).thenAnswer((_) async => token);
+      when(() => authService.performTokenRefresh()).thenAnswer((_) async {});
+      when(() => requestHandler.next(any())).thenAnswer((_) {});
+
+      getInterceptor().onRequest(options, requestHandler);
+
+      await Future<void>.delayed(Duration.zero);
+      expect(options.headers['Authorization'], 'Bearer $token');
+      // Should call performTokenRefresh in the background
+      verify(() => authService.performTokenRefresh()).called(1);
     });
   });
 

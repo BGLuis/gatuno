@@ -21,6 +21,29 @@
   "authDoNotHaveAccount": "Não tem uma conta? Cadastre-se",
   "authAlreadyHaveAccount": "Já tem uma conta? Entrar",
   "homeTitle": "Início",
+  "booksTitle": "Livros",
+  "booksSearchHint": "Pesquisar livros...",
+  "booksFilterTitle": "Filtros",
+  "booksApplyFilters": "Aplicar Filtros",
+  "booksClearFilters": "Limpar",
+  "booksPublicationYear": "Ano de publicação",
+  "booksTypes": "Tipos",
+  "booksSensitiveContent": "Conteúdos sensíveis",
+  "booksTags": "Tags",
+  "booksIncludedTags": "Selecionadas",
+  "booksExcludedTags": "Excluídas",
+  "booksOperatorBefore": "Antes de",
+  "booksOperatorBeforeEqual": "Antes ou igual a",
+  "booksOperatorAfter": "Depois de",
+  "booksOperatorAfterEqual": "Depois ou igual a",
+  "booksOperatorEqual": "Igual a",
+  "bookTypeManga": "Mangá",
+  "bookTypeManhwa": "Manhwa",
+  "bookTypeManhua": "Manhua",
+  "bookTypeBook": "Livro",
+  "bookTypeOther": "Outro",
+  "booksUnknownAuthor": "Autor Desconhecido",
+  "booksNoBooksFound": "Nenhum livro encontrado",
   "homeWelcome": "Bem-vindo ao Gatuno!",
   "homeProfile": "Perfil",
   "userMeTitle": "Meu Perfil",
@@ -31,5 +54,18 @@
   "errorTitle": "Algo deu errado",
   "errorMessage": "Ocorreu um erro inesperado.",
   "errorRetry": "Tentar novamente",
-  "errorBack": "Voltar"
+  "errorBack": "Voltar",
+  "commonPrevious": "Anterior",
+  "commonNext": "Próximo",
+  "commonPageOf": "Página {current} de {total}",
+  "@commonPageOf": {
+    "placeholders": {
+      "current": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  }
 }

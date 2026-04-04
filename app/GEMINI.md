@@ -1,6 +1,7 @@
 # Gatuno Development Log
 
 ## Branding & Identity
+
 - **App Icons:**
   - Configured platform-specific icon sets using `flutter_launcher_icons`.
   - Generated 1024x1024 raster assets from SVG via ImageMagick for compatibility.
@@ -16,9 +17,9 @@
   - Rebranded package/bundle identifier to `com.gatuno.app` across Android (build.gradle, MainActivity) and iOS (project.pbxproj).
 
 ## Features
+
 - **Authentication - Signup:**
-  - Integrated `/auth/signup` endpoint with DTO-compliant validation (8+ chars, uppercase, digit, symbol).
-  - Implemented `SignUpViewModel` and `SignUpForm` with automatic post-registration signIn.
+  - Integrated `/auth/signup` endpoint with DTO-compliant validation (8+ chars, uppercase, digit, symbol). Implemented `SignUpViewModel` and `SignUpForm` with automatic post-registration signIn.
   - Updated `GoRouter` navigation to handle the new signup flow and redirection.
 - **Autofill Support:**
   - Enabled password manager autofill (e.g., Bitwarden, iCloud Keychain) for SignIn and SignUp forms.
@@ -27,6 +28,7 @@
   - Added explicit `TextInput.finishAutofillContext(shouldSave: true)` calls on successful authentication to prompt credential saving.
 
 ## Infrastructure & Quality
+
 - **Routing:**
   - Removed global `redirect` from `GoRouter` in `router.dart`.
   - The app is now accessible without mandatory signIn, allowing direct access to `/home`.
@@ -53,6 +55,7 @@
   - Stubbed `AuthService.isAuthenticated()` in tests to prevent `Mocktail` failures during `initState`.
 
 ## Features
+
 - **Users - Profile:**
   - Implemented `/users/me` route to display current user profile.
   - Developed a custom `JwtDecoder` utility in `core/utils/jwt_decoder.dart` to extract user info from access tokens.
@@ -60,12 +63,22 @@
   - Added a "Sensitive Content" toggle that persists in `UserStorage` and remains enabled even after logout.
   - Integrated `MePage` with `GoRouter` using `context.push()` to allow easy navigation back to `/home`.
 
+- **Books - Navigation & List:**
+  - Refactored primary navigation to use a `BottomNavigationBar` via `StatefulShellRoute`.
+  - Implemented the `Books` feature with support for Grid and List layouts.
+  - Developed `BooksViewModel` with advanced filtering (publication year, types, sensitive content) and sorting options.
+  - Integrated `BooksFilterSheet` for a refined user experience in discovery.
+  - Implemented index-based pagination for the book list.
+  - Updated `AuthService` to provide `displayName` by decoding JWT tokens.
+  - Integrated comprehensive logging in `BooksViewModel` and `BooksRepositoryImpl` to monitor book retrieval, user filtering actions, and pagination.
+
 - **Home:**
   - Refactored `HomePage` to follow Atomic Design using `HomeAppBar` (organism) and `HomeTemplate` (template).
   - Implemented `HomeViewModel` to reactively update the UI when authentication state changes.
   - Improved `AppBar` to show "Profile" or "Sign In" icons instantly based on `AuthService` state.
 
 ## Design Patterns
+
 - **Atomic Design:**
   - Adopted Atomic Design for UI components in `shared/components/`.
   - **Atoms:** Low-level components like `AppButton`, `AppAvatar`, `AppSwitch`, `AppClickableAction`.
@@ -75,6 +88,7 @@
   - **Pages:** Feature-specific views that wire view models to templates, like `MePage` and `HomePage`.
 
 ## Infrastructure & Quality
+
 - **Reactive Auth State:**
   - Refactored `AuthService` to extend `ChangeNotifier` and provide synchronous `authenticated` and `isInitialized` properties.
   - Provided `AuthService` globally via `MultiProvider` in `main.dart` to allow the entire app to react to auth state changes.

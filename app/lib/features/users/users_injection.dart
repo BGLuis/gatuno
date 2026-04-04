@@ -3,6 +3,7 @@ import '../authentication/domain/use_cases/auth_service.dart';
 import 'data/data_sources/user_local_data_source.dart';
 import 'domain/use_cases/user_service.dart';
 import 'presentation/view_models/me_view_model.dart';
+import '../../shared/presentation/view_models/navigation_view_model.dart';
 
 void initUsersInjection(GetIt sl) {
   // Data Sources
@@ -15,4 +16,7 @@ void initUsersInjection(GetIt sl) {
 
   // View Models
   sl.registerFactory<MeViewModel>(() => MeViewModel(sl<UserService>()));
+  sl.registerFactory<NavigationViewModel>(
+    () => NavigationViewModel(sl<UserService>(), sl<AuthService>()),
+  );
 }

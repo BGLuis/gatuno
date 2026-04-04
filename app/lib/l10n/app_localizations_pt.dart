@@ -75,6 +75,75 @@ class AppLocalizationsPt extends AppLocalizations {
   String get homeTitle => 'Início';
 
   @override
+  String get booksTitle => 'Livros';
+
+  @override
+  String get booksSearchHint => 'Pesquisar livros...';
+
+  @override
+  String get booksFilterTitle => 'Filtros';
+
+  @override
+  String get booksApplyFilters => 'Aplicar Filtros';
+
+  @override
+  String get booksClearFilters => 'Limpar';
+
+  @override
+  String get booksPublicationYear => 'Ano de publicação';
+
+  @override
+  String get booksTypes => 'Tipos';
+
+  @override
+  String get booksSensitiveContent => 'Conteúdos sensíveis';
+
+  @override
+  String get booksTags => 'Tags';
+
+  @override
+  String get booksIncludedTags => 'Selecionadas';
+
+  @override
+  String get booksExcludedTags => 'Excluídas';
+
+  @override
+  String get booksOperatorBefore => 'Antes de';
+
+  @override
+  String get booksOperatorBeforeEqual => 'Antes ou igual a';
+
+  @override
+  String get booksOperatorAfter => 'Depois de';
+
+  @override
+  String get booksOperatorAfterEqual => 'Depois ou igual a';
+
+  @override
+  String get booksOperatorEqual => 'Igual a';
+
+  @override
+  String get bookTypeManga => 'Mangá';
+
+  @override
+  String get bookTypeManhwa => 'Manhwa';
+
+  @override
+  String get bookTypeManhua => 'Manhua';
+
+  @override
+  String get bookTypeBook => 'Livro';
+
+  @override
+  String get bookTypeOther => 'Outro';
+
+  @override
+  String get booksUnknownAuthor => 'Autor Desconhecido';
+
+  @override
+  String get booksNoBooksFound => 'Nenhum livro encontrado';
+
+  @override
   String get homeWelcome => 'Bem-vindo ao Gatuno!';
 
   @override
@@ -107,4 +176,15 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get errorBack => 'Voltar';
+
+  @override
+  String get commonPrevious => 'Anterior';
+
+  @override
+  String get commonNext => 'Próximo';
+
+  @override
+  String commonPageOf(int current, int total) {
+    return 'Página $current de $total';
+  }
 }
