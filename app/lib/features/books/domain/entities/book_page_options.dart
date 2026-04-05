@@ -32,15 +32,15 @@ class BookPageOptions {
     this.order = SortOrder.desc,
     this.search,
     this.publication,
-    this.publicationOperator = 'eq',
+    this.publicationOperator,
     this.type,
     this.sensitiveContent,
     this.tags,
-    this.tagsLogic = 'and',
+    this.tagsLogic,
     this.excludeTags,
-    this.excludeTagsLogic = 'or',
+    this.excludeTagsLogic,
     this.authors,
-    this.authorsLogic = 'and',
+    this.authorsLogic,
   });
 
   Map<String, dynamic> toJson() {
@@ -48,7 +48,7 @@ class BookPageOptions {
       'page': page,
       'limit': limit,
       'orderBy': orderBy,
-      'order': order.name,
+      'order': order.name.toUpperCase(),
       if (search != null && search!.isNotEmpty) 'search': search,
       if (publication != null) 'publication': publication,
       if (publicationOperator != null)

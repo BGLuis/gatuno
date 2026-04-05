@@ -146,6 +146,29 @@ class AppLocalizationsEn extends AppLocalizations {
   String get booksNoBooksFound => 'No books found';
 
   @override
+  String get booksNoChaptersFound => 'No chapters found';
+
+  @override
+  String get booksChapterCount => 'Chapters';
+
+  @override
+  String booksChapterLabel(String index) {
+    return 'Chapter $index';
+  }
+
+  @override
+  String get scrapingStatusReady => 'Ready';
+
+  @override
+  String get scrapingStatusProcess => 'Processing';
+
+  @override
+  String get scrapingStatusError => 'Error';
+
+  @override
+  String get booksStartReading => 'Start Reading';
+
+  @override
   String get homeWelcome => 'Welcome to Gatuno!';
 
   @override

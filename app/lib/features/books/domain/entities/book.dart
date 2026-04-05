@@ -11,8 +11,9 @@ class Book {
   final String? cover;
   final TypeBook? type;
   final int? publication;
-  final DateTime createdAt;
-  final DateTime updatedAt;
+  final int? totalChapters;
+  final DateTime? createdAt;
+  final DateTime? updatedAt;
 
   const Book({
     required this.id,
@@ -23,8 +24,9 @@ class Book {
     this.cover,
     this.type,
     this.publication,
-    required this.createdAt,
-    required this.updatedAt,
+    this.totalChapters,
+    this.createdAt,
+    this.updatedAt,
   });
 }
 

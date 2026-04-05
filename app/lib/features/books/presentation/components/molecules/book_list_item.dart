@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import '../../../domain/entities/book.dart';
 import '../atoms/book_cover.dart';
 import 'book_info.dart';
@@ -13,7 +14,7 @@ class BookListItem extends StatelessWidget {
     final theme = Theme.of(context);
 
     return InkWell(
-      onTap: () {},
+      onTap: () => context.push('/books/${book.id}'),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         child: SizedBox(

@@ -50,10 +50,16 @@ class BooksViewModel extends SafeChangeNotifier {
 
     try {
       final sensitiveEnabled = await _userStorage.isSensitiveContentEnabled();
-      // If sensitive content is NOT enabled, we only want 'Safe' content.
-      // If it IS enabled, we don't send any restriction (or we could send others if we had more tags).
+      // If no sensitive content filter is selected, we apply the default based on user settings.
+      // If the user is NOT allowed sensitive content, we force 'Safe' even if they try to select something else.
+      List<String>? sensitiveFilter = _options.sensitiveContent;
+
+      if (!sensitiveEnabled) {
+        sensitiveFilter = ['Safe'];
+      }
+
       final currentOptions = _options.copyWith(
-        sensitiveContent: sensitiveEnabled ? null : ['Safe'],
+        sensitiveContent: sensitiveFilter,
       );
 
       final result = await _repository.getBooks(currentOptions);
@@ -113,6 +119,7 @@ class BooksViewModel extends SafeChangeNotifier {
     String? excludeTagsLogic,
     List<String>? authors,
     String? authorsLogic,
+    List<String>? sensitiveContent,
   }) {
     AppLogger.i('Updating filters', _logTag);
     _options = _options.copyWith(
@@ -125,6 +132,7 @@ class BooksViewModel extends SafeChangeNotifier {
       excludeTagsLogic: excludeTagsLogic,
       authors: authors,
       authorsLogic: authorsLogic,
+      sensitiveContent: sensitiveContent,
       page: 1,
     );
     fetchBooks(refresh: true);

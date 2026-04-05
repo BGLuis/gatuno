@@ -144,6 +144,29 @@ class AppLocalizationsPt extends AppLocalizations {
   String get booksNoBooksFound => 'Nenhum livro encontrado';
 
   @override
+  String get booksNoChaptersFound => 'Nenhum capítulo encontrado';
+
+  @override
+  String get booksChapterCount => 'Capítulos';
+
+  @override
+  String booksChapterLabel(String index) {
+    return 'Capítulo $index';
+  }
+
+  @override
+  String get scrapingStatusReady => 'Pronto';
+
+  @override
+  String get scrapingStatusProcess => 'Processando';
+
+  @override
+  String get scrapingStatusError => 'Erro';
+
+  @override
+  String get booksStartReading => 'Começar a ler';
+
+  @override
   String get homeWelcome => 'Bem-vindo ao Gatuno!';
 
   @override

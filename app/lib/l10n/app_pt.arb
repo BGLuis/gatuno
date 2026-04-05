@@ -44,6 +44,20 @@
   "bookTypeOther": "Outro",
   "booksUnknownAuthor": "Autor Desconhecido",
   "booksNoBooksFound": "Nenhum livro encontrado",
+  "booksNoChaptersFound": "Nenhum capítulo encontrado",
+  "booksChapterCount": "Capítulos",
+  "booksChapterLabel": "Capítulo {index}",
+  "@booksChapterLabel": {
+    "placeholders": {
+      "index": {
+        "type": "String"
+      }
+    }
+  },
+  "scrapingStatusReady": "Pronto",
+  "scrapingStatusProcess": "Processando",
+  "scrapingStatusError": "Erro",
+  "booksStartReading": "Começar a ler",
   "homeWelcome": "Bem-vindo ao Gatuno!",
   "homeProfile": "Perfil",
   "userMeTitle": "Meu Perfil",

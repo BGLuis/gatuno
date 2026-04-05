@@ -20,7 +20,8 @@ void main() {
     when(() => mockViewModel.isLoading).thenReturn(false);
     when(() => mockViewModel.error).thenReturn(null);
     when(() => mockViewModel.layoutMode).thenReturn(BooksLayoutMode.grid);
-    when(() => mockViewModel.options).thenReturn(const BookPageOptions());
+    const options = BookPageOptions();
+    when(() => mockViewModel.options).thenReturn(options);
     when(() => mockViewModel.bookList).thenReturn(null);
     when(
       () => mockViewModel.fetchBooks(
@@ -73,14 +74,18 @@ void main() {
     // Trigger error
     when(() => mockViewModel.error).thenReturn('Some error occurred');
 
-    // Simulate notification
-    final dynamic listener = verify(
+    // Simulate notification - trigger all listeners
+    final listeners = verify(
       () => mockViewModel.addListener(captureAny()),
-    ).captured.first;
-    listener();
+    ).captured;
+    for (final listener in listeners) {
+      if (listener is VoidCallback) {
+        listener();
+      }
+    }
 
     await tester.pump(); // Trigger build
-    await tester.pump(const Duration(milliseconds: 100)); // Show snackbar
+    await tester.pumpAndSettle(); // Show snackbar
 
     expect(find.byType(SnackBar), findsOneWidget);
     expect(find.text('Some error occurred'), findsOneWidget);

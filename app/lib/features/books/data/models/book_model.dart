@@ -13,8 +13,9 @@ class BookModel extends Book {
     super.cover,
     super.type,
     super.publication,
-    required super.createdAt,
-    required super.updatedAt,
+    super.totalChapters,
+    super.createdAt,
+    super.updatedAt,
   });
 
   factory BookModel.fromJson(Map<String, dynamic> json) {
@@ -27,8 +28,13 @@ class BookModel extends Book {
       cover: json['cover'] as String?,
       type: _parseType(json['type'] as String?),
       publication: json['publication'] as int?,
-      createdAt: DateTime.parse(json['createdAt'] as String),
-      updatedAt: DateTime.parse(json['updatedAt'] as String),
+      totalChapters: json['totalChapters'] as int?,
+      createdAt: json['createdAt'] != null
+          ? DateTime.parse(json['createdAt'] as String)
+          : null,
+      updatedAt: json['updatedAt'] != null
+          ? DateTime.parse(json['updatedAt'] as String)
+          : null,
     );
   }
 

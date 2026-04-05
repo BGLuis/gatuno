@@ -44,6 +44,20 @@
   "bookTypeOther": "Other",
   "booksUnknownAuthor": "Unknown Author",
   "booksNoBooksFound": "No books found",
+  "booksNoChaptersFound": "No chapters found",
+  "booksChapterCount": "Chapters",
+  "booksChapterLabel": "Chapter {index}",
+  "@booksChapterLabel": {
+    "placeholders": {
+      "index": {
+        "type": "String"
+      }
+    }
+  },
+  "scrapingStatusReady": "Ready",
+  "scrapingStatusProcess": "Processing",
+  "scrapingStatusError": "Error",
+  "booksStartReading": "Start Reading",
   "homeWelcome": "Welcome to Gatuno!",
   "homeProfile": "Profile",
   "userMeTitle": "My Profile",

@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:gatuno/l10n/app_localizations.dart';
 import '../../../../../shared/components/atoms/app_button.dart';
+import '../../../../../shared/utils/bottom_sheet_utils.dart';
 import '../../../domain/entities/book_page_options.dart';
 import '../../../domain/entities/book_type.dart';
+import '../../view_models/books_view_model.dart';
 import '../molecules/books_filter_content.dart';
 import '../molecules/books_filter_header.dart';
 
@@ -16,6 +18,30 @@ class BooksFilterSheet extends StatefulWidget {
     required this.onApply,
     required this.onClear,
   });
+
+  static Future<void> show(BuildContext context, BooksViewModel viewModel) {
+    return showAppModalBottomSheet<void>(
+      context: context,
+      builder: (context) => BooksFilterSheet(
+        initialOptions: viewModel.options,
+        onApply: (newOptions) {
+          viewModel.updateFilters(
+            publication: newOptions.publication,
+            publicationOperator: newOptions.publicationOperator,
+            type: newOptions.type,
+            tags: newOptions.tags,
+            tagsLogic: newOptions.tagsLogic,
+            excludeTags: newOptions.excludeTags,
+            excludeTagsLogic: newOptions.excludeTagsLogic,
+            authors: newOptions.authors,
+            authorsLogic: newOptions.authorsLogic,
+            sensitiveContent: newOptions.sensitiveContent,
+          );
+        },
+        onClear: viewModel.clearFilters,
+      ),
+    );
+  }
 
   @override
   State<BooksFilterSheet> createState() => _BooksFilterSheetState();

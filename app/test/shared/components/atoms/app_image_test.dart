@@ -3,7 +3,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:gatuno/shared/components/atoms/app_image.dart';
-import 'package:gatuno/shared/components/atoms/app_loading_indicator.dart';
+import 'package:gatuno/shared/components/atoms/app_skeleton.dart';
 import 'package:mocktail/mocktail.dart';
 import '../../../helpers/test_injection.dart';
 
@@ -43,7 +43,7 @@ void main() {
 
       await tester.pumpWidget(createWidget('http://example.com/image.png'));
 
-      expect(find.byType(AppLoadingIndicator), findsOneWidget);
+      expect(find.byType(AppSkeleton), findsOneWidget);
       await tester.pumpAndSettle();
     });
 

@@ -362,6 +362,48 @@ abstract class AppLocalizations {
   /// **'No books found'**
   String get booksNoBooksFound;
 
+  /// No description provided for @booksNoChaptersFound.
+  ///
+  /// In en, this message translates to:
+  /// **'No chapters found'**
+  String get booksNoChaptersFound;
+
+  /// No description provided for @booksChapterCount.
+  ///
+  /// In en, this message translates to:
+  /// **'Chapters'**
+  String get booksChapterCount;
+
+  /// No description provided for @booksChapterLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Chapter {index}'**
+  String booksChapterLabel(String index);
+
+  /// No description provided for @scrapingStatusReady.
+  ///
+  /// In en, this message translates to:
+  /// **'Ready'**
+  String get scrapingStatusReady;
+
+  /// No description provided for @scrapingStatusProcess.
+  ///
+  /// In en, this message translates to:
+  /// **'Processing'**
+  String get scrapingStatusProcess;
+
+  /// No description provided for @scrapingStatusError.
+  ///
+  /// In en, this message translates to:
+  /// **'Error'**
+  String get scrapingStatusError;
+
+  /// No description provided for @booksStartReading.
+  ///
+  /// In en, this message translates to:
+  /// **'Start Reading'**
+  String get booksStartReading;
+
   /// No description provided for @homeWelcome.
   ///
   /// In en, this message translates to:

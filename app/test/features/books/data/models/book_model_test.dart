@@ -88,5 +88,19 @@ void main() {
       expect(model.authors, isEmpty);
       expect(model.tags, isEmpty);
     });
+
+    test('fromJson should handle null createdAt and updatedAt', () {
+      const jsonNullDates = {
+        'id': '1',
+        'title': 'Test Book',
+        'createdAt': null,
+        'updatedAt': null,
+      };
+
+      final model = BookModel.fromJson(jsonNullDates);
+
+      expect(model.createdAt, isNull);
+      expect(model.updatedAt, isNull);
+    });
   });
 }
