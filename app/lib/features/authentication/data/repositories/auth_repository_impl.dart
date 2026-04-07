@@ -143,8 +143,9 @@ class AuthRepositoryImpl implements AuthRepository {
   Future<AuthTokens> refreshToken(String refreshToken) async {
     AppLogger.i('Token refresh attempt', _logTag);
     try {
-      final response = await _dio.get<Map<String, dynamic>>(
+      final response = await _dio.post<Map<String, dynamic>>(
         ApiConstants.refreshToken,
+        data: const <String, dynamic>{},
         options: Options(headers: {'Cookie': 'refreshToken=$refreshToken'}),
       );
 

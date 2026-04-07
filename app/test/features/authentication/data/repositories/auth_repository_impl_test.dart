@@ -108,8 +108,9 @@ void main() {
       };
 
       when(
-        () => mockDio.get<Map<String, dynamic>>(
+        () => mockDio.post<Map<String, dynamic>>(
           any(),
+          data: any(named: 'data'),
           options: any(named: 'options'),
         ),
       ).thenAnswer(
@@ -126,8 +127,9 @@ void main() {
       expect(result.refreshToken, 'new_refresh');
 
       verify(
-        () => mockDio.get<Map<String, dynamic>>(
+        () => mockDio.post<Map<String, dynamic>>(
           any(),
+          data: <String, dynamic>{},
           options: any(
             named: 'options',
             that: isA<Options>().having(
