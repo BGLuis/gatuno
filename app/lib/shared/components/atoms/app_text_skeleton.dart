@@ -18,7 +18,7 @@ class AppTextSkeleton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (text == null) {
+    if (text == null || text!.trim().isEmpty) {
       return Container(
         width: width,
         height: height,

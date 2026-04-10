@@ -157,6 +157,33 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get booksSortTitle => 'Sort';
+
+  @override
+  String get booksSortMostRecentAdded => 'Most Recent Added';
+
+  @override
+  String get booksSortOldestAdded => 'Oldest Added';
+
+  @override
+  String get booksSortAlphabeticalAZ => 'Alphabetical A-Z';
+
+  @override
+  String get booksSortAlphabeticalZA => 'Alphabetical Z-A';
+
+  @override
+  String get booksSortMostRecentUpdate => 'Most Recent Update';
+
+  @override
+  String get booksSortOldestUpdate => 'Oldest Update';
+
+  @override
+  String get booksSortMostRecentPublished => 'Most Recent Published';
+
+  @override
+  String get booksSortOldestPublished => 'Oldest Published';
+
+  @override
   String get scrapingStatusReady => 'Ready';
 
   @override

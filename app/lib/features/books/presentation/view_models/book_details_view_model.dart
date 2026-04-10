@@ -24,8 +24,14 @@ class BookDetailsViewModel extends SafeChangeNotifier {
   bool _isLoading = false;
   bool get isLoading => _isLoading;
 
+  bool _isLoadingChapters = false;
+  bool get isLoadingChapters => _isLoadingChapters;
+
   String? _error;
   String? get error => _error;
+
+  String? _chaptersError;
+  String? get chaptersError => _chaptersError;
 
   ChapterPageOptions _options = const ChapterPageOptions();
   ChapterPageOptions get options => _options;
@@ -36,6 +42,7 @@ class BookDetailsViewModel extends SafeChangeNotifier {
     AppLogger.i('Fetching book details for ID: $bookId', _logTag);
     _isLoading = true;
     _error = null;
+    _chaptersError = null;
     notifyListeners();
 
     try {
@@ -43,16 +50,7 @@ class BookDetailsViewModel extends SafeChangeNotifier {
       _book = bookResult;
       notifyListeners();
 
-      final chaptersResult = await _repository.getBookChapters(
-        bookId,
-        _options,
-      );
-      _chapterList = chaptersResult;
-
-      AppLogger.i(
-        'Book details and chapters fetched successfully: id=$bookId, chapters=${_chapterList?.data.length}',
-        _logTag,
-      );
+      await fetchChapters();
     } catch (e, stackTrace) {
       AppLogger.e('Error fetching book details', e, stackTrace, _logTag);
       _error = e.toString();
@@ -62,13 +60,44 @@ class BookDetailsViewModel extends SafeChangeNotifier {
     }
   }
 
+  Future<void> fetchChapters() async {
+    if (_isLoadingChapters) return;
+
+    AppLogger.i('Fetching chapters for ID: $bookId', _logTag);
+    _isLoadingChapters = true;
+    _chaptersError = null;
+    notifyListeners();
+
+    try {
+      final chaptersResult = await _repository.getBookChapters(
+        bookId,
+        _options,
+      );
+      _chapterList = chaptersResult;
+
+      AppLogger.i(
+        'Chapters fetched successfully: id=$bookId, count=${_chapterList?.data.length}',
+        _logTag,
+      );
+    } catch (e, stackTrace) {
+      AppLogger.e('Error fetching chapters', e, stackTrace, _logTag);
+      _chaptersError = e.toString();
+    } finally {
+      _isLoadingChapters = false;
+      notifyListeners();
+    }
+  }
+
   Future<void> loadMoreChapters() async {
-    if (_isLoading || _chapterList == null || !_chapterList!.hasNextPage) {
+    if (_isLoading ||
+        _isLoadingChapters ||
+        _chapterList == null ||
+        !_chapterList!.hasNextPage) {
       return;
     }
 
     AppLogger.i('Loading more chapters for ID: $bookId', _logTag);
-    _isLoading = true;
+    _isLoadingChapters = true;
     notifyListeners();
 
     try {
@@ -87,9 +116,9 @@ class BookDetailsViewModel extends SafeChangeNotifier {
       );
     } catch (e, stackTrace) {
       AppLogger.e('Error fetching more chapters', e, stackTrace, _logTag);
-      _error = e.toString();
+      _chaptersError = e.toString();
     } finally {
-      _isLoading = false;
+      _isLoadingChapters = false;
       notifyListeners();
     }
   }

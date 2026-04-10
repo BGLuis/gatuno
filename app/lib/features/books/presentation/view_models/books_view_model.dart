@@ -103,6 +103,28 @@ class BooksViewModel extends SafeChangeNotifier {
     fetchBooks(refresh: true);
   }
 
+  void clearSearch() {
+    AppLogger.i('Clearing search', _logTag);
+    _options = BookPageOptions(
+      page: 1,
+      limit: _options.limit,
+      orderBy: _options.orderBy,
+      order: _options.order,
+      search: null,
+      publication: _options.publication,
+      publicationOperator: _options.publicationOperator,
+      type: _options.type,
+      sensitiveContent: _options.sensitiveContent,
+      tags: _options.tags,
+      tagsLogic: _options.tagsLogic,
+      excludeTags: _options.excludeTags,
+      excludeTagsLogic: _options.excludeTagsLogic,
+      authors: _options.authors,
+      authorsLogic: _options.authorsLogic,
+    );
+    fetchBooks(refresh: true);
+  }
+
   void setSort(String orderBy, SortOrder order) {
     AppLogger.i('Setting sort: $orderBy $order', _logTag);
     _options = _options.copyWith(orderBy: orderBy, order: order, page: 1);

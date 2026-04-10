@@ -13,16 +13,19 @@ import 'chapter_list.dart';
 class BookDetailsContent extends StatelessWidget {
   final BookDetailsViewModel viewModel;
   final Book book;
+  final ScrollController scrollController;
 
   const BookDetailsContent({
     super.key,
     required this.viewModel,
     required this.book,
+    required this.scrollController,
   });
 
   @override
   Widget build(BuildContext context) {
     return BookDetailsTemplate(
+      scrollController: scrollController,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         leading: IconButton(
@@ -46,12 +49,13 @@ class BookDetailsContent extends StatelessWidget {
       description: BookDescription(description: book.description),
       chapterList: ChapterList(
         chapters: viewModel.chapterList?.data ?? [],
-        isLoading: viewModel.isLoading,
+        isLoading: viewModel.isLoadingChapters,
         hasNextPage: viewModel.chapterList?.hasNextPage ?? false,
-        onLoadMore: viewModel.loadMoreChapters,
         onChapterTap: (chapter) {
           // TODO: Navigate to reader
         },
+        error: viewModel.chaptersError,
+        onRetry: viewModel.fetchChapters,
       ),
     );
   }

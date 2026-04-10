@@ -7,23 +7,25 @@ class ChapterList extends StatelessWidget {
   final List<Chapter> chapters;
   final bool isLoading;
   final bool hasNextPage;
-  final VoidCallback onLoadMore;
   final void Function(Chapter) onChapterTap;
+  final String? error;
+  final VoidCallback? onRetry;
 
   const ChapterList({
     super.key,
     required this.chapters,
     required this.isLoading,
     required this.hasNextPage,
-    required this.onLoadMore,
     required this.onChapterTap,
+    this.error,
+    this.onRetry,
   });
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
 
-    if (chapters.isEmpty && !isLoading) {
+    if (chapters.isEmpty && !isLoading && error == null) {
       return SliverToBoxAdapter(
         child: Center(
           child: Padding(
@@ -45,12 +47,50 @@ class ChapterList extends StatelessWidget {
       );
     }
 
+    if (chapters.isEmpty && error != null) {
+      return SliverToBoxAdapter(
+        child: Center(
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              children: [
+                Text(error!, textAlign: TextAlign.center),
+                if (onRetry != null)
+                  TextButton(onPressed: onRetry, child: Text(l10n.errorRetry)),
+              ],
+            ),
+          ),
+        ),
+      );
+    }
+
     return SliverList(
       delegate: SliverChildBuilderDelegate((context, index) {
         if (index == chapters.length) {
-          if (hasNextPage) {
-            onLoadMore();
-            return const Center(child: CircularProgressIndicator());
+          if (isLoading) {
+            return const Center(
+              child: Padding(
+                padding: EdgeInsets.all(16.0),
+                child: CircularProgressIndicator(),
+              ),
+            );
+          }
+          if (error != null) {
+            return Center(
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  children: [
+                    Text(error!, textAlign: TextAlign.center),
+                    if (onRetry != null)
+                      TextButton(
+                        onPressed: onRetry,
+                        child: Text(l10n.errorRetry),
+                      ),
+                  ],
+                ),
+              ),
+            );
           }
           return const SizedBox(height: 32);
         }

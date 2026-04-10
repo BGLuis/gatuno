@@ -58,7 +58,7 @@ class _AppImageState extends State<AppImage> {
         return Uint8List.fromList(response.data!);
       }
     } catch (e) {
-      debugPrint('Error fetching image (\$widget.imageUrl): $e');
+      debugPrint('Error fetching image (${widget.imageUrl}): $e');
     }
     return null;
   }

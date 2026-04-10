@@ -15,14 +15,30 @@ class BookDetailsPage extends StatefulWidget {
 
 class _BookDetailsPageState extends State<BookDetailsPage> {
   late final BookDetailsViewModel _viewModel;
+  final ScrollController _scrollController = ScrollController();
 
   @override
   void initState() {
     super.initState();
     _viewModel = context.read<BookDetailsViewModel>();
+    _scrollController.addListener(_onScroll);
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _viewModel.fetchBookDetails();
     });
+  }
+
+  @override
+  void dispose() {
+    _scrollController.removeListener(_onScroll);
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  void _onScroll() {
+    if (_scrollController.position.pixels >=
+        _scrollController.position.maxScrollExtent - 200) {
+      _viewModel.loadMoreChapters();
+    }
   }
 
   @override
@@ -51,7 +67,11 @@ class _BookDetailsPageState extends State<BookDetailsPage> {
           );
         }
 
-        return BookDetailsContent(viewModel: _viewModel, book: book);
+        return BookDetailsContent(
+          viewModel: _viewModel,
+          book: book,
+          scrollController: _scrollController,
+        );
       },
     );
   }

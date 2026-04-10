@@ -23,12 +23,17 @@ class NavigationViewModel extends SafeChangeNotifier {
   }
 
   Future<void> _loadUser() async {
-    if (_authService.authenticated) {
-      _user = await _userService.getCurrentUser();
-    } else {
+    try {
+      if (_authService.authenticated) {
+        _user = await _userService.getCurrentUser();
+      } else {
+        _user = null;
+      }
+    } catch (e) {
       _user = null;
+    } finally {
+      notifyListeners();
     }
-    notifyListeners();
   }
 
   @visibleForTesting

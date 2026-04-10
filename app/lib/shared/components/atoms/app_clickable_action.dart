@@ -17,7 +17,7 @@ class AppClickableAction extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Semantics(
-      button: true,
+      button: onPressed != null,
       label: tooltip,
       child: Tooltip(
         message: tooltip,

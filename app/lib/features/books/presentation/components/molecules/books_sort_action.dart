@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gatuno/l10n/app_localizations.dart';
 import '../../../domain/entities/book_page_options.dart';
 
 class BooksSortAction extends StatelessWidget {
@@ -8,43 +9,46 @@ class BooksSortAction extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return PopupMenuButton<SortOption>(
       icon: const Icon(Icons.sort),
+      tooltip: l10n.booksSortTitle,
       onSelected: (option) {
         onSortChanged(option.orderBy, option.order);
       },
       itemBuilder: (context) => [
-        const PopupMenuItem(
-          value: SortOption('createdAt', SortOrder.desc),
-          child: Text('Most Recent Added'),
+        PopupMenuItem(
+          value: const SortOption('createdAt', SortOrder.desc),
+          child: Text(l10n.booksSortMostRecentAdded),
         ),
-        const PopupMenuItem(
-          value: SortOption('createdAt', SortOrder.asc),
-          child: Text('Oldest Added'),
+        PopupMenuItem(
+          value: const SortOption('createdAt', SortOrder.asc),
+          child: Text(l10n.booksSortOldestAdded),
         ),
-        const PopupMenuItem(
-          value: SortOption('title', SortOrder.asc),
-          child: Text('Alphabetical A-Z'),
+        PopupMenuItem(
+          value: const SortOption('title', SortOrder.asc),
+          child: Text(l10n.booksSortAlphabeticalAZ),
         ),
-        const PopupMenuItem(
-          value: SortOption('title', SortOrder.desc),
-          child: Text('Alphabetical Z-A'),
+        PopupMenuItem(
+          value: const SortOption('title', SortOrder.desc),
+          child: Text(l10n.booksSortAlphabeticalZA),
         ),
-        const PopupMenuItem(
-          value: SortOption('updatedAt', SortOrder.desc),
-          child: Text('Most Recent Update'),
+        PopupMenuItem(
+          value: const SortOption('updatedAt', SortOrder.desc),
+          child: Text(l10n.booksSortMostRecentUpdate),
         ),
-        const PopupMenuItem(
-          value: SortOption('updatedAt', SortOrder.asc),
-          child: Text('Oldest Update'),
+        PopupMenuItem(
+          value: const SortOption('updatedAt', SortOrder.asc),
+          child: Text(l10n.booksSortOldestUpdate),
         ),
-        const PopupMenuItem(
-          value: SortOption('publication', SortOrder.desc),
-          child: Text('Most Recent Published'),
+        PopupMenuItem(
+          value: const SortOption('publication', SortOrder.desc),
+          child: Text(l10n.booksSortMostRecentPublished),
         ),
-        const PopupMenuItem(
-          value: SortOption('publication', SortOrder.asc),
-          child: Text('Oldest Published'),
+        PopupMenuItem(
+          value: const SortOption('publication', SortOrder.asc),
+          child: Text(l10n.booksSortOldestPublished),
         ),
       ],
     );

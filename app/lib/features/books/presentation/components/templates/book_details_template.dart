@@ -9,6 +9,7 @@ class BookDetailsTemplate extends StatelessWidget {
   final Widget tags;
   final Widget description;
   final Widget chapterList;
+  final ScrollController? scrollController;
 
   const BookDetailsTemplate({
     super.key,
@@ -19,6 +20,7 @@ class BookDetailsTemplate extends StatelessWidget {
     required this.tags,
     required this.description,
     required this.chapterList,
+    this.scrollController,
   });
 
   @override
@@ -36,6 +38,7 @@ class BookDetailsTemplate extends StatelessWidget {
       body: Container(
         decoration: BoxDecoration(gradient: gatunoColors?.degrader),
         child: CustomScrollView(
+          controller: scrollController,
           slivers: [
             SliverToBoxAdapter(
               child: SafeArea(

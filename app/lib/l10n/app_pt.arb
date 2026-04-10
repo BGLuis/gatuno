@@ -54,6 +54,15 @@
       }
     }
   },
+  "booksSortTitle": "Ordenar",
+  "booksSortMostRecentAdded": "Adicionados recentemente",
+  "booksSortOldestAdded": "Mais antigos primeiro",
+  "booksSortAlphabeticalAZ": "Alfabética A-Z",
+  "booksSortAlphabeticalZA": "Alfabética Z-A",
+  "booksSortMostRecentUpdate": "Atualizações recentes",
+  "booksSortOldestUpdate": "Atualizações antigas",
+  "booksSortMostRecentPublished": "Publicados recentemente",
+  "booksSortOldestPublished": "Publicados antigos",
   "scrapingStatusReady": "Pronto",
   "scrapingStatusProcess": "Processando",
   "scrapingStatusError": "Erro",

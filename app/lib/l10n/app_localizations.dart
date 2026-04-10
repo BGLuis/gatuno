@@ -380,6 +380,60 @@ abstract class AppLocalizations {
   /// **'Chapter {index}'**
   String booksChapterLabel(String index);
 
+  /// No description provided for @booksSortTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Sort'**
+  String get booksSortTitle;
+
+  /// No description provided for @booksSortMostRecentAdded.
+  ///
+  /// In en, this message translates to:
+  /// **'Most Recent Added'**
+  String get booksSortMostRecentAdded;
+
+  /// No description provided for @booksSortOldestAdded.
+  ///
+  /// In en, this message translates to:
+  /// **'Oldest Added'**
+  String get booksSortOldestAdded;
+
+  /// No description provided for @booksSortAlphabeticalAZ.
+  ///
+  /// In en, this message translates to:
+  /// **'Alphabetical A-Z'**
+  String get booksSortAlphabeticalAZ;
+
+  /// No description provided for @booksSortAlphabeticalZA.
+  ///
+  /// In en, this message translates to:
+  /// **'Alphabetical Z-A'**
+  String get booksSortAlphabeticalZA;
+
+  /// No description provided for @booksSortMostRecentUpdate.
+  ///
+  /// In en, this message translates to:
+  /// **'Most Recent Update'**
+  String get booksSortMostRecentUpdate;
+
+  /// No description provided for @booksSortOldestUpdate.
+  ///
+  /// In en, this message translates to:
+  /// **'Oldest Update'**
+  String get booksSortOldestUpdate;
+
+  /// No description provided for @booksSortMostRecentPublished.
+  ///
+  /// In en, this message translates to:
+  /// **'Most Recent Published'**
+  String get booksSortMostRecentPublished;
+
+  /// No description provided for @booksSortOldestPublished.
+  ///
+  /// In en, this message translates to:
+  /// **'Oldest Published'**
+  String get booksSortOldestPublished;
+
   /// No description provided for @scrapingStatusReady.
   ///
   /// In en, this message translates to:
