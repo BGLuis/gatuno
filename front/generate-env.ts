@@ -1,7 +1,7 @@
-import * as fs from 'node:fs';
-import * as path from 'node:path';
+const fs = require('node:fs');
+const path = require('node:path');
 
-const envDirectory = path.join(import.meta.dirname, 'src/environments');
+const envDirectory = path.join(__dirname, 'src/environments');
 const targetPath = path.join(envDirectory, 'environment.prod.ts');
 
 if (!fs.existsSync(envDirectory)) {
@@ -12,7 +12,7 @@ const envConfigFile = `// This file was generated automatically by the generate-
 export const environment = {
 	production: true,
 	apiURL: '${process.env.API_URL || 'http://localhost:3001'}/api',
-	apiURLServer: '${process.env.API_URL_SERVER || 'http://api:3000'}/api'
+	apiURLServer: '${process.env.API_URL_SERVER || process.env.API_URL || 'http://localhost:3001'}/api'
 };
 `;
 
