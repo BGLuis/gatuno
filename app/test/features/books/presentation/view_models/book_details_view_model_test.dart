@@ -108,7 +108,10 @@ void main() {
       viewModel.setChapterOrder(ChapterSortOrder.desc);
 
       expect(viewModel.options.order, ChapterSortOrder.desc);
-      expect(viewModel.isLoading, true); // It starts fetching immediately
+      expect(
+        viewModel.isLoadingChapters,
+        true,
+      ); // It starts fetching immediately
 
       await Future<void>.delayed(Duration.zero); // Allow fetch to complete
 
