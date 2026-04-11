@@ -16,13 +16,38 @@ class AuthInterceptor extends Interceptor {
 
   AuthInterceptor({required this.dioClient, required this.authService});
 
+  bool _shouldIntercept(RequestOptions options) {
+    // 1. Check if the request is targeting the API origin
+    if (options.baseUrl.isEmpty) return false;
+
+    final baseUri = Uri.parse(options.baseUrl);
+    final requestUri = options.uri;
+
+    // Use a basic origin check (scheme, host, port) to identify API requests.
+    // This prevents leaking tokens to third-party domains.
+    final bool isApiOrigin =
+        requestUri.scheme == baseUri.scheme &&
+        requestUri.host == baseUri.host &&
+        requestUri.port == baseUri.port;
+
+    if (!isApiOrigin) return false;
+
+    // 2. Check if the path is an auth endpoint that shouldn't have the token
+    // Some auth endpoints (signin, signup) don't need the Authorization header.
+    // The refresh token endpoint uses a cookie-based approach.
+    final bool isExcluded = _excludedPaths.any(
+      (path) => options.path == path || requestUri.path.endsWith(path),
+    );
+
+    return !isExcluded;
+  }
+
   @override
   void onRequest(
     RequestOptions options,
     RequestInterceptorHandler handler,
   ) async {
-    // Don't add auth header to the refresh token endpoint itself
-    if (options.path != ApiConstants.refreshToken) {
+    if (_shouldIntercept(options)) {
       final token = await authService.getAccessToken();
       if (token != null && token.isNotEmpty) {
         options.headers['Authorization'] = 'Bearer $token';
@@ -49,7 +74,7 @@ class AuthInterceptor extends Interceptor {
   @override
   void onError(DioException err, ErrorInterceptorHandler handler) async {
     if (err.response?.statusCode == 401 &&
-        !_excludedPaths.contains(err.requestOptions.path)) {
+        _shouldIntercept(err.requestOptions)) {
       final currentToken = await authService.getAccessToken();
       final authHeader = err.requestOptions.headers['Authorization']
           ?.toString();

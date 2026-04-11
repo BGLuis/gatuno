@@ -60,7 +60,9 @@ class BooksYearFilter extends StatelessWidget {
               child: TextField(
                 controller: yearController,
                 keyboardType: TextInputType.number,
-                decoration: const InputDecoration(hintText: '2026'),
+                decoration: InputDecoration(
+                  hintText: DateTime.now().year.toString(),
+                ),
                 onChanged: onYearChanged,
               ),
             ),

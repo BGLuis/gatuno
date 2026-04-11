@@ -79,8 +79,8 @@ class _AppImageState extends State<AppImage> {
             height: widget.height,
             child: Center(
               child:
-                  widget.placeholder ??
                   widget.errorWidget ??
+                  widget.placeholder ??
                   const Icon(Icons.broken_image, size: 24.0),
             ),
           );

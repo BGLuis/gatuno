@@ -235,6 +235,11 @@ class AppLocalizationsEn extends AppLocalizations {
   String get commonNext => 'Next';
 
   @override
+  String commonPage(int page) {
+    return 'Page $page';
+  }
+
+  @override
   String commonPageOf(int current, int total) {
     return 'Page $current of $total';
   }

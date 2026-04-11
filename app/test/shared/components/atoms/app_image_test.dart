@@ -60,6 +60,33 @@ void main() {
       expect(find.byIcon(Icons.broken_image), findsOneWidget);
     });
 
+    testWidgets('shows errorWidget instead of placeholder when fetch fails', (
+      WidgetTester tester,
+    ) async {
+      when(
+        () => mockDio.get<List<int>>(any(), options: any(named: 'options')),
+      ).thenThrow(DioException(requestOptions: RequestOptions(path: '')));
+
+      const placeholderKey = Key('placeholder');
+      const errorKey = Key('error');
+
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: AppImage(
+              imageUrl: 'http://example.com/image.png',
+              placeholder: const SizedBox(key: placeholderKey),
+              errorWidget: const SizedBox(key: errorKey),
+            ),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      expect(find.byKey(errorKey), findsOneWidget);
+      expect(find.byKey(placeholderKey), findsNothing);
+    });
+
     testWidgets('shows error widget when data is null', (
       WidgetTester tester,
     ) async {

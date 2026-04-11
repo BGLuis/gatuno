@@ -38,10 +38,13 @@ void main() {
     mockViewModel = MockBookDetailsViewModel();
 
     when(() => mockViewModel.isLoading).thenReturn(false);
+    when(() => mockViewModel.isLoadingChapters).thenReturn(false);
     when(() => mockViewModel.error).thenReturn(null);
+    when(() => mockViewModel.chaptersError).thenReturn(null);
     when(() => mockViewModel.book).thenReturn(null);
     when(() => mockViewModel.chapterList).thenReturn(null);
     when(() => mockViewModel.fetchBookDetails()).thenAnswer((_) async {});
+    when(() => mockViewModel.fetchChapters()).thenAnswer((_) async {});
 
     // Handle listeners
     when(() => mockViewModel.addListener(any())).thenReturn(null);

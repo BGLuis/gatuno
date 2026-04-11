@@ -80,6 +80,14 @@
   "errorBack": "Go Back",
   "commonPrevious": "Previous",
   "commonNext": "Next",
+  "commonPage": "Page {page}",
+  "@commonPage": {
+    "placeholders": {
+      "page": {
+        "type": "int"
+      }
+    }
+  },
   "commonPageOf": "Page {current} of {total}",
   "@commonPageOf": {
     "placeholders": {

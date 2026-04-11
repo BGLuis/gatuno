@@ -85,5 +85,32 @@ void main() {
       viewModel.clearError();
       expect(viewModel.error, null);
     });
+
+    test('setSearch(null) should clear search filter', () async {
+      final bookList = BookList(
+        data: [],
+        total: 0,
+        page: 1,
+        limit: 20,
+        totalPages: 1,
+      );
+
+      when(
+        () => mockUserStorage.isSensitiveContentEnabled(),
+      ).thenAnswer((_) async => false);
+      when(
+        () => mockRepository.getBooks(any()),
+      ).thenAnswer((_) async => bookList);
+
+      // Set search initially
+      viewModel.setSearch('test');
+      expect(viewModel.options.search, 'test');
+
+      // Attempt to clear search
+      viewModel.setSearch(null);
+
+      // If copyWith bug exists, search will still be 'test'
+      expect(viewModel.options.search, null);
+    });
   });
 }

@@ -80,6 +80,14 @@
   "errorBack": "Voltar",
   "commonPrevious": "Anterior",
   "commonNext": "Próximo",
+  "commonPage": "Página {page}",
+  "@commonPage": {
+    "placeholders": {
+      "page": {
+        "type": "int"
+      }
+    }
+  },
   "commonPageOf": "Página {current} de {total}",
   "@commonPageOf": {
     "placeholders": {

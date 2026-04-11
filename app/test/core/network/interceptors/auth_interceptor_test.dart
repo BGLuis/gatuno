@@ -35,6 +35,7 @@ void main() {
   late Interceptors interceptors;
   late MockRequestInterceptorHandler requestHandler;
   late MockErrorInterceptorHandler errorHandler;
+  const testBaseUrl = 'https://api.gatuno.com/api';
 
   setUpAll(() {
     registerFallbackValue(FakeRequestOptions());
@@ -65,7 +66,7 @@ void main() {
     test(
       'should NOT add Authorization header when token is empty string',
       () async {
-        final options = RequestOptions(path: '/test');
+        final options = RequestOptions(path: '/test', baseUrl: testBaseUrl);
         when(() => authService.getAccessToken()).thenAnswer((_) async => '');
         when(() => requestHandler.next(any())).thenAnswer((_) {});
 
@@ -77,7 +78,7 @@ void main() {
     );
 
     test('should add Authorization header when token is valid', () async {
-      final options = RequestOptions(path: '/test');
+      final options = RequestOptions(path: '/test', baseUrl: testBaseUrl);
 
       // Create a non-expired valid-looking token (3 parts)
       final exp = (DateTime.now().millisecondsSinceEpoch ~/ 1000) + 3600;
@@ -97,8 +98,41 @@ void main() {
       verifyNever(() => authService.performTokenRefresh());
     });
 
+    test('should NOT add Authorization header for external URLs', () async {
+      final options = RequestOptions(
+        path: 'https://other-api.com/data',
+        baseUrl: testBaseUrl,
+      );
+      when(() => authService.getAccessToken()).thenAnswer((_) async => 'token');
+      when(() => requestHandler.next(any())).thenAnswer((_) {});
+
+      getInterceptor().onRequest(options, requestHandler);
+
+      await Future<void>.delayed(Duration.zero);
+      expect(options.headers['Authorization'], isNull);
+    });
+
+    test(
+      'should NOT add Authorization header for excluded paths (signin)',
+      () async {
+        final options = RequestOptions(
+          path: '/auth/signin',
+          baseUrl: testBaseUrl,
+        );
+        when(
+          () => authService.getAccessToken(),
+        ).thenAnswer((_) async => 'token');
+        when(() => requestHandler.next(any())).thenAnswer((_) {});
+
+        getInterceptor().onRequest(options, requestHandler);
+
+        await Future<void>.delayed(Duration.zero);
+        expect(options.headers['Authorization'], isNull);
+      },
+    );
+
     test('should trigger eager refresh when token is near expiry', () async {
-      final options = RequestOptions(path: '/test');
+      final options = RequestOptions(path: '/test', baseUrl: testBaseUrl);
 
       // Create a token that expires in 1 minute (within the 2-minute threshold)
       final exp = (DateTime.now().millisecondsSinceEpoch ~/ 1000) + 60;
@@ -126,6 +160,7 @@ void main() {
       () async {
         final options = RequestOptions(
           path: '/test',
+          baseUrl: testBaseUrl,
           headers: {'Authorization': 'Bearer old_token'},
         );
         final error = DioException(
@@ -152,9 +187,30 @@ void main() {
       },
     );
 
+    test('should NOT perform refresh for external URL 401', () async {
+      final options = RequestOptions(
+        path: 'https://other-api.com/data',
+        baseUrl: testBaseUrl,
+        headers: {'Authorization': 'Bearer some_token'},
+      );
+      final error = DioException(
+        requestOptions: options,
+        response: Response<dynamic>(requestOptions: options, statusCode: 401),
+      );
+
+      when(() => errorHandler.next(any())).thenAnswer((_) {});
+
+      getInterceptor().onError(error, errorHandler);
+
+      await Future<void>.delayed(Duration.zero);
+      verifyNever(() => authService.performTokenRefresh());
+      verify(() => errorHandler.next(error)).called(1);
+    });
+
     test('should perform refresh and retry if token is the same', () async {
       final options = RequestOptions(
         path: '/test',
+        baseUrl: testBaseUrl,
         headers: {'Authorization': 'Bearer old_token'},
       );
       final error = DioException(
@@ -185,6 +241,7 @@ void main() {
     test('should forward refresh error when refresh fails', () async {
       final options = RequestOptions(
         path: '/test',
+        baseUrl: testBaseUrl,
         headers: {'Authorization': 'Bearer old_token'},
       );
       final error = DioException(

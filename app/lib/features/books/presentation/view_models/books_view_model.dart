@@ -98,6 +98,10 @@ class BooksViewModel extends SafeChangeNotifier {
   }
 
   void setSearch(String? search) {
+    if (search == null || search.isEmpty) {
+      clearSearch();
+      return;
+    }
     AppLogger.i('Setting search to: $search', _logTag);
     _options = _options.copyWith(search: search, page: 1);
     fetchBooks(refresh: true);

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../../l10n/app_localizations.dart';
 import '../atoms/app_clickable_action.dart';
 
 class Pagination extends StatelessWidget {
@@ -93,11 +94,12 @@ class _PageButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final l10n = AppLocalizations.of(context)!;
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 4),
       child: AppClickableAction(
-        tooltip: 'Page $page',
+        tooltip: l10n.commonPage(page),
         padding: EdgeInsets.zero,
         onPressed: isSelected ? null : onTap,
         child: Container(

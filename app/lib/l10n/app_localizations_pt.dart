@@ -234,6 +234,11 @@ class AppLocalizationsPt extends AppLocalizations {
   String get commonNext => 'Próximo';
 
   @override
+  String commonPage(int page) {
+    return 'Página $page';
+  }
+
+  @override
   String commonPageOf(int current, int total) {
     return 'Página $current de $total';
   }

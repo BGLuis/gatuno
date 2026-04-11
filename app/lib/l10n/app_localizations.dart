@@ -536,6 +536,12 @@ abstract class AppLocalizations {
   /// **'Next'**
   String get commonNext;
 
+  /// No description provided for @commonPage.
+  ///
+  /// In en, this message translates to:
+  /// **'Page {page}'**
+  String commonPage(int page);
+
   /// No description provided for @commonPageOf.
   ///
   /// In en, this message translates to:
