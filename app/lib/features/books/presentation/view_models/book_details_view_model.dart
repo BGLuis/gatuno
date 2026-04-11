@@ -128,7 +128,7 @@ class BookDetailsViewModel extends SafeChangeNotifier {
     AppLogger.i('Setting chapter order to: $order', _logTag);
     _options = ChapterPageOptions(order: order);
     _chapterList = null;
-    fetchBookDetails();
+    fetchChapters();
   }
 
   void clearError() {
