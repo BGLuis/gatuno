@@ -21,6 +21,52 @@
   "authDoNotHaveAccount": "Don't have an account? Sign Up",
   "authAlreadyHaveAccount": "Already have an account? Sign In",
   "homeTitle": "Home",
+  "booksTitle": "Books",
+  "booksSearchHint": "Search books...",
+  "booksFilterTitle": "Filters",
+  "booksApplyFilters": "Apply Filters",
+  "booksClearFilters": "Clear",
+  "booksPublicationYear": "Publication Year",
+  "booksTypes": "Types",
+  "booksSensitiveContent": "Sensitive Content",
+  "booksTags": "Tags",
+  "booksIncludedTags": "Included Tags",
+  "booksExcludedTags": "Excluded Tags",
+  "booksOperatorBefore": "Before",
+  "booksOperatorBeforeEqual": "Before or Equal to",
+  "booksOperatorAfter": "After",
+  "booksOperatorAfterEqual": "After or Equal to",
+  "booksOperatorEqual": "Equal",
+  "bookTypeManga": "Manga",
+  "bookTypeManhwa": "Manhwa",
+  "bookTypeManhua": "Manhua",
+  "bookTypeBook": "Book",
+  "bookTypeOther": "Other",
+  "booksUnknownAuthor": "Unknown Author",
+  "booksNoBooksFound": "No books found",
+  "booksNoChaptersFound": "No chapters found",
+  "booksChapterCount": "Chapters",
+  "booksChapterLabel": "Chapter {index}",
+  "@booksChapterLabel": {
+    "placeholders": {
+      "index": {
+        "type": "String"
+      }
+    }
+  },
+  "booksSortTitle": "Sort",
+  "booksSortMostRecentAdded": "Most Recent Added",
+  "booksSortOldestAdded": "Oldest Added",
+  "booksSortAlphabeticalAZ": "Alphabetical A-Z",
+  "booksSortAlphabeticalZA": "Alphabetical Z-A",
+  "booksSortMostRecentUpdate": "Most Recent Update",
+  "booksSortOldestUpdate": "Oldest Update",
+  "booksSortMostRecentPublished": "Most Recent Published",
+  "booksSortOldestPublished": "Oldest Published",
+  "scrapingStatusReady": "Ready",
+  "scrapingStatusProcess": "Processing",
+  "scrapingStatusError": "Error",
+  "booksStartReading": "Start Reading",
   "homeWelcome": "Welcome to Gatuno!",
   "homeProfile": "Profile",
   "userMeTitle": "My Profile",
@@ -31,5 +77,26 @@
   "errorTitle": "Something went wrong",
   "errorMessage": "An unexpected error occurred.",
   "errorRetry": "Retry",
-  "errorBack": "Go Back"
+  "errorBack": "Go Back",
+  "commonPrevious": "Previous",
+  "commonNext": "Next",
+  "commonPage": "Page {page}",
+  "@commonPage": {
+    "placeholders": {
+      "page": {
+        "type": "int"
+      }
+    }
+  },
+  "commonPageOf": "Page {current} of {total}",
+  "@commonPageOf": {
+    "placeholders": {
+      "current": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  }
 }

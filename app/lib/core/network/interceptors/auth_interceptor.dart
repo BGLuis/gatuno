@@ -2,24 +2,70 @@ import 'package:dio/dio.dart';
 import '../dio_client.dart';
 import '../api_constants.dart';
 import '../../../features/authentication/domain/use_cases/auth_service.dart';
+import '../../utils/jwt_decoder.dart';
+import '../../logging/logger.dart';
 
 class AuthInterceptor extends Interceptor {
   final DioClient dioClient;
   final AuthService authService;
-  Future<void>? _refreshFuture;
+  final List<String> _excludedPaths = [
+    ApiConstants.signIn,
+    ApiConstants.signUp,
+    ApiConstants.refreshToken,
+  ];
 
   AuthInterceptor({required this.dioClient, required this.authService});
+
+  bool _shouldIntercept(RequestOptions options) {
+    // 1. Check if the request is targeting the API origin
+    if (options.baseUrl.isEmpty) return false;
+
+    final baseUri = Uri.parse(options.baseUrl);
+    final requestUri = options.uri;
+
+    // Use a basic origin check (scheme, host, port) to identify API requests.
+    // This prevents leaking tokens to third-party domains.
+    final bool isApiOrigin =
+        requestUri.scheme == baseUri.scheme &&
+        requestUri.host == baseUri.host &&
+        requestUri.port == baseUri.port;
+
+    if (!isApiOrigin) return false;
+
+    // 2. Check if the path is an auth endpoint that shouldn't have the token
+    // Some auth endpoints (signin, signup) don't need the Authorization header.
+    // The refresh token endpoint uses a cookie-based approach.
+    final bool isExcluded = _excludedPaths.any(
+      (path) => options.path == path || requestUri.path.endsWith(path),
+    );
+
+    return !isExcluded;
+  }
 
   @override
   void onRequest(
     RequestOptions options,
     RequestInterceptorHandler handler,
   ) async {
-    // Don't add auth header to the refresh token endpoint itself
-    if (options.path != ApiConstants.refreshToken) {
+    if (_shouldIntercept(options)) {
       final token = await authService.getAccessToken();
       if (token != null && token.isNotEmpty) {
         options.headers['Authorization'] = 'Bearer $token';
+
+        // Eager refresh if token expires in less than 2 minutes.
+        // We don't wait for the result to not block the current request.
+        if (JwtDecoder.isExpired(
+          token,
+          threshold: const Duration(minutes: 2),
+        )) {
+          authService.performTokenRefresh().catchError((Object e) {
+            // Log error but don't fail the current request
+            AppLogger.w(
+              'Background token refresh failed: $e',
+              'AuthInterceptor',
+            );
+          });
+        }
       }
     }
     return handler.next(options);
@@ -28,7 +74,7 @@ class AuthInterceptor extends Interceptor {
   @override
   void onError(DioException err, ErrorInterceptorHandler handler) async {
     if (err.response?.statusCode == 401 &&
-        err.requestOptions.path != ApiConstants.refreshToken) {
+        _shouldIntercept(err.requestOptions)) {
       final currentToken = await authService.getAccessToken();
       final authHeader = err.requestOptions.headers['Authorization']
           ?.toString();
@@ -48,10 +94,8 @@ class AuthInterceptor extends Interceptor {
       }
 
       try {
-        // Handle concurrent refresh requests
-        _refreshFuture ??= authService.performTokenRefresh();
-        await _refreshFuture;
-        _refreshFuture = null;
+        // Atomic refresh handled by AuthService
+        await authService.performTokenRefresh();
 
         // Retry the original request with the new token
         final options = err.requestOptions;
@@ -61,7 +105,6 @@ class AuthInterceptor extends Interceptor {
         final response = await dioClient.dio.fetch<dynamic>(options);
         return handler.resolve(response);
       } catch (e) {
-        _refreshFuture = null;
         // If refresh fails, the AuthService.performTokenRefresh already handles logout.
         // We forward the refresh failure (if it's a DioException) or a new DioException wrapping the error,
         // so callers can see the real reason why refresh failed.

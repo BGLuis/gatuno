@@ -21,6 +21,52 @@
   "authDoNotHaveAccount": "Não tem uma conta? Cadastre-se",
   "authAlreadyHaveAccount": "Já tem uma conta? Entrar",
   "homeTitle": "Início",
+  "booksTitle": "Livros",
+  "booksSearchHint": "Pesquisar livros...",
+  "booksFilterTitle": "Filtros",
+  "booksApplyFilters": "Aplicar Filtros",
+  "booksClearFilters": "Limpar",
+  "booksPublicationYear": "Ano de publicação",
+  "booksTypes": "Tipos",
+  "booksSensitiveContent": "Conteúdos sensíveis",
+  "booksTags": "Tags",
+  "booksIncludedTags": "Selecionadas",
+  "booksExcludedTags": "Excluídas",
+  "booksOperatorBefore": "Antes de",
+  "booksOperatorBeforeEqual": "Antes ou igual a",
+  "booksOperatorAfter": "Depois de",
+  "booksOperatorAfterEqual": "Depois ou igual a",
+  "booksOperatorEqual": "Igual a",
+  "bookTypeManga": "Mangá",
+  "bookTypeManhwa": "Manhwa",
+  "bookTypeManhua": "Manhua",
+  "bookTypeBook": "Livro",
+  "bookTypeOther": "Outro",
+  "booksUnknownAuthor": "Autor Desconhecido",
+  "booksNoBooksFound": "Nenhum livro encontrado",
+  "booksNoChaptersFound": "Nenhum capítulo encontrado",
+  "booksChapterCount": "Capítulos",
+  "booksChapterLabel": "Capítulo {index}",
+  "@booksChapterLabel": {
+    "placeholders": {
+      "index": {
+        "type": "String"
+      }
+    }
+  },
+  "booksSortTitle": "Ordenar",
+  "booksSortMostRecentAdded": "Adicionados recentemente",
+  "booksSortOldestAdded": "Mais antigos primeiro",
+  "booksSortAlphabeticalAZ": "Alfabética A-Z",
+  "booksSortAlphabeticalZA": "Alfabética Z-A",
+  "booksSortMostRecentUpdate": "Atualizações recentes",
+  "booksSortOldestUpdate": "Atualizações antigas",
+  "booksSortMostRecentPublished": "Publicados recentemente",
+  "booksSortOldestPublished": "Publicados antigos",
+  "scrapingStatusReady": "Pronto",
+  "scrapingStatusProcess": "Processando",
+  "scrapingStatusError": "Erro",
+  "booksStartReading": "Começar a ler",
   "homeWelcome": "Bem-vindo ao Gatuno!",
   "homeProfile": "Perfil",
   "userMeTitle": "Meu Perfil",
@@ -31,5 +77,26 @@
   "errorTitle": "Algo deu errado",
   "errorMessage": "Ocorreu um erro inesperado.",
   "errorRetry": "Tentar novamente",
-  "errorBack": "Voltar"
+  "errorBack": "Voltar",
+  "commonPrevious": "Anterior",
+  "commonNext": "Próximo",
+  "commonPage": "Página {page}",
+  "@commonPage": {
+    "placeholders": {
+      "page": {
+        "type": "int"
+      }
+    }
+  },
+  "commonPageOf": "Página {current} de {total}",
+  "@commonPageOf": {
+    "placeholders": {
+      "current": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  }
 }

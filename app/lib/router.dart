@@ -1,40 +1,24 @@
 import 'package:go_router/go_router.dart';
-import 'package:provider/provider.dart';
-import 'features/authentication/presentation/views/signin_screen.dart';
-import 'features/authentication/presentation/views/signup_screen.dart';
-import 'features/users/presentation/views/me_screen.dart';
-import 'features/users/presentation/view_models/me_view_model.dart';
-import 'features/home/presentation/views/home_screen.dart';
-import 'features/home/presentation/view_models/home_view_model.dart';
+import 'features/authentication/auth_router.dart';
+import 'features/users/users_router.dart';
+import 'features/home/home_router.dart';
+import 'features/books/books_router.dart';
 import 'shared/presentation/error_screen.dart';
+import 'shared/components/organisms/navigation_shell.dart';
 import 'core/logging/logger.dart';
-import 'core/di/injection.dart';
+import 'core/router/router_keys.dart';
 
 final GoRouter appRouter = GoRouter(
+  navigatorKey: rootNavigatorKey,
   initialLocation: '/home',
   routes: [
-    GoRoute(
-      path: '/home',
-      builder: (context, state) => ChangeNotifierProvider(
-        create: (_) => sl<HomeViewModel>(),
-        child: const HomePage(),
-      ),
+    StatefulShellRoute.indexedStack(
+      builder: (context, state, navigationShell) {
+        return NavigationShell(navigationShell: navigationShell);
+      },
+      branches: [homeBranch, booksBranch, profileBranch],
     ),
-    GoRoute(
-      path: '/auth/signin',
-      builder: (context, state) => const SignInPage(),
-    ),
-    GoRoute(
-      path: '/auth/signup',
-      builder: (context, state) => const SignUpPage(),
-    ),
-    GoRoute(
-      path: '/users/me',
-      builder: (context, state) => ChangeNotifierProvider(
-        create: (_) => sl<MeViewModel>(),
-        child: const MePage(),
-      ),
-    ),
+    ...authRoutes,
   ],
   errorBuilder: (context, state) {
     AppLogger.e('Router Error: ${state.uri}', state.error, null, 'ROUTER');

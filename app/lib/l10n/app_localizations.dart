@@ -224,6 +224,240 @@ abstract class AppLocalizations {
   /// **'Home'**
   String get homeTitle;
 
+  /// No description provided for @booksTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Books'**
+  String get booksTitle;
+
+  /// No description provided for @booksSearchHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Search books...'**
+  String get booksSearchHint;
+
+  /// No description provided for @booksFilterTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Filters'**
+  String get booksFilterTitle;
+
+  /// No description provided for @booksApplyFilters.
+  ///
+  /// In en, this message translates to:
+  /// **'Apply Filters'**
+  String get booksApplyFilters;
+
+  /// No description provided for @booksClearFilters.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear'**
+  String get booksClearFilters;
+
+  /// No description provided for @booksPublicationYear.
+  ///
+  /// In en, this message translates to:
+  /// **'Publication Year'**
+  String get booksPublicationYear;
+
+  /// No description provided for @booksTypes.
+  ///
+  /// In en, this message translates to:
+  /// **'Types'**
+  String get booksTypes;
+
+  /// No description provided for @booksSensitiveContent.
+  ///
+  /// In en, this message translates to:
+  /// **'Sensitive Content'**
+  String get booksSensitiveContent;
+
+  /// No description provided for @booksTags.
+  ///
+  /// In en, this message translates to:
+  /// **'Tags'**
+  String get booksTags;
+
+  /// No description provided for @booksIncludedTags.
+  ///
+  /// In en, this message translates to:
+  /// **'Included Tags'**
+  String get booksIncludedTags;
+
+  /// No description provided for @booksExcludedTags.
+  ///
+  /// In en, this message translates to:
+  /// **'Excluded Tags'**
+  String get booksExcludedTags;
+
+  /// No description provided for @booksOperatorBefore.
+  ///
+  /// In en, this message translates to:
+  /// **'Before'**
+  String get booksOperatorBefore;
+
+  /// No description provided for @booksOperatorBeforeEqual.
+  ///
+  /// In en, this message translates to:
+  /// **'Before or Equal to'**
+  String get booksOperatorBeforeEqual;
+
+  /// No description provided for @booksOperatorAfter.
+  ///
+  /// In en, this message translates to:
+  /// **'After'**
+  String get booksOperatorAfter;
+
+  /// No description provided for @booksOperatorAfterEqual.
+  ///
+  /// In en, this message translates to:
+  /// **'After or Equal to'**
+  String get booksOperatorAfterEqual;
+
+  /// No description provided for @booksOperatorEqual.
+  ///
+  /// In en, this message translates to:
+  /// **'Equal'**
+  String get booksOperatorEqual;
+
+  /// No description provided for @bookTypeManga.
+  ///
+  /// In en, this message translates to:
+  /// **'Manga'**
+  String get bookTypeManga;
+
+  /// No description provided for @bookTypeManhwa.
+  ///
+  /// In en, this message translates to:
+  /// **'Manhwa'**
+  String get bookTypeManhwa;
+
+  /// No description provided for @bookTypeManhua.
+  ///
+  /// In en, this message translates to:
+  /// **'Manhua'**
+  String get bookTypeManhua;
+
+  /// No description provided for @bookTypeBook.
+  ///
+  /// In en, this message translates to:
+  /// **'Book'**
+  String get bookTypeBook;
+
+  /// No description provided for @bookTypeOther.
+  ///
+  /// In en, this message translates to:
+  /// **'Other'**
+  String get bookTypeOther;
+
+  /// No description provided for @booksUnknownAuthor.
+  ///
+  /// In en, this message translates to:
+  /// **'Unknown Author'**
+  String get booksUnknownAuthor;
+
+  /// No description provided for @booksNoBooksFound.
+  ///
+  /// In en, this message translates to:
+  /// **'No books found'**
+  String get booksNoBooksFound;
+
+  /// No description provided for @booksNoChaptersFound.
+  ///
+  /// In en, this message translates to:
+  /// **'No chapters found'**
+  String get booksNoChaptersFound;
+
+  /// No description provided for @booksChapterCount.
+  ///
+  /// In en, this message translates to:
+  /// **'Chapters'**
+  String get booksChapterCount;
+
+  /// No description provided for @booksChapterLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Chapter {index}'**
+  String booksChapterLabel(String index);
+
+  /// No description provided for @booksSortTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Sort'**
+  String get booksSortTitle;
+
+  /// No description provided for @booksSortMostRecentAdded.
+  ///
+  /// In en, this message translates to:
+  /// **'Most Recent Added'**
+  String get booksSortMostRecentAdded;
+
+  /// No description provided for @booksSortOldestAdded.
+  ///
+  /// In en, this message translates to:
+  /// **'Oldest Added'**
+  String get booksSortOldestAdded;
+
+  /// No description provided for @booksSortAlphabeticalAZ.
+  ///
+  /// In en, this message translates to:
+  /// **'Alphabetical A-Z'**
+  String get booksSortAlphabeticalAZ;
+
+  /// No description provided for @booksSortAlphabeticalZA.
+  ///
+  /// In en, this message translates to:
+  /// **'Alphabetical Z-A'**
+  String get booksSortAlphabeticalZA;
+
+  /// No description provided for @booksSortMostRecentUpdate.
+  ///
+  /// In en, this message translates to:
+  /// **'Most Recent Update'**
+  String get booksSortMostRecentUpdate;
+
+  /// No description provided for @booksSortOldestUpdate.
+  ///
+  /// In en, this message translates to:
+  /// **'Oldest Update'**
+  String get booksSortOldestUpdate;
+
+  /// No description provided for @booksSortMostRecentPublished.
+  ///
+  /// In en, this message translates to:
+  /// **'Most Recent Published'**
+  String get booksSortMostRecentPublished;
+
+  /// No description provided for @booksSortOldestPublished.
+  ///
+  /// In en, this message translates to:
+  /// **'Oldest Published'**
+  String get booksSortOldestPublished;
+
+  /// No description provided for @scrapingStatusReady.
+  ///
+  /// In en, this message translates to:
+  /// **'Ready'**
+  String get scrapingStatusReady;
+
+  /// No description provided for @scrapingStatusProcess.
+  ///
+  /// In en, this message translates to:
+  /// **'Processing'**
+  String get scrapingStatusProcess;
+
+  /// No description provided for @scrapingStatusError.
+  ///
+  /// In en, this message translates to:
+  /// **'Error'**
+  String get scrapingStatusError;
+
+  /// No description provided for @booksStartReading.
+  ///
+  /// In en, this message translates to:
+  /// **'Start Reading'**
+  String get booksStartReading;
+
   /// No description provided for @homeWelcome.
   ///
   /// In en, this message translates to:
@@ -289,6 +523,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Go Back'**
   String get errorBack;
+
+  /// No description provided for @commonPrevious.
+  ///
+  /// In en, this message translates to:
+  /// **'Previous'**
+  String get commonPrevious;
+
+  /// No description provided for @commonNext.
+  ///
+  /// In en, this message translates to:
+  /// **'Next'**
+  String get commonNext;
+
+  /// No description provided for @commonPage.
+  ///
+  /// In en, this message translates to:
+  /// **'Page {page}'**
+  String commonPage(int page);
+
+  /// No description provided for @commonPageOf.
+  ///
+  /// In en, this message translates to:
+  /// **'Page {current} of {total}'**
+  String commonPageOf(int current, int total);
 }
 
 class _AppLocalizationsDelegate

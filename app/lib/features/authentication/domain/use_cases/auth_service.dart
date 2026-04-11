@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import '../repositories/auth_repository.dart';
 import '../../data/data_sources/auth_local_data_source.dart';
 import '../../../../core/logging/logger.dart';
+import '../../../../core/utils/jwt_decoder.dart';
 
 class AuthService extends ChangeNotifier {
   final AuthRepository _authRepository;
@@ -18,9 +19,26 @@ class AuthService extends ChangeNotifier {
   bool get isInitialized => _isInitialized;
   bool get authenticated => _isAuthenticated;
 
+  Future<void>? _refreshFuture;
+
   Future<void> _initAuth() async {
     final token = await _authStorage.getAccessToken();
-    _isAuthenticated = token != null && token.isNotEmpty;
+    if (token != null && token.isNotEmpty) {
+      if (JwtDecoder.isExpired(token)) {
+        AppLogger.i('Stored token is expired, attempting refresh', _logTag);
+        try {
+          await performTokenRefresh();
+          return;
+        } catch (e) {
+          AppLogger.w('Initial token refresh failed: $e', _logTag);
+          _isAuthenticated = false;
+        }
+      } else {
+        _isAuthenticated = true;
+      }
+    } else {
+      _isAuthenticated = false;
+    }
     _isInitialized = true;
     AppLogger.d(
       'AuthService initialized: authenticated = $_isAuthenticated',
@@ -105,7 +123,17 @@ class AuthService extends ChangeNotifier {
 
   Future<bool> isAuthenticated() async {
     final token = await _authStorage.getAccessToken();
-    final authenticated = token != null && token.isNotEmpty;
+    bool authenticated = token != null && token.isNotEmpty;
+
+    if (authenticated && JwtDecoder.isExpired(token)) {
+      AppLogger.i('Token expired in isAuthenticated check', _logTag);
+      try {
+        await performTokenRefresh();
+        return true;
+      } catch (e) {
+        authenticated = false;
+      }
+    }
 
     if (_isAuthenticated != authenticated) {
       _isAuthenticated = authenticated;
@@ -117,6 +145,23 @@ class AuthService extends ChangeNotifier {
   }
 
   Future<void> performTokenRefresh() async {
+    if (_refreshFuture != null) {
+      AppLogger.d(
+        'Refresh already in progress, waiting for existing future',
+        _logTag,
+      );
+      return _refreshFuture;
+    }
+
+    _refreshFuture = _performTokenRefreshInternal();
+    try {
+      await _refreshFuture;
+    } finally {
+      _refreshFuture = null;
+    }
+  }
+
+  Future<void> _performTokenRefreshInternal() async {
     AppLogger.i('Performing token refresh', _logTag);
     final refreshToken = await _authStorage.getRefreshToken();
     if (refreshToken == null) {
@@ -131,6 +176,7 @@ class AuthService extends ChangeNotifier {
         refreshToken: response.refreshToken,
       );
       _isAuthenticated = true;
+      _isInitialized = true;
       AppLogger.i('Token refresh success', _logTag);
       notifyListeners();
     } catch (e, stackTrace) {

@@ -30,7 +30,7 @@ class JwtDecoder {
     }
   }
 
-  static bool isExpired(String token) {
+  static bool isExpired(String token, {Duration threshold = Duration.zero}) {
     try {
       final payload = decode(token);
       if (payload['exp'] == null) {
@@ -39,7 +39,7 @@ class JwtDecoder {
 
       final int exp = payload['exp'] as int;
       final expirationTime = DateTime.fromMillisecondsSinceEpoch(exp * 1000);
-      return DateTime.now().isAfter(expirationTime);
+      return DateTime.now().add(threshold).isAfter(expirationTime);
     } catch (e) {
       return true;
     }

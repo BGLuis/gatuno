@@ -1,3 +1,4 @@
+import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:gatuno/core/di/injection.dart';
 import 'package:gatuno/features/authentication/domain/use_cases/auth_service.dart';
@@ -10,12 +11,25 @@ void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
   group('Injection', () {
+    const MethodChannel channel = MethodChannel(
+      'plugins.flutter.io/path_provider',
+    );
+
     setUp(() async {
       await sl.reset();
+      TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+          .setMockMethodCallHandler(channel, (MethodCall methodCall) async {
+            if (methodCall.method == 'getApplicationCacheDirectory') {
+              return '.';
+            }
+            return null;
+          });
     });
 
     tearDown(() async {
       await sl.reset();
+      TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+          .setMockMethodCallHandler(channel, null);
     });
 
     test('initDI registers all dependencies', () async {

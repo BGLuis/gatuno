@@ -9,4 +9,7 @@ class ApiConstants {
   static const String signUp = '/auth/signup';
   static const String refreshToken = '/auth/refresh';
   static const String logout = '/auth/logout';
+
+  // Books Routes
+  static const String books = '/books';
 }

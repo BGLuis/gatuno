@@ -19,16 +19,7 @@ class UserProfileIcon extends StatelessWidget {
     return AppClickableAction(
       tooltip: tooltip,
       onPressed: onPressed,
-      child: displayName != null
-          ? AppAvatar(name: displayName!, radius: 16)
-          : Container(
-              width: 32,
-              height: 32,
-              decoration: BoxDecoration(
-                color: Colors.grey.withValues(alpha: 0.3),
-                shape: BoxShape.circle,
-              ),
-            ),
+      child: AppAvatar(name: displayName, radius: 16),
     );
   }
 }

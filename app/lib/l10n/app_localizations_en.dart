@@ -77,6 +77,125 @@ class AppLocalizationsEn extends AppLocalizations {
   String get homeTitle => 'Home';
 
   @override
+  String get booksTitle => 'Books';
+
+  @override
+  String get booksSearchHint => 'Search books...';
+
+  @override
+  String get booksFilterTitle => 'Filters';
+
+  @override
+  String get booksApplyFilters => 'Apply Filters';
+
+  @override
+  String get booksClearFilters => 'Clear';
+
+  @override
+  String get booksPublicationYear => 'Publication Year';
+
+  @override
+  String get booksTypes => 'Types';
+
+  @override
+  String get booksSensitiveContent => 'Sensitive Content';
+
+  @override
+  String get booksTags => 'Tags';
+
+  @override
+  String get booksIncludedTags => 'Included Tags';
+
+  @override
+  String get booksExcludedTags => 'Excluded Tags';
+
+  @override
+  String get booksOperatorBefore => 'Before';
+
+  @override
+  String get booksOperatorBeforeEqual => 'Before or Equal to';
+
+  @override
+  String get booksOperatorAfter => 'After';
+
+  @override
+  String get booksOperatorAfterEqual => 'After or Equal to';
+
+  @override
+  String get booksOperatorEqual => 'Equal';
+
+  @override
+  String get bookTypeManga => 'Manga';
+
+  @override
+  String get bookTypeManhwa => 'Manhwa';
+
+  @override
+  String get bookTypeManhua => 'Manhua';
+
+  @override
+  String get bookTypeBook => 'Book';
+
+  @override
+  String get bookTypeOther => 'Other';
+
+  @override
+  String get booksUnknownAuthor => 'Unknown Author';
+
+  @override
+  String get booksNoBooksFound => 'No books found';
+
+  @override
+  String get booksNoChaptersFound => 'No chapters found';
+
+  @override
+  String get booksChapterCount => 'Chapters';
+
+  @override
+  String booksChapterLabel(String index) {
+    return 'Chapter $index';
+  }
+
+  @override
+  String get booksSortTitle => 'Sort';
+
+  @override
+  String get booksSortMostRecentAdded => 'Most Recent Added';
+
+  @override
+  String get booksSortOldestAdded => 'Oldest Added';
+
+  @override
+  String get booksSortAlphabeticalAZ => 'Alphabetical A-Z';
+
+  @override
+  String get booksSortAlphabeticalZA => 'Alphabetical Z-A';
+
+  @override
+  String get booksSortMostRecentUpdate => 'Most Recent Update';
+
+  @override
+  String get booksSortOldestUpdate => 'Oldest Update';
+
+  @override
+  String get booksSortMostRecentPublished => 'Most Recent Published';
+
+  @override
+  String get booksSortOldestPublished => 'Oldest Published';
+
+  @override
+  String get scrapingStatusReady => 'Ready';
+
+  @override
+  String get scrapingStatusProcess => 'Processing';
+
+  @override
+  String get scrapingStatusError => 'Error';
+
+  @override
+  String get booksStartReading => 'Start Reading';
+
+  @override
   String get homeWelcome => 'Welcome to Gatuno!';
 
   @override
@@ -108,4 +227,20 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get errorBack => 'Go Back';
+
+  @override
+  String get commonPrevious => 'Previous';
+
+  @override
+  String get commonNext => 'Next';
+
+  @override
+  String commonPage(int page) {
+    return 'Page $page';
+  }
+
+  @override
+  String commonPageOf(int current, int total) {
+    return 'Page $current of $total';
+  }
 }

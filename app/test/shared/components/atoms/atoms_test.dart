@@ -26,6 +26,15 @@ void main() {
       expect(find.text('?'), findsOneWidget);
     });
 
+    testWidgets('AppAvatar renders skeleton for null name', (tester) async {
+      await tester.pumpWidget(
+        const MaterialApp(home: Scaffold(body: AppAvatar(name: null))),
+      );
+
+      expect(find.byType(Container), findsOneWidget);
+      expect(find.text('?'), findsNothing);
+    });
+
     testWidgets('AppClickableAction triggers onPressed', (tester) async {
       var pressed = false;
       await tester.pumpWidget(

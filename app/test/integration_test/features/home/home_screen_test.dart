@@ -1,72 +1,161 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:gatuno/features/home/presentation/views/home_screen.dart';
+import 'package:gatuno/shared/components/organisms/navigation_shell.dart';
 import 'package:mocktail/mocktail.dart';
-import '../../../helpers/pump_app.dart';
+import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
+import 'package:gatuno/l10n/app_localizations.dart';
+import 'package:gatuno/features/authentication/domain/use_cases/auth_service.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import '../../../helpers/test_injection.dart';
-
-import 'package:gatuno/shared/components/molecules/login_icon.dart';
-import 'package:gatuno/shared/components/molecules/user_profile_icon.dart';
+import 'package:gatuno/shared/components/atoms/app_avatar.dart';
+import 'package:gatuno/features/users/data/models/user_model.dart';
 
 void main() {
   late MockAuthService mockAuthService;
   late MockHomeViewModel mockHomeViewModel;
+  late MockNavigationViewModel mockNavigationViewModel;
 
   setUp(() async {
     mockAuthService = MockAuthService();
     mockHomeViewModel = MockHomeViewModel();
+    mockNavigationViewModel = MockNavigationViewModel();
 
     await initTestDI(
       authService: mockAuthService,
       homeViewModel: mockHomeViewModel,
+      navigationViewModel: mockNavigationViewModel,
     );
 
-    when(() => mockAuthService.authenticated).thenReturn(false);
-    when(() => mockAuthService.isInitialized).thenReturn(true);
+    when(() => mockHomeViewModel.isAuthenticated).thenReturn(true);
+    when(() => mockHomeViewModel.isInitialized).thenReturn(true);
+    when(() => mockHomeViewModel.displayName).thenReturn('Test User');
+
+    when(() => mockNavigationViewModel.isAuthenticated).thenReturn(true);
+    when(() => mockNavigationViewModel.user).thenReturn(null);
+
     when(
       () => mockAuthService.isAuthenticated(),
     ).thenAnswer((_) async => false);
-
-    when(() => mockHomeViewModel.isAuthenticated).thenReturn(false);
-    when(() => mockHomeViewModel.isInitialized).thenReturn(true);
-    when(() => mockHomeViewModel.displayName).thenReturn(null);
   });
 
-  testWidgets('HomePage renders correctly as guest', (
+  Future<void> pumpNavigationShell(WidgetTester tester) async {
+    FlutterSecureStorage.setMockInitialValues({});
+
+    final router = GoRouter(
+      initialLocation: '/home',
+      routes: [
+        StatefulShellRoute.indexedStack(
+          builder: (context, state, navigationShell) {
+            return NavigationShell(navigationShell: navigationShell);
+          },
+          branches: [
+            StatefulShellBranch(
+              routes: [
+                GoRoute(
+                  path: '/home',
+                  builder: (context, state) => const Text('Home Content'),
+                ),
+              ],
+            ),
+            StatefulShellBranch(
+              routes: [
+                GoRoute(
+                  path: '/books',
+                  builder: (context, state) => const Text('Books Content'),
+                ),
+              ],
+            ),
+            StatefulShellBranch(
+              routes: [
+                GoRoute(
+                  path: '/profile',
+                  builder: (context, state) => const Text('Profile Content'),
+                ),
+              ],
+            ),
+          ],
+        ),
+        GoRoute(
+          path: '/auth/signin',
+          builder: (context, state) => const Text('Signin Page'),
+        ),
+      ],
+    );
+
+    await tester.pumpWidget(
+      ChangeNotifierProvider<AuthService>.value(
+        value: mockAuthService,
+        child: MaterialApp.router(
+          routerConfig: router,
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+  }
+
+  testWidgets('NavigationShell renders bottom navigation items', (
     WidgetTester tester,
   ) async {
-    await tester.pumpApp(const HomePage());
-    await tester.pumpAndSettle();
+    when(() => mockNavigationViewModel.isAuthenticated).thenReturn(false);
+    await pumpNavigationShell(tester);
 
-    expect(find.text('Home'), findsOneWidget);
-    expect(find.text('Welcome to Gatuno!'), findsOneWidget);
-    expect(find.byType(LoginIcon), findsOneWidget);
-    expect(find.byType(UserProfileIcon), findsNothing);
+    expect(find.byIcon(Icons.home), findsOneWidget);
+    expect(find.byIcon(Icons.book), findsOneWidget);
+    expect(find.byIcon(Icons.person_outline), findsOneWidget);
+    expect(find.text('Home Content'), findsOneWidget);
   });
 
-  testWidgets('HomePage renders correctly as authenticated', (
+  testWidgets('NavigationShell shows avatar when authenticated', (
     WidgetTester tester,
   ) async {
-    when(() => mockHomeViewModel.isAuthenticated).thenReturn(true);
-    when(() => mockHomeViewModel.displayName).thenReturn('Test');
+    when(() => mockNavigationViewModel.isAuthenticated).thenReturn(true);
+    when(() => mockNavigationViewModel.user).thenReturn(
+      UserModel(
+        id: '1',
+        email: 'test@example.com',
+        name: 'Test User',
+        roles: ['user'],
+        maxWeightSensitiveContent: 0,
+      ),
+    );
 
-    await tester.pumpApp(const HomePage());
-    await tester.pumpAndSettle();
+    await pumpNavigationShell(tester);
 
-    expect(find.text('Home'), findsOneWidget);
-    expect(find.text('Welcome to Gatuno!'), findsOneWidget);
-    expect(find.byType(UserProfileIcon), findsOneWidget);
-    expect(find.byType(LoginIcon), findsNothing);
+    expect(find.byType(AppAvatar), findsOneWidget);
+    expect(find.byIcon(Icons.person_outline), findsNothing);
   });
 
-  testWidgets('HomePage login button navigates to signin', (
+  testWidgets('NavigationShell navigates between branches', (
     WidgetTester tester,
   ) async {
-    await tester.pumpApp(const HomePage());
-    await tester.pumpAndSettle();
+    when(() => mockNavigationViewModel.isAuthenticated).thenReturn(false);
+    await pumpNavigationShell(tester);
 
-    await tester.tap(find.byType(LoginIcon));
+    // Tap Books
+    await tester.tap(find.byIcon(Icons.book));
     await tester.pumpAndSettle();
+    expect(find.text('Books Content'), findsOneWidget);
 
-    expect(find.text('Signin Page'), findsOneWidget);
+    // Tap Home
+    await tester.tap(find.byIcon(Icons.home));
+    await tester.pumpAndSettle();
+    expect(find.text('Home Content'), findsOneWidget);
   });
+
+  testWidgets(
+    'NavigationShell redirects to signin for unauthenticated profile access',
+    (WidgetTester tester) async {
+      when(() => mockNavigationViewModel.isAuthenticated).thenReturn(false);
+      await pumpNavigationShell(tester);
+
+      // Tap Profile (unauthenticated)
+      await tester.tap(find.byIcon(Icons.person_outline));
+      await tester.pumpAndSettle();
+
+      expect(find.text('Signin Page'), findsOneWidget);
+    },
+  );
 }
