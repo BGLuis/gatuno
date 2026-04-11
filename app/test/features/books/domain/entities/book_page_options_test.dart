@@ -1,4 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:optional/optional.dart';
 import 'package:gatuno/features/books/domain/entities/book_page_options.dart';
 
 void main() {
@@ -56,7 +57,7 @@ void main() {
       const options = BookPageOptions();
       final updated = options.copyWith(
         page: 5,
-        search: 'test',
+        search: Optional.ofNullable('test'),
         order: SortOrder.asc,
       );
 

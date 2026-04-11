@@ -1,3 +1,4 @@
+import 'package:optional/optional.dart';
 import '../../../../core/base/safe_change_notifier.dart';
 import '../../../../core/logging/logger.dart';
 import '../../../users/data/data_sources/user_local_data_source.dart';
@@ -59,7 +60,7 @@ class BooksViewModel extends SafeChangeNotifier {
       }
 
       final currentOptions = _options.copyWith(
-        sensitiveContent: sensitiveFilter,
+        sensitiveContent: Optional.ofNullable(sensitiveFilter),
       );
 
       final result = await _repository.getBooks(currentOptions);
@@ -103,29 +104,13 @@ class BooksViewModel extends SafeChangeNotifier {
       return;
     }
     AppLogger.i('Setting search to: $search', _logTag);
-    _options = _options.copyWith(search: search, page: 1);
+    _options = _options.copyWith(search: Optional.ofNullable(search), page: 1);
     fetchBooks(refresh: true);
   }
 
   void clearSearch() {
     AppLogger.i('Clearing search', _logTag);
-    _options = BookPageOptions(
-      page: 1,
-      limit: _options.limit,
-      orderBy: _options.orderBy,
-      order: _options.order,
-      search: null,
-      publication: _options.publication,
-      publicationOperator: _options.publicationOperator,
-      type: _options.type,
-      sensitiveContent: _options.sensitiveContent,
-      tags: _options.tags,
-      tagsLogic: _options.tagsLogic,
-      excludeTags: _options.excludeTags,
-      excludeTagsLogic: _options.excludeTagsLogic,
-      authors: _options.authors,
-      authorsLogic: _options.authorsLogic,
-    );
+    _options = _options.copyWith(search: const Optional.empty(), page: 1);
     fetchBooks(refresh: true);
   }
 
@@ -149,16 +134,16 @@ class BooksViewModel extends SafeChangeNotifier {
   }) {
     AppLogger.i('Updating filters', _logTag);
     _options = _options.copyWith(
-      publication: publication,
-      publicationOperator: publicationOperator,
-      type: type,
-      tags: tags,
-      tagsLogic: tagsLogic,
-      excludeTags: excludeTags,
-      excludeTagsLogic: excludeTagsLogic,
-      authors: authors,
-      authorsLogic: authorsLogic,
-      sensitiveContent: sensitiveContent,
+      publication: Optional.ofNullable(publication),
+      publicationOperator: Optional.ofNullable(publicationOperator),
+      type: Optional.ofNullable(type),
+      tags: Optional.ofNullable(tags),
+      tagsLogic: Optional.ofNullable(tagsLogic),
+      excludeTags: Optional.ofNullable(excludeTags),
+      excludeTagsLogic: Optional.ofNullable(excludeTagsLogic),
+      authors: Optional.ofNullable(authors),
+      authorsLogic: Optional.ofNullable(authorsLogic),
+      sensitiveContent: Optional.ofNullable(sensitiveContent),
       page: 1,
     );
     fetchBooks(refresh: true);

@@ -1,3 +1,4 @@
+import 'package:optional/optional.dart';
 import 'book_type.dart';
 
 enum SortOrder { asc, desc }
@@ -72,34 +73,46 @@ class BookPageOptions {
     int? limit,
     String? orderBy,
     SortOrder? order,
-    String? search,
-    int? publication,
-    String? publicationOperator,
-    List<TypeBook>? type,
-    List<String>? sensitiveContent,
-    List<String>? tags,
-    String? tagsLogic,
-    List<String>? excludeTags,
-    String? excludeTagsLogic,
-    List<String>? authors,
-    String? authorsLogic,
+    Optional<String?>? search,
+    Optional<int?>? publication,
+    Optional<String?>? publicationOperator,
+    Optional<List<TypeBook>?>? type,
+    Optional<List<String>?>? sensitiveContent,
+    Optional<List<String>?>? tags,
+    Optional<String?>? tagsLogic,
+    Optional<List<String>?>? excludeTags,
+    Optional<String?>? excludeTagsLogic,
+    Optional<List<String>?>? authors,
+    Optional<String?>? authorsLogic,
   }) {
     return BookPageOptions(
       page: page ?? this.page,
       limit: limit ?? this.limit,
       orderBy: orderBy ?? this.orderBy,
       order: order ?? this.order,
-      search: search ?? this.search,
-      publication: publication ?? this.publication,
-      publicationOperator: publicationOperator ?? this.publicationOperator,
-      type: type ?? this.type,
-      sensitiveContent: sensitiveContent ?? this.sensitiveContent,
-      tags: tags ?? this.tags,
-      tagsLogic: tagsLogic ?? this.tagsLogic,
-      excludeTags: excludeTags ?? this.excludeTags,
-      excludeTagsLogic: excludeTagsLogic ?? this.excludeTagsLogic,
-      authors: authors ?? this.authors,
-      authorsLogic: authorsLogic ?? this.authorsLogic,
+      search: search != null ? search.orElse(null) : this.search,
+      publication: publication != null
+          ? publication.orElse(null)
+          : this.publication,
+      publicationOperator: publicationOperator != null
+          ? publicationOperator.orElse(null)
+          : this.publicationOperator,
+      type: type != null ? type.orElse(null) : this.type,
+      sensitiveContent: sensitiveContent != null
+          ? sensitiveContent.orElse(null)
+          : this.sensitiveContent,
+      tags: tags != null ? tags.orElse(null) : this.tags,
+      tagsLogic: tagsLogic != null ? tagsLogic.orElse(null) : this.tagsLogic,
+      excludeTags: excludeTags != null
+          ? excludeTags.orElse(null)
+          : this.excludeTags,
+      excludeTagsLogic: excludeTagsLogic != null
+          ? excludeTagsLogic.orElse(null)
+          : this.excludeTagsLogic,
+      authors: authors != null ? authors.orElse(null) : this.authors,
+      authorsLogic: authorsLogic != null
+          ? authorsLogic.orElse(null)
+          : this.authorsLogic,
     );
   }
 }

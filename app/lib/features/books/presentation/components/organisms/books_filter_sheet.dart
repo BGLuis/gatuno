@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:optional/optional.dart';
 import 'package:gatuno/l10n/app_localizations.dart';
 import '../../../../../shared/components/atoms/app_button.dart';
 import '../../../../../shared/utils/bottom_sheet_utils.dart';
@@ -68,14 +69,16 @@ class _BooksFilterSheetState extends State<BooksFilterSheet> {
 
   void _onOperatorChanged(String? value) {
     setState(() {
-      _currentOptions = _currentOptions.copyWith(publicationOperator: value);
+      _currentOptions = _currentOptions.copyWith(
+        publicationOperator: Optional.ofNullable(value),
+      );
     });
   }
 
   void _onYearChanged(String value) {
     setState(() {
       _currentOptions = _currentOptions.copyWith(
-        publication: int.tryParse(value),
+        publication: Optional.ofNullable(int.tryParse(value)),
       );
     });
   }
@@ -88,7 +91,9 @@ class _BooksFilterSheetState extends State<BooksFilterSheet> {
       } else {
         types.remove(type);
       }
-      _currentOptions = _currentOptions.copyWith(type: types);
+      _currentOptions = _currentOptions.copyWith(
+        type: Optional.ofNullable(types),
+      );
     });
   }
 
@@ -100,7 +105,9 @@ class _BooksFilterSheetState extends State<BooksFilterSheet> {
       } else {
         tags.remove(tag);
       }
-      _currentOptions = _currentOptions.copyWith(sensitiveContent: tags);
+      _currentOptions = _currentOptions.copyWith(
+        sensitiveContent: Optional.ofNullable(tags),
+      );
     });
   }
 
