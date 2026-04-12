@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:dio/io.dart';
-import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import '../../data/data_sources/settings_local_data_source.dart';
 import '../../../../core/network/dio_client.dart';
 import '../../../../core/logging/logger.dart';

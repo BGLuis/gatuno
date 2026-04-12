@@ -25,8 +25,6 @@ class NavigationShell extends StatelessWidget {
             bottomNavigationBar: AppBottomNavBar(
               currentIndex: navigationShell.currentIndex,
               onTap: (index) => _onTap(context, index),
-              isAuthenticated: viewModel.isAuthenticated,
-              displayName: viewModel.user?.displayName,
             ),
           );
         },

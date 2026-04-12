@@ -13,7 +13,6 @@ void main() {
           bottomNavigationBar: AppBottomNavBar(
             currentIndex: 0,
             onTap: (index) => tappedIndex = index,
-            isAuthenticated: false,
           ),
         ),
       );
@@ -48,17 +47,11 @@ void main() {
     testWidgets('renders settings icon regardless of auth', (tester) async {
       await tester.pumpApp(
         Scaffold(
-          bottomNavigationBar: AppBottomNavBar(
-            currentIndex: 2,
-            onTap: (_) {},
-            isAuthenticated: true,
-            displayName: 'John Doe',
-          ),
+          bottomNavigationBar: AppBottomNavBar(currentIndex: 2, onTap: (_) {}),
         ),
       );
 
       expect(find.byIcon(Icons.settings), findsOneWidget);
-      expect(find.text('J'), findsNothing);
     });
   });
 }

@@ -4,7 +4,7 @@ import 'package:mocktail/mocktail.dart';
 import 'package:provider/provider.dart';
 import 'package:gatuno/features/settings/presentation/views/settings_screen.dart';
 import 'package:gatuno/features/settings/presentation/view_models/settings_view_model.dart';
-import 'package:gatuno/shared/components/molecules/settings_profile_card.dart';
+import 'package:gatuno/features/settings/presentation/components/molecules/settings_profile_card.dart';
 import '../../../../helpers/pump_app.dart';
 import '../../../../helpers/test_injection.dart';
 

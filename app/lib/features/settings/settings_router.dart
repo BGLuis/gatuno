@@ -28,6 +28,13 @@ final StatefulShellBranch settingsBranch = StatefulShellBranch(
         GoRoute(
           path:
               'profile', // Full path will be /settings/profile or use /users/me
+          redirect: (context, state) {
+            final authService = sl<AuthService>();
+            if (!authService.authenticated) {
+              return '/auth/signin';
+            }
+            return null;
+          },
           builder: (context, state) => ChangeNotifierProvider(
             create: (_) => sl<MeViewModel>(),
             child: const MePage(),

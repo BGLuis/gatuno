@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../atoms/app_avatar.dart';
+import 'package:gatuno/shared/components/atoms/app_avatar.dart';
 
 class SettingsProfileCard extends StatelessWidget {
   final String name;

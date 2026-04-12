@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
+import 'package:gatuno/l10n/app_localizations.dart';
 import '../view_models/welcome_view_model.dart';
 
 class WelcomePage extends StatefulWidget {
@@ -23,6 +24,7 @@ class _WelcomePageState extends State<WelcomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final viewModel = context.watch<WelcomeViewModel>();
 
     return Scaffold(
@@ -35,24 +37,21 @@ class _WelcomePageState extends State<WelcomePage> {
               const Icon(Icons.pets, size: 80, color: Colors.orange),
               const SizedBox(height: 24),
               Text(
-                'Welcome to Gatuno',
+                l10n.welcomeTitle,
                 style: Theme.of(context).textTheme.headlineMedium?.copyWith(
                   fontWeight: FontWeight.bold,
                 ),
               ),
               const SizedBox(height: 8),
-              const Text(
-                'Please enter your server API URL to continue.',
-                textAlign: TextAlign.center,
-              ),
+              Text(l10n.welcomeInstructions, textAlign: TextAlign.center),
               const SizedBox(height: 32),
               TextField(
                 controller: _urlController,
                 decoration: InputDecoration(
-                  labelText: 'API Base URL',
+                  labelText: l10n.settingsApiUrlLabel,
                   border: const OutlineInputBorder(),
                   errorText: viewModel.error,
-                  hintText: 'http://your-server:3000/api',
+                  hintText: l10n.settingsApiUrlHint,
                 ),
                 keyboardType: TextInputType.url,
                 enabled: !viewModel.isLoading,
@@ -76,7 +75,7 @@ class _WelcomePageState extends State<WelcomePage> {
                   ),
                   child: viewModel.isLoading
                       ? const CircularProgressIndicator()
-                      : const Text('Connect'),
+                      : Text(l10n.welcomeConnect),
                 ),
               ),
             ],

@@ -1,4 +1,5 @@
 import '../../../../core/base/safe_change_notifier.dart';
+import '../../../../core/logging/logger.dart';
 import '../../../settings/domain/use_cases/settings_service.dart';
 
 class WelcomeViewModel extends SafeChangeNotifier {
@@ -37,6 +38,15 @@ class WelcomeViewModel extends SafeChangeNotifier {
             'Could not connect to the server. Please check the URL and certificate.';
         return false;
       }
+    } catch (e, stackTrace) {
+      AppLogger.e(
+        'Error during validateAndSaveUrl in ViewModel',
+        e,
+        stackTrace,
+        'WelcomeViewModel',
+      );
+      _error = 'An unexpected error occurred while saving the URL.';
+      return false;
     } finally {
       _isLoading = false;
       notifyListeners();

@@ -4,7 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:gatuno/l10n/app_localizations.dart';
 import '../view_models/me_view_model.dart';
 import '../../../../shared/components/molecules/user_profile_header.dart';
-import '../../../../shared/components/organisms/me_settings_list.dart';
+import 'package:gatuno/features/settings/presentation/components/organisms/me_settings_list.dart';
 import '../../../../shared/components/templates/profile_template.dart';
 
 class MePage extends StatefulWidget {

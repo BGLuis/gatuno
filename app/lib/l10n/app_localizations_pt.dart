@@ -210,6 +210,37 @@ class AppLocalizationsPt extends AppLocalizations {
       'Mostrar livros com conteúdo sensível';
 
   @override
+  String get settingsTitle => 'Configurações';
+
+  @override
+  String get settingsGeneralSection => 'Geral';
+
+  @override
+  String get settingsApiSection => 'Configuração da API';
+
+  @override
+  String get settingsApiUrlLabel => 'URL Base da API';
+
+  @override
+  String get settingsApiUrlHint => 'http://sua-api.com/api';
+
+  @override
+  String get settingsApiUrlSuccess => 'URL da API atualizada com sucesso';
+
+  @override
+  String get settingsApiUrlError => 'Erro ao atualizar a URL da API';
+
+  @override
+  String get welcomeTitle => 'Bem-vindo ao Gatuno';
+
+  @override
+  String get welcomeInstructions =>
+      'Por favor, insira a URL da API do seu servidor para continuar.';
+
+  @override
+  String get welcomeConnect => 'Conectar';
+
+  @override
   String get commonLogout => 'Sair';
 
   @override

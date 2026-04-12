@@ -5,15 +5,11 @@ import '../atoms/app_nav_bar_item.dart';
 class AppBottomNavBar extends StatelessWidget {
   final int currentIndex;
   final ValueChanged<int> onTap;
-  final bool isAuthenticated;
-  final String? displayName;
 
   const AppBottomNavBar({
     super.key,
     required this.currentIndex,
     required this.onTap,
-    required this.isAuthenticated,
-    this.displayName,
   });
 
   @override
@@ -55,7 +51,7 @@ class AppBottomNavBar extends StatelessWidget {
             ),
             AppNavBarItem(
               icon: const Icon(Icons.settings),
-              tooltip: 'Settings',
+              tooltip: l10n.settingsTitle,
               isSelected: currentIndex == 2,
               onTap: () => onTap(2),
             ),

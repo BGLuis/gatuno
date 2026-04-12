@@ -211,6 +211,37 @@ class AppLocalizationsEn extends AppLocalizations {
   String get userMeSensitiveContentDesc => 'Show books with sensitive content';
 
   @override
+  String get settingsTitle => 'Settings';
+
+  @override
+  String get settingsGeneralSection => 'General';
+
+  @override
+  String get settingsApiSection => 'API Configuration';
+
+  @override
+  String get settingsApiUrlLabel => 'API Base URL';
+
+  @override
+  String get settingsApiUrlHint => 'http://your-api.com/api';
+
+  @override
+  String get settingsApiUrlSuccess => 'API URL updated successfully';
+
+  @override
+  String get settingsApiUrlError => 'Error updating API URL';
+
+  @override
+  String get welcomeTitle => 'Welcome to Gatuno';
+
+  @override
+  String get welcomeInstructions =>
+      'Please enter your server API URL to continue.';
+
+  @override
+  String get welcomeConnect => 'Connect';
+
+  @override
   String get commonLogout => 'Sign Out';
 
   @override

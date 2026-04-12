@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:gatuno/shared/components/molecules/settings_profile_card.dart';
+import 'package:gatuno/features/settings/presentation/components/molecules/settings_profile_card.dart';
 import 'package:gatuno/shared/components/atoms/app_avatar.dart';
-import '../../../helpers/pump_app.dart';
+import '../../../../../helpers/pump_app.dart';
 
 void main() {
   group('SettingsProfileCard', () {

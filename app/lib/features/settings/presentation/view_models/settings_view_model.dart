@@ -1,4 +1,5 @@
 import '../../../../core/base/safe_change_notifier.dart';
+import '../../../../core/logging/logger.dart';
 import '../../domain/use_cases/settings_service.dart';
 import '../../../authentication/domain/use_cases/auth_service.dart';
 import '../../../users/data/models/user_model.dart';
@@ -49,6 +50,14 @@ class SettingsViewModel extends SafeChangeNotifier {
         await _settingsService.setApiUrl(formattedUrl);
         return true;
       }
+      return false;
+    } catch (e, stackTrace) {
+      AppLogger.e(
+        'Error updating API URL in ViewModel',
+        e,
+        stackTrace,
+        'SettingsViewModel',
+      );
       return false;
     } finally {
       _isLoading = false;
