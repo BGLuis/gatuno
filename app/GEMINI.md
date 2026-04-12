@@ -96,7 +96,7 @@
   - Refactored `DioClient` to remove internal `AuthStorage` instantiation, favoring dependency injection.
   - Extracted authentication interceptor setup into a standalone function `setupAuthInterceptor` in `core/network/interceptors/auth_interceptor.dart`.
   - Improved DI configuration in `initDI` to wire `DioClient`, `AuthService`, and interceptors using `GetIt`.
-  - Exposed `getAccessToken` in `AuthService` to provide a clean interface for the authentication interceptor.
+  - Exposed `getToken` in `AuthService` to provide a clean interface for the authentication interceptor.
   - Enhanced `HomePage` integration tests with interaction verification using `Mocktail`.
 - **Authentication - Tokens:**
   - Implemented `AuthInterceptor` with automatic token refresh on 401 errors.
@@ -104,3 +104,20 @@
   - Implemented request retry mechanism after successful token refresh.
   - Updated `AuthRepository` and `AuthService` to use cookie-based refresh and logout as required by the backend (`GET` request with `Cookie: refreshToken=...`).
   - Added unit tests for the updated authentication repository and service.
+
+## Architecture & Advanced Features
+
+- **Feature-Driven Clean Architecture:**
+  - Solidified a feature-driven project structure for high maintainability.
+  - Each feature (Auth, Books, Users) contains its own data, domain, and presentation layers.
+  - Integrated local injection containers and routers per feature to decouple logic.
+- **Books - Detailed Views:**
+  - Implemented comprehensive UI for Book Details and Book Listing.
+  - Added support for displaying relationships (sequences, spin-offs) between works.
+  - Improved listing performance with optimized pagination and lazy loading.
+- **Navigation & Guarding:**
+  - Enhanced `GoRouter` configuration to support state-based redirection.
+  - Implemented granular route guards for protected features like User Profile and Saved Pages.
+- **Enhanced Localization (i18n):**
+  - Expanded ARB translations to cover all new book-related screens.
+  - Improved multi-language support (EN, PT) for better accessibility.

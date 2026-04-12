@@ -42,9 +42,7 @@ void main() {
       };
       final token = createMockToken(payload);
 
-      when(
-        () => mockAuthService.getAccessToken(),
-      ).thenAnswer((_) async => token);
+      when(() => mockAuthService.getToken()).thenAnswer((_) async => token);
 
       final user = await userService.getCurrentUser();
 
@@ -63,9 +61,7 @@ void main() {
       };
       final token = createMockToken(payload);
 
-      when(
-        () => mockAuthService.getAccessToken(),
-      ).thenAnswer((_) async => token);
+      when(() => mockAuthService.getToken()).thenAnswer((_) async => token);
 
       final user = await userService.getCurrentUser();
 
@@ -73,9 +69,7 @@ void main() {
     });
 
     test('getCurrentUser should return null for null token', () async {
-      when(
-        () => mockAuthService.getAccessToken(),
-      ).thenAnswer((_) async => null);
+      when(() => mockAuthService.getToken()).thenAnswer((_) async => null);
 
       final user = await userService.getCurrentUser();
 

@@ -67,7 +67,7 @@ void main() {
       'should NOT add Authorization header when token is empty string',
       () async {
         final options = RequestOptions(path: '/test', baseUrl: testBaseUrl);
-        when(() => authService.getAccessToken()).thenAnswer((_) async => '');
+        when(() => authService.getToken()).thenAnswer((_) async => '');
         when(() => requestHandler.next(any())).thenAnswer((_) {});
 
         getInterceptor().onRequest(options, requestHandler);
@@ -87,7 +87,7 @@ void main() {
           .replaceAll('=', '');
       final token = 'header.$payload.signature';
 
-      when(() => authService.getAccessToken()).thenAnswer((_) async => token);
+      when(() => authService.getToken()).thenAnswer((_) async => token);
       when(() => requestHandler.next(any())).thenAnswer((_) {});
 
       getInterceptor().onRequest(options, requestHandler);
@@ -103,7 +103,7 @@ void main() {
         path: 'https://other-api.com/data',
         baseUrl: testBaseUrl,
       );
-      when(() => authService.getAccessToken()).thenAnswer((_) async => 'token');
+      when(() => authService.getToken()).thenAnswer((_) async => 'token');
       when(() => requestHandler.next(any())).thenAnswer((_) {});
 
       getInterceptor().onRequest(options, requestHandler);
@@ -119,9 +119,7 @@ void main() {
           path: '/auth/signin',
           baseUrl: testBaseUrl,
         );
-        when(
-          () => authService.getAccessToken(),
-        ).thenAnswer((_) async => 'token');
+        when(() => authService.getToken()).thenAnswer((_) async => 'token');
         when(() => requestHandler.next(any())).thenAnswer((_) {});
 
         getInterceptor().onRequest(options, requestHandler);
@@ -141,7 +139,7 @@ void main() {
           .replaceAll('=', '');
       final token = 'header.$payload.signature';
 
-      when(() => authService.getAccessToken()).thenAnswer((_) async => token);
+      when(() => authService.getToken()).thenAnswer((_) async => token);
       when(() => authService.performTokenRefresh()).thenAnswer((_) async {});
       when(() => requestHandler.next(any())).thenAnswer((_) {});
 
@@ -168,9 +166,7 @@ void main() {
           response: Response<dynamic>(requestOptions: options, statusCode: 401),
         );
 
-        when(
-          () => authService.getAccessToken(),
-        ).thenAnswer((_) async => 'new_token');
+        when(() => authService.getToken()).thenAnswer((_) async => 'new_token');
 
         final response = Response<dynamic>(
           requestOptions: options,
@@ -218,9 +214,7 @@ void main() {
         response: Response<dynamic>(requestOptions: options, statusCode: 401),
       );
 
-      when(
-        () => authService.getAccessToken(),
-      ).thenAnswer((_) async => 'old_token');
+      when(() => authService.getToken()).thenAnswer((_) async => 'old_token');
       when(() => authService.performTokenRefresh()).thenAnswer((_) async {});
 
       final response = Response<dynamic>(
@@ -255,9 +249,7 @@ void main() {
         type: DioExceptionType.badResponse,
       );
 
-      when(
-        () => authService.getAccessToken(),
-      ).thenAnswer((_) async => 'old_token');
+      when(() => authService.getToken()).thenAnswer((_) async => 'old_token');
       when(() => authService.performTokenRefresh()).thenThrow(refreshError);
       when(() => errorHandler.next(any())).thenAnswer((_) {});
 

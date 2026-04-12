@@ -22,7 +22,7 @@ class AuthService extends ChangeNotifier {
   Future<void>? _refreshFuture;
 
   Future<void> _initAuth() async {
-    final token = await _authStorage.getAccessToken();
+    final token = await _authStorage.getToken();
     if (token != null && token.isNotEmpty) {
       if (JwtDecoder.isExpired(token)) {
         AppLogger.i('Stored token is expired, attempting refresh', _logTag);
@@ -53,13 +53,10 @@ class AuthService extends ChangeNotifier {
     try {
       final response = await _authRepository.signIn(email, password);
 
-      await _authStorage.saveTokens(
-        accessToken: response.accessToken,
-        refreshToken: response.refreshToken,
-      );
+      await _authStorage.saveToken(response.token);
 
       AppLogger.i(
-        'SignIn completed and tokens saved for: $redactedEmail',
+        'SignIn completed and token saved for: $redactedEmail',
         _logTag,
       );
       _isAuthenticated = true;
@@ -101,9 +98,8 @@ class AuthService extends ChangeNotifier {
   Future<void> logout() async {
     AppLogger.i('Performing logout', _logTag);
     try {
-      final refreshToken = await _authStorage.getRefreshToken();
-      // Call backend logout if possible
-      await _authRepository.logout(refreshToken);
+      // Call backend logout
+      await _authRepository.logout();
     } catch (e) {
       // We log but still clear tokens locally
       AppLogger.w(
@@ -111,18 +107,18 @@ class AuthService extends ChangeNotifier {
         _logTag,
       );
     }
-    await _authStorage.clearTokens();
+    await _authStorage.clearToken();
     _isAuthenticated = false;
     AppLogger.i('Tokens cleared successfully', _logTag);
     notifyListeners();
   }
 
-  Future<String?> getAccessToken() async {
-    return _authStorage.getAccessToken();
+  Future<String?> getToken() async {
+    return _authStorage.getToken();
   }
 
   Future<bool> isAuthenticated() async {
-    final token = await _authStorage.getAccessToken();
+    final token = await _authStorage.getToken();
     bool authenticated = token != null && token.isNotEmpty;
 
     if (authenticated && JwtDecoder.isExpired(token)) {
@@ -163,18 +159,9 @@ class AuthService extends ChangeNotifier {
 
   Future<void> _performTokenRefreshInternal() async {
     AppLogger.i('Performing token refresh', _logTag);
-    final refreshToken = await _authStorage.getRefreshToken();
-    if (refreshToken == null) {
-      AppLogger.w('Token refresh aborted: No refresh token available', _logTag);
-      throw Exception('No refresh token available');
-    }
-
     try {
-      final response = await _authRepository.refreshToken(refreshToken);
-      await _authStorage.saveTokens(
-        accessToken: response.accessToken,
-        refreshToken: response.refreshToken,
-      );
+      final response = await _authRepository.refreshToken();
+      await _authStorage.saveToken(response.token);
       _isAuthenticated = true;
       _isInitialized = true;
       AppLogger.i('Token refresh success', _logTag);

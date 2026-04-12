@@ -3,7 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:gatuno/features/authentication/domain/use_cases/auth_service.dart';
 import 'package:gatuno/features/authentication/domain/repositories/auth_repository.dart';
 import 'package:gatuno/features/authentication/data/data_sources/auth_local_data_source.dart';
-import 'package:gatuno/features/authentication/domain/entities/auth_tokens.dart';
+import 'package:gatuno/features/authentication/domain/entities/auth_token.dart';
 import 'package:mocktail/mocktail.dart';
 
 class MockAuthRepository extends Mock implements AuthRepository {}
@@ -16,7 +16,7 @@ void main() {
   late MockAuthStorage mockAuthStorage;
 
   setUpAll(() {
-    registerFallbackValue(AuthTokens(accessToken: '', refreshToken: ''));
+    registerFallbackValue(AuthToken(token: ''));
   });
 
   setUp(() {
@@ -24,28 +24,25 @@ void main() {
     mockAuthStorage = MockAuthStorage();
 
     // Default mock behavior for constructor's _initAuth
-    when(() => mockAuthStorage.getAccessToken()).thenAnswer((_) async => null);
+    when(() => mockAuthStorage.getToken()).thenAnswer((_) async => null);
 
     authService = AuthService(mockAuthRepository, mockAuthStorage);
   });
 
-  final tTokens = AuthTokens(accessToken: 'access', refreshToken: 'refresh');
+  final tToken = AuthToken(token: 'access');
 
   group('AuthService', () {
     test(
-      'signIn calls repository, saves tokens and notifies listeners',
+      'signIn calls repository, saves token and notifies listeners',
       () async {
         var notificationCount = 0;
         authService.addListener(() => notificationCount++);
 
         when(
           () => mockAuthRepository.signIn(any(), any()),
-        ).thenAnswer((_) async => tTokens);
+        ).thenAnswer((_) async => tToken);
         when(
-          () => mockAuthStorage.saveTokens(
-            accessToken: any(named: 'accessToken'),
-            refreshToken: any(named: 'refreshToken'),
-          ),
+          () => mockAuthStorage.saveToken(any()),
         ).thenAnswer((_) async => {});
 
         final result = await authService.signIn('test@example.com', 'password');
@@ -56,12 +53,7 @@ void main() {
         verify(
           () => mockAuthRepository.signIn('test@example.com', 'password'),
         ).called(1);
-        verify(
-          () => mockAuthStorage.saveTokens(
-            accessToken: 'access',
-            refreshToken: 'refresh',
-          ),
-        ).called(1);
+        verify(() => mockAuthStorage.saveToken('access')).called(1);
       },
     );
 
@@ -71,28 +63,21 @@ void main() {
         var notificationCount = 0;
         authService.addListener(() => notificationCount++);
 
-        when(
-          () => mockAuthStorage.getRefreshToken(),
-        ).thenAnswer((_) async => 'refresh_token');
-        when(() => mockAuthRepository.logout(any())).thenAnswer((_) async {});
-        when(() => mockAuthStorage.clearTokens()).thenAnswer((_) async => {});
+        when(() => mockAuthRepository.logout()).thenAnswer((_) async {});
+        when(() => mockAuthStorage.clearToken()).thenAnswer((_) async => {});
 
         await authService.logout();
 
         expect(authService.authenticated, false);
         expect(notificationCount, greaterThan(0));
-        verify(() => mockAuthRepository.logout('refresh_token')).called(1);
-        verify(() => mockAuthStorage.clearTokens()).called(1);
+        verify(() => mockAuthRepository.logout()).called(1);
+        verify(() => mockAuthStorage.clearToken()).called(1);
       },
     );
 
     test(
       'isAuthenticated returns true when token exists and is not expired',
       () async {
-        when(
-          () => mockAuthStorage.getAccessToken(),
-        ).thenAnswer((_) async => 'token');
-
         // token split by . gives 3 parts, middle is base64 payload.
         // We need it to NOT be expired.
         final exp = (DateTime.now().millisecondsSinceEpoch ~/ 1000) + 3600;
@@ -101,9 +86,7 @@ void main() {
             .replaceAll('=', '');
         final token = 'header.$payload.signature';
 
-        when(
-          () => mockAuthStorage.getAccessToken(),
-        ).thenAnswer((_) async => token);
+        when(() => mockAuthStorage.getToken()).thenAnswer((_) async => token);
 
         final result = await authService.isAuthenticated();
 
@@ -113,21 +96,11 @@ void main() {
     );
 
     test('performTokenRefresh handles concurrent calls atomically', () async {
-      when(() => mockAuthStorage.getRefreshToken()).thenAnswer((_) async {
-        // Add a small delay to simulate async work
-        await Future<void>.delayed(const Duration(milliseconds: 50));
-        return 'old_refresh';
-      });
-      when(() => mockAuthRepository.refreshToken(any())).thenAnswer((_) async {
+      when(() => mockAuthRepository.refreshToken()).thenAnswer((_) async {
         await Future<void>.delayed(const Duration(milliseconds: 100));
-        return tTokens;
+        return tToken;
       });
-      when(
-        () => mockAuthStorage.saveTokens(
-          accessToken: any(named: 'accessToken'),
-          refreshToken: any(named: 'refreshToken'),
-        ),
-      ).thenAnswer((_) async => {});
+      when(() => mockAuthStorage.saveToken(any())).thenAnswer((_) async => {});
 
       // Fire multiple refresh requests concurrently
       final futures = await Future.wait([
@@ -137,7 +110,7 @@ void main() {
       ]);
 
       expect(futures.length, 3);
-      verify(() => mockAuthRepository.refreshToken('old_refresh')).called(1);
+      verify(() => mockAuthRepository.refreshToken()).called(1);
     });
   });
 }
