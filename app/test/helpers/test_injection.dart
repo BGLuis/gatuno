@@ -41,7 +41,7 @@ Future<void> initTestDI({
 
   final storage = authStorage ?? MockAuthStorage();
   if (authStorage == null) {
-    when(() => storage.getAccessToken()).thenAnswer((_) async => null);
+    when(() => storage.getToken()).thenAnswer((_) async => null);
   }
   sl.registerLazySingleton<AuthStorage>(() => storage);
 

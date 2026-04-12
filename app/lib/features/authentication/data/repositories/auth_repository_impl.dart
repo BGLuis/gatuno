@@ -2,7 +2,7 @@ import 'package:dio/dio.dart';
 import '../../../../core/network/api_constants.dart';
 import '../../../../core/network/exceptions.dart';
 import '../../../../core/logging/logger.dart';
-import '../../domain/entities/auth_tokens.dart';
+import '../../domain/entities/auth_token.dart';
 import '../../domain/repositories/auth_repository.dart';
 import '../models/auth_response.dart';
 
@@ -13,7 +13,7 @@ class AuthRepositoryImpl implements AuthRepository {
   AuthRepositoryImpl(this._dio);
 
   @override
-  Future<AuthTokens> signIn(String email, String password) async {
+  Future<AuthToken> signIn(String email, String password) async {
     final redactedEmail = AppLogger.redactEmail(email);
     AppLogger.i('SignIn attempt for: $redactedEmail', _logTag);
     try {
@@ -105,17 +105,10 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
-  Future<void> logout(String? refreshToken) async {
+  Future<void> logout() async {
     AppLogger.i('Logout attempt in repository', _logTag);
     try {
-      final response = await _dio.get<dynamic>(
-        ApiConstants.logout,
-        options: Options(
-          headers: refreshToken != null
-              ? {'Cookie': 'refreshToken=$refreshToken'}
-              : null,
-        ),
-      );
+      final response = await _dio.get<dynamic>(ApiConstants.logout);
 
       if (response.statusCode != 200 && response.statusCode != 201) {
         AppLogger.w(
@@ -140,13 +133,12 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
-  Future<AuthTokens> refreshToken(String refreshToken) async {
+  Future<AuthToken> refreshToken() async {
     AppLogger.i('Token refresh attempt', _logTag);
     try {
       final response = await _dio.post<Map<String, dynamic>>(
-        ApiConstants.refreshToken,
+        ApiConstants.authRefresh,
         data: const <String, dynamic>{},
-        options: Options(headers: {'Cookie': 'refreshToken=$refreshToken'}),
       );
 
       final data = response.data;

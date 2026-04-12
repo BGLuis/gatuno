@@ -13,7 +13,7 @@ class UserService {
 
   Future<UserModel?> getCurrentUser() async {
     try {
-      final token = await _authService.getAccessToken();
+      final token = await _authService.getToken();
       if (token == null || token.isEmpty) {
         return null;
       }
