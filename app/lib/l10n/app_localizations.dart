@@ -488,6 +488,66 @@ abstract class AppLocalizations {
   /// **'Show books with sensitive content'**
   String get userMeSensitiveContentDesc;
 
+  /// No description provided for @settingsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Settings'**
+  String get settingsTitle;
+
+  /// No description provided for @settingsGeneralSection.
+  ///
+  /// In en, this message translates to:
+  /// **'General'**
+  String get settingsGeneralSection;
+
+  /// No description provided for @settingsApiSection.
+  ///
+  /// In en, this message translates to:
+  /// **'API Configuration'**
+  String get settingsApiSection;
+
+  /// No description provided for @settingsApiUrlLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'API Base URL'**
+  String get settingsApiUrlLabel;
+
+  /// No description provided for @settingsApiUrlHint.
+  ///
+  /// In en, this message translates to:
+  /// **'http://your-api.com/api'**
+  String get settingsApiUrlHint;
+
+  /// No description provided for @settingsApiUrlSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'API URL updated successfully'**
+  String get settingsApiUrlSuccess;
+
+  /// No description provided for @settingsApiUrlError.
+  ///
+  /// In en, this message translates to:
+  /// **'Error updating API URL'**
+  String get settingsApiUrlError;
+
+  /// No description provided for @welcomeTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Welcome to Gatuno'**
+  String get welcomeTitle;
+
+  /// No description provided for @welcomeInstructions.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter your server API URL to continue.'**
+  String get welcomeInstructions;
+
+  /// No description provided for @welcomeConnect.
+  ///
+  /// In en, this message translates to:
+  /// **'Connect'**
+  String get welcomeConnect;
+
   /// No description provided for @commonLogout.
   ///
   /// In en, this message translates to:
@@ -499,6 +559,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Loading...'**
   String get commonLoading;
+
+  /// No description provided for @commonGuest.
+  ///
+  /// In en, this message translates to:
+  /// **'Guest'**
+  String get commonGuest;
 
   /// No description provided for @errorTitle.
   ///

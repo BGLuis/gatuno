@@ -1,12 +1,11 @@
 import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:dio/io.dart';
-import 'api_constants.dart';
 
 class DioClient {
   late final Dio dio;
 
-  DioClient({String baseUrl = ApiConstants.baseUrl, HttpClient? httpClient}) {
+  DioClient({String baseUrl = '', HttpClient? httpClient}) {
     dio = Dio(
       BaseOptions(
         baseUrl: baseUrl,
@@ -17,12 +16,23 @@ class DioClient {
       ),
     );
 
+    if (baseUrl.isNotEmpty) {
+      _setupCertificatePinning(baseUrl, httpClient);
+    }
+  }
+
+  void updateBaseUrl(String baseUrl, {HttpClient? httpClient}) {
+    dio.options.baseUrl = baseUrl;
     _setupCertificatePinning(baseUrl, httpClient);
   }
 
   void _setupCertificatePinning(String baseUrl, HttpClient? httpClient) {
+    if (baseUrl.isEmpty) return;
+
     // Support self-signed certificates for the configured API host
-    final baseUri = Uri.parse(baseUrl);
+    final baseUri = Uri.tryParse(baseUrl);
+    if (baseUri == null) return;
+
     dio.httpClientAdapter = IOHttpClientAdapter(
       createHttpClient: () {
         final client = httpClient ?? HttpClient();

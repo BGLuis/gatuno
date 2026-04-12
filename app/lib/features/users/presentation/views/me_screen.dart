@@ -4,7 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:gatuno/l10n/app_localizations.dart';
 import '../view_models/me_view_model.dart';
 import '../../../../shared/components/molecules/user_profile_header.dart';
-import '../../../../shared/components/organisms/me_settings_list.dart';
+import 'package:gatuno/features/settings/presentation/components/organisms/me_settings_list.dart';
 import '../../../../shared/components/templates/profile_template.dart';
 
 class MePage extends StatefulWidget {
@@ -36,18 +36,13 @@ class _MePageState extends State<MePage> {
         email: viewModel.user?.email ?? '',
       ),
       settings: MeSettingsList(
-        sensitiveContentTitle: l10n.userMeSensitiveContent,
-        sensitiveContentSubtitle: l10n.userMeSensitiveContentDesc,
-        isSensitiveContentEnabled: viewModel.isSensitiveContentEnabled,
-        onSensitiveContentChanged: (value) =>
-            viewModel.toggleSensitiveContent(value),
         logoutButton: SizedBox(
           width: double.infinity,
           child: ElevatedButton.icon(
             onPressed: () async {
               await viewModel.logout();
               if (!context.mounted) return;
-              context.go('/home');
+              context.go('/settings');
             },
             icon: const Icon(Icons.logout),
             label: Text(l10n.commonLogout),

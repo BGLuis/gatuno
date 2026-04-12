@@ -13,7 +13,6 @@ void main() {
           bottomNavigationBar: AppBottomNavBar(
             currentIndex: 0,
             onTap: (index) => tappedIndex = index,
-            isAuthenticated: false,
           ),
         ),
       );
@@ -38,28 +37,21 @@ void main() {
       // Verify icons
       expect(find.byIcon(Icons.home), findsOneWidget);
       expect(find.byIcon(Icons.book), findsOneWidget);
-      expect(find.byIcon(Icons.person_outline), findsOneWidget);
+      expect(find.byIcon(Icons.settings), findsOneWidget);
 
       // Verify tap
       await tester.tap(find.byIcon(Icons.book));
       expect(tappedIndex, 1);
     });
 
-    testWidgets('renders profile avatar when authenticated', (tester) async {
+    testWidgets('renders settings icon regardless of auth', (tester) async {
       await tester.pumpApp(
         Scaffold(
-          bottomNavigationBar: AppBottomNavBar(
-            currentIndex: 2,
-            onTap: (_) {},
-            isAuthenticated: true,
-            displayName: 'John Doe',
-          ),
+          bottomNavigationBar: AppBottomNavBar(currentIndex: 2, onTap: (_) {}),
         ),
       );
 
-      expect(find.byIcon(Icons.person_outline), findsNothing);
-      // AppAvatar renders initials J for John Doe
-      expect(find.text('J'), findsOneWidget);
+      expect(find.byIcon(Icons.settings), findsOneWidget);
     });
   });
 }

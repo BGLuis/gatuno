@@ -21,5 +21,11 @@ void main() {
       await authStorage.clearToken();
       expect(await authStorage.getToken(), isNull);
     });
+
+    test('clearTokens (legacy) removes stored token', () async {
+      await authStorage.saveToken('token');
+      await authStorage.clearTokens();
+      expect(await authStorage.getToken(), isNull);
+    });
   });
 }

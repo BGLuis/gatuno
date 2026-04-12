@@ -53,6 +53,7 @@ void main() {
   testWidgets('appRouter should show ErrorScreen for non-existent route', (
     tester,
   ) async {
+    final router = createAppRouter('/home');
     await tester.pumpWidget(
       MultiProvider(
         providers: [
@@ -60,14 +61,14 @@ void main() {
           ChangeNotifierProvider<HomeViewModel>.value(value: mockHomeViewModel),
         ],
         child: MaterialApp.router(
-          routerConfig: appRouter,
+          routerConfig: router,
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           supportedLocales: AppLocalizations.supportedLocales,
         ),
       ),
     );
 
-    appRouter.go('/non-existent');
+    router.go('/non-existent');
     await tester.pumpAndSettle();
 
     expect(find.byType(ErrorScreen), findsOneWidget);

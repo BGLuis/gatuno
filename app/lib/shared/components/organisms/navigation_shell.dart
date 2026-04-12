@@ -11,13 +11,6 @@ class NavigationShell extends StatelessWidget {
   const NavigationShell({super.key, required this.navigationShell});
 
   void _onTap(BuildContext context, int index) {
-    if (index == 2) {
-      final viewModel = context.read<NavigationViewModel>();
-      if (!viewModel.isAuthenticated) {
-        context.push('/auth/signin');
-        return;
-      }
-    }
     navigationShell.goBranch(index);
   }
 
@@ -32,8 +25,6 @@ class NavigationShell extends StatelessWidget {
             bottomNavigationBar: AppBottomNavBar(
               currentIndex: navigationShell.currentIndex,
               onTap: (index) => _onTap(context, index),
-              isAuthenticated: viewModel.isAuthenticated,
-              displayName: viewModel.user?.displayName,
             ),
           );
         },

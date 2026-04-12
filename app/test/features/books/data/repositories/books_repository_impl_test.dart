@@ -191,6 +191,32 @@ void main() {
         expect(call, throwsA(isA<ServerException>()));
       },
     );
+
+    test(
+      'should throw handled ApiException when DioException occurs',
+      () async {
+        when(() => mockDio.get<Map<String, dynamic>>(any())).thenThrow(
+          DioException(
+            requestOptions: RequestOptions(path: ''),
+            type: DioExceptionType.badResponse,
+            response: Response(
+              statusCode: 404,
+              requestOptions: RequestOptions(path: ''),
+            ),
+          ),
+        );
+
+        expect(() => repository.getBook(bookId), throwsA(isA<AuthException>()));
+      },
+    );
+
+    test('should throw generic Exception on unexpected error', () async {
+      when(
+        () => mockDio.get<Map<String, dynamic>>(any()),
+      ).thenThrow(Exception());
+
+      expect(() => repository.getBook(bookId), throwsA(isA<Exception>()));
+    });
   });
 
   group('getBookChapters', () {
@@ -231,5 +257,58 @@ void main() {
         expect(result.hasNextPage, false);
       },
     );
+
+    test('should throw ServerException when response is invalid', () async {
+      when(
+        () => mockDio.get<Map<String, dynamic>>(
+          any(),
+          queryParameters: any(named: 'queryParameters'),
+        ),
+      ).thenAnswer(
+        (_) async => Response(
+          data: null,
+          statusCode: 200,
+          requestOptions: RequestOptions(path: ''),
+        ),
+      );
+
+      expect(
+        () => repository.getBookChapters(bookId, options),
+        throwsA(isA<ServerException>()),
+      );
+    });
+
+    test('should throw handled ApiException on DioException', () async {
+      when(
+        () => mockDio.get<Map<String, dynamic>>(
+          any(),
+          queryParameters: any(named: 'queryParameters'),
+        ),
+      ).thenThrow(
+        DioException(
+          requestOptions: RequestOptions(path: ''),
+          type: DioExceptionType.connectionTimeout,
+        ),
+      );
+
+      expect(
+        () => repository.getBookChapters(bookId, options),
+        throwsA(isA<NetworkException>()),
+      );
+    });
+
+    test('should throw generic Exception on unexpected error', () async {
+      when(
+        () => mockDio.get<Map<String, dynamic>>(
+          any(),
+          queryParameters: any(named: 'queryParameters'),
+        ),
+      ).thenThrow(Exception());
+
+      expect(
+        () => repository.getBookChapters(bookId, options),
+        throwsA(isA<Exception>()),
+      );
+    });
   });
 }

@@ -9,12 +9,21 @@ import '../../features/authentication/domain/use_cases/auth_service.dart';
 import '../../features/users/users_injection.dart';
 import '../../features/home/home_injection.dart';
 import '../../features/books/books_injection.dart';
+import '../../features/settings/data/data_sources/settings_local_data_source.dart';
+import '../../features/settings/domain/use_cases/settings_service.dart';
 
 final GetIt sl = GetIt.instance;
 
 Future<void> initDI() async {
   // Core
   sl.registerLazySingleton<DioClient>(() => DioClient());
+  sl.registerLazySingleton<SettingsStorage>(() => SettingsStorage());
+  sl.registerLazySingleton<SettingsService>(
+    () => SettingsService(sl<SettingsStorage>(), sl<DioClient>()),
+  );
+
+  // Initialize settings (including base URL)
+  await sl<SettingsService>().init();
 
   // Features
   initAuthenticationInjection(sl);

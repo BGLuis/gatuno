@@ -3,17 +3,17 @@ import 'package:gatuno/features/books/domain/entities/book.dart';
 import 'package:gatuno/features/books/domain/entities/book_page_options.dart';
 import 'package:gatuno/features/books/domain/repositories/books_repository.dart';
 import 'package:gatuno/features/books/presentation/view_models/books_view_model.dart';
-import 'package:gatuno/features/users/data/data_sources/user_local_data_source.dart';
+import 'package:gatuno/features/settings/domain/use_cases/settings_service.dart';
 import 'package:mocktail/mocktail.dart';
 
 class MockBooksRepository extends Mock implements BooksRepository {}
 
-class MockUserStorage extends Mock implements UserStorage {}
+class MockSettingsService extends Mock implements SettingsService {}
 
 void main() {
   late BooksViewModel viewModel;
   late MockBooksRepository mockRepository;
-  late MockUserStorage mockUserStorage;
+  late MockSettingsService mockSettingsService;
 
   setUpAll(() {
     registerFallbackValue(const BookPageOptions());
@@ -21,10 +21,10 @@ void main() {
 
   setUp(() {
     mockRepository = MockBooksRepository();
-    mockUserStorage = MockUserStorage();
+    mockSettingsService = MockSettingsService();
     viewModel = BooksViewModel(
       repository: mockRepository,
-      userStorage: mockUserStorage,
+      settingsService: mockSettingsService,
     );
   });
 
@@ -45,9 +45,7 @@ void main() {
         totalPages: 1,
       );
 
-      when(
-        () => mockUserStorage.isSensitiveContentEnabled(),
-      ).thenAnswer((_) async => false);
+      when(() => mockSettingsService.sensitiveContentEnabled).thenReturn(false);
       when(
         () => mockRepository.getBooks(any()),
       ).thenAnswer((_) async => bookList);
@@ -60,9 +58,7 @@ void main() {
     });
 
     test('fetchBooks failure updates state correctly', () async {
-      when(
-        () => mockUserStorage.isSensitiveContentEnabled(),
-      ).thenAnswer((_) async => false);
+      when(() => mockSettingsService.sensitiveContentEnabled).thenReturn(false);
       when(
         () => mockRepository.getBooks(any()),
       ).thenThrow(Exception('Failed to fetch books'));
@@ -74,9 +70,7 @@ void main() {
     });
 
     test('clearError resets error message', () async {
-      when(
-        () => mockUserStorage.isSensitiveContentEnabled(),
-      ).thenAnswer((_) async => false);
+      when(() => mockSettingsService.sensitiveContentEnabled).thenReturn(false);
       when(() => mockRepository.getBooks(any())).thenThrow(Exception('Error'));
 
       await viewModel.fetchBooks();
@@ -95,9 +89,7 @@ void main() {
         totalPages: 1,
       );
 
-      when(
-        () => mockUserStorage.isSensitiveContentEnabled(),
-      ).thenAnswer((_) async => false);
+      when(() => mockSettingsService.sensitiveContentEnabled).thenReturn(false);
       when(
         () => mockRepository.getBooks(any()),
       ).thenAnswer((_) async => bookList);
@@ -109,7 +101,6 @@ void main() {
       // Attempt to clear search
       viewModel.setSearch(null);
 
-      // If copyWith bug exists, search will still be 'test'
       expect(viewModel.options.search, null);
     });
   });

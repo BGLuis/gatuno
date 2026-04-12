@@ -1,15 +1,13 @@
 import '../../../../core/utils/jwt_decoder.dart';
 import '../../../authentication/domain/use_cases/auth_service.dart';
-import '../../data/data_sources/user_local_data_source.dart';
 import '../../data/models/user_model.dart';
 import '../../../../core/logging/logger.dart';
 
 class UserService {
   final AuthService _authService;
-  final UserStorage _userStorage;
   static const String _logTag = 'UserService';
 
-  UserService(this._authService, this._userStorage);
+  UserService(this._authService);
 
   Future<UserModel?> getCurrentUser() async {
     try {
@@ -34,15 +32,6 @@ class UserService {
       );
       return null;
     }
-  }
-
-  Future<void> setSensitiveContentEnabled(bool enabled) async {
-    AppLogger.i('Setting sensitive content enabled: $enabled', _logTag);
-    await _userStorage.setSensitiveContentEnabled(enabled);
-  }
-
-  Future<bool> isSensitiveContentEnabled() async {
-    return await _userStorage.isSensitiveContentEnabled();
   }
 
   Future<void> logout() async {
