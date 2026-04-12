@@ -47,6 +47,6 @@ void main() {
     await tester.pumpAndSettle();
 
     verify(() => mockUserService.logout()).called(1);
-    expect(find.text('Home Page'), findsOneWidget);
+    expect(find.text('Settings Page'), findsOneWidget);
   });
 }

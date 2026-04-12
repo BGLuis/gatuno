@@ -42,7 +42,7 @@ class _MePageState extends State<MePage> {
             onPressed: () async {
               await viewModel.logout();
               if (!context.mounted) return;
-              context.go('/home');
+              context.go('/settings');
             },
             icon: const Icon(Icons.logout),
             label: Text(l10n.commonLogout),
