@@ -74,6 +74,7 @@
   "userMeSensitiveContentDesc": "Mostrar livros com conteúdo sensível",
   "commonLogout": "Sair",
   "commonLoading": "Carregando...",
+  "commonGuest": "Visitante",
   "errorTitle": "Algo deu errado",
   "errorMessage": "Ocorreu um erro inesperado.",
   "errorRetry": "Tentar novamente",

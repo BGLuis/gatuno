@@ -217,6 +217,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get commonLoading => 'Loading...';
 
   @override
+  String get commonGuest => 'Guest';
+
+  @override
   String get errorTitle => 'Something went wrong';
 
   @override

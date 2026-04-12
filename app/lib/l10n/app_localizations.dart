@@ -500,6 +500,12 @@ abstract class AppLocalizations {
   /// **'Loading...'**
   String get commonLoading;
 
+  /// No description provided for @commonGuest.
+  ///
+  /// In en, this message translates to:
+  /// **'Guest'**
+  String get commonGuest;
+
   /// No description provided for @errorTitle.
   ///
   /// In en, this message translates to:

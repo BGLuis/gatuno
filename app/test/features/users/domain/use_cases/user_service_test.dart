@@ -12,12 +12,10 @@ class MockUserStorage extends Mock implements UserStorage {}
 void main() {
   late UserService userService;
   late MockAuthService mockAuthService;
-  late MockUserStorage mockUserStorage;
 
   setUp(() {
     mockAuthService = MockAuthService();
-    mockUserStorage = MockUserStorage();
-    userService = UserService(mockAuthService, mockUserStorage);
+    userService = UserService(mockAuthService);
   });
 
   String createMockToken(Map<String, dynamic> payload) {
@@ -74,27 +72,6 @@ void main() {
       final user = await userService.getCurrentUser();
 
       expect(user, isNull);
-    });
-
-    test('setSensitiveContentEnabled should call storage', () async {
-      when(
-        () => mockUserStorage.setSensitiveContentEnabled(any()),
-      ).thenAnswer((_) async {});
-
-      await userService.setSensitiveContentEnabled(true);
-
-      verify(() => mockUserStorage.setSensitiveContentEnabled(true)).called(1);
-    });
-
-    test('isSensitiveContentEnabled should call storage', () async {
-      when(
-        () => mockUserStorage.isSensitiveContentEnabled(),
-      ).thenAnswer((_) async => true);
-
-      final result = await userService.isSensitiveContentEnabled();
-
-      expect(result, isTrue);
-      verify(() => mockUserStorage.isSensitiveContentEnabled()).called(1);
     });
 
     test('logout should call authService.logout', () async {

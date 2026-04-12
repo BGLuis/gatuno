@@ -36,11 +36,6 @@ class _MePageState extends State<MePage> {
         email: viewModel.user?.email ?? '',
       ),
       settings: MeSettingsList(
-        sensitiveContentTitle: l10n.userMeSensitiveContent,
-        sensitiveContentSubtitle: l10n.userMeSensitiveContentDesc,
-        isSensitiveContentEnabled: viewModel.isSensitiveContentEnabled,
-        onSensitiveContentChanged: (value) =>
-            viewModel.toggleSensitiveContent(value),
         logoutButton: SizedBox(
           width: double.infinity,
           child: ElevatedButton.icon(

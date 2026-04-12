@@ -8,13 +8,11 @@ class MeViewModel extends SafeChangeNotifier {
   static const String _logTag = 'MeViewModel';
 
   UserModel? _user;
-  bool _isSensitiveContentEnabled = false;
   bool _isLoading = true;
 
   MeViewModel(this._userService);
 
   UserModel? get user => _user;
-  bool get isSensitiveContentEnabled => _isSensitiveContentEnabled;
   bool get isLoading => _isLoading;
 
   Future<void> init() async {
@@ -24,10 +22,8 @@ class MeViewModel extends SafeChangeNotifier {
 
     try {
       _user = await _userService.getCurrentUser();
-      _isSensitiveContentEnabled = await _userService
-          .isSensitiveContentEnabled();
       AppLogger.i(
-        'MeViewModel initialized: user=${_user?.displayName}, sensitive=$_isSensitiveContentEnabled',
+        'MeViewModel initialized: user=${_user?.displayName}',
         _logTag,
       );
     } catch (e, stackTrace) {
@@ -35,17 +31,6 @@ class MeViewModel extends SafeChangeNotifier {
     } finally {
       _isLoading = false;
       notifyListeners();
-    }
-  }
-
-  Future<void> toggleSensitiveContent(bool value) async {
-    AppLogger.i('Toggling sensitive content to: $value', _logTag);
-    try {
-      await _userService.setSensitiveContentEnabled(value);
-      _isSensitiveContentEnabled = value;
-      notifyListeners();
-    } catch (e, stackTrace) {
-      AppLogger.e('Error toggling sensitive content', e, stackTrace, _logTag);
     }
   }
 

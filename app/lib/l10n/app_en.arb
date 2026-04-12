@@ -74,6 +74,7 @@
   "userMeSensitiveContentDesc": "Show books with sensitive content",
   "commonLogout": "Sign Out",
   "commonLoading": "Loading...",
+  "commonGuest": "Guest",
   "errorTitle": "Something went wrong",
   "errorMessage": "An unexpected error occurred.",
   "errorRetry": "Retry",

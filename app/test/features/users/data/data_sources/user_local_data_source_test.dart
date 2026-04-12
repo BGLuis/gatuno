@@ -13,16 +13,9 @@ void main() {
   });
 
   group('UserStorage', () {
-    test('setSensitiveContentEnabled and isSensitiveContentEnabled', () async {
-      await userStorage.setSensitiveContentEnabled(true);
-      expect(await userStorage.isSensitiveContentEnabled(), isTrue);
-
-      await userStorage.setSensitiveContentEnabled(false);
-      expect(await userStorage.isSensitiveContentEnabled(), isFalse);
-    });
-
-    test('isSensitiveContentEnabled should return false if not set', () async {
-      expect(await userStorage.isSensitiveContentEnabled(), isFalse);
+    // Add tests for other UserStorage methods here when they are implemented
+    test('UserStorage exists', () {
+      expect(userStorage, isNotNull);
     });
   });
 }

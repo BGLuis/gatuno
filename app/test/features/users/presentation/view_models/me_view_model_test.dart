@@ -21,7 +21,7 @@ void main() {
       expect(viewModel.user, isNull);
     });
 
-    test('init should load user and settings', () async {
+    test('init should load user', () async {
       final user = UserModel(
         id: '1',
         email: 'test@example.com',
@@ -32,32 +32,12 @@ void main() {
       when(
         () => mockUserService.getCurrentUser(),
       ).thenAnswer((_) async => user);
-      when(
-        () => mockUserService.isSensitiveContentEnabled(),
-      ).thenAnswer((_) async => true);
 
       await viewModel.init();
 
       expect(viewModel.isLoading, isFalse);
       expect(viewModel.user, equals(user));
-      expect(viewModel.isSensitiveContentEnabled, isTrue);
     });
-
-    test(
-      'toggleSensitiveContent should update state and call service',
-      () async {
-        when(
-          () => mockUserService.setSensitiveContentEnabled(any()),
-        ).thenAnswer((_) async {});
-
-        await viewModel.toggleSensitiveContent(true);
-
-        expect(viewModel.isSensitiveContentEnabled, isTrue);
-        verify(
-          () => mockUserService.setSensitiveContentEnabled(true),
-        ).called(1);
-      },
-    );
 
     test('logout should call service', () async {
       when(() => mockUserService.logout()).thenAnswer((_) async {});

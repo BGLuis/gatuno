@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:gatuno/l10n/app_localizations.dart';
-import '../atoms/app_avatar.dart';
 import '../atoms/app_nav_bar_item.dart';
 
 class AppBottomNavBar extends StatelessWidget {
@@ -55,21 +54,8 @@ class AppBottomNavBar extends StatelessWidget {
               onTap: () => onTap(1),
             ),
             AppNavBarItem(
-              icon: isAuthenticated
-                  ? AppAvatar(
-                      name: displayName,
-                      radius: 14,
-                      backgroundColor: currentIndex == 2
-                          ? null
-                          : Theme.of(context).colorScheme.onSurfaceVariant,
-                      foregroundColor: currentIndex == 2
-                          ? null
-                          : Theme.of(context).colorScheme.surface,
-                    )
-                  : const Icon(Icons.person_outline),
-              tooltip: isAuthenticated
-                  ? l10n.homeProfile
-                  : l10n.authSignInButton,
+              icon: const Icon(Icons.settings),
+              tooltip: 'Settings',
               isSelected: currentIndex == 2,
               onTap: () => onTap(2),
             ),

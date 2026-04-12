@@ -216,6 +216,9 @@ class AppLocalizationsPt extends AppLocalizations {
   String get commonLoading => 'Carregando...';
 
   @override
+  String get commonGuest => 'Visitante';
+
+  @override
   String get errorTitle => 'Algo deu errado';
 
   @override

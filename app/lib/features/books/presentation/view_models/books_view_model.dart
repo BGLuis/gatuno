@@ -1,7 +1,7 @@
 import 'package:optional/optional.dart';
 import '../../../../core/base/safe_change_notifier.dart';
 import '../../../../core/logging/logger.dart';
-import '../../../users/data/data_sources/user_local_data_source.dart';
+import '../../../settings/domain/use_cases/settings_service.dart';
 import '../../domain/entities/book.dart';
 import '../../domain/entities/book_page_options.dart';
 import '../../domain/entities/book_type.dart';
@@ -11,14 +11,14 @@ enum BooksLayoutMode { grid, list }
 
 class BooksViewModel extends SafeChangeNotifier {
   final BooksRepository _repository;
-  final UserStorage _userStorage;
+  final SettingsService _settingsService;
   static const String _logTag = 'BooksViewModel';
 
   BooksViewModel({
     required BooksRepository repository,
-    required UserStorage userStorage,
+    required SettingsService settingsService,
   }) : _repository = repository,
-       _userStorage = userStorage;
+       _settingsService = settingsService;
 
   BookList? _bookList;
   BookList? get bookList => _bookList;
@@ -50,7 +50,7 @@ class BooksViewModel extends SafeChangeNotifier {
     notifyListeners();
 
     try {
-      final sensitiveEnabled = await _userStorage.isSensitiveContentEnabled();
+      final sensitiveEnabled = _settingsService.sensitiveContentEnabled;
       // If no sensitive content filter is selected, we apply the default based on user settings.
       // If the user is NOT allowed sensitive content, we force 'Safe' even if they try to select something else.
       List<String>? sensitiveFilter = _options.sensitiveContent;

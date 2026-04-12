@@ -6,10 +6,8 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:gatuno/l10n/app_localizations.dart';
 import 'package:gatuno/features/authentication/domain/use_cases/auth_service.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:gatuno/core/router/router_keys.dart';
 import '../../../helpers/test_injection.dart';
-import 'package:gatuno/shared/components/atoms/app_avatar.dart';
-import 'package:gatuno/features/users/data/models/user_model.dart';
 
 void main() {
   late MockAuthService mockAuthService;
@@ -27,22 +25,20 @@ void main() {
       navigationViewModel: mockNavigationViewModel,
     );
 
-    when(() => mockHomeViewModel.isAuthenticated).thenReturn(true);
-    when(() => mockHomeViewModel.isInitialized).thenReturn(true);
-    when(() => mockHomeViewModel.displayName).thenReturn('Test User');
-
-    when(() => mockNavigationViewModel.isAuthenticated).thenReturn(true);
-    when(() => mockNavigationViewModel.user).thenReturn(null);
-
+    when(() => mockAuthService.authenticated).thenReturn(false);
+    when(() => mockAuthService.isInitialized).thenReturn(true);
     when(
       () => mockAuthService.isAuthenticated(),
     ).thenAnswer((_) async => false);
+
+    when(() => mockHomeViewModel.isAuthenticated).thenReturn(false);
+    when(() => mockHomeViewModel.isInitialized).thenReturn(true);
+    when(() => mockHomeViewModel.displayName).thenReturn(null);
   });
 
   Future<void> pumpNavigationShell(WidgetTester tester) async {
-    FlutterSecureStorage.setMockInitialValues({});
-
     final router = GoRouter(
+      navigatorKey: rootNavigatorKey,
       initialLocation: '/home',
       routes: [
         StatefulShellRoute.indexedStack(
@@ -69,8 +65,8 @@ void main() {
             StatefulShellBranch(
               routes: [
                 GoRoute(
-                  path: '/profile',
-                  builder: (context, state) => const Text('Profile Content'),
+                  path: '/settings',
+                  builder: (context, state) => const Text('Settings Content'),
                 ),
               ],
             ),
@@ -104,28 +100,8 @@ void main() {
 
     expect(find.byIcon(Icons.home), findsOneWidget);
     expect(find.byIcon(Icons.book), findsOneWidget);
-    expect(find.byIcon(Icons.person_outline), findsOneWidget);
+    expect(find.byIcon(Icons.settings), findsOneWidget);
     expect(find.text('Home Content'), findsOneWidget);
-  });
-
-  testWidgets('NavigationShell shows avatar when authenticated', (
-    WidgetTester tester,
-  ) async {
-    when(() => mockNavigationViewModel.isAuthenticated).thenReturn(true);
-    when(() => mockNavigationViewModel.user).thenReturn(
-      UserModel(
-        id: '1',
-        email: 'test@example.com',
-        name: 'Test User',
-        roles: ['user'],
-        maxWeightSensitiveContent: 0,
-      ),
-    );
-
-    await pumpNavigationShell(tester);
-
-    expect(find.byType(AppAvatar), findsOneWidget);
-    expect(find.byIcon(Icons.person_outline), findsNothing);
   });
 
   testWidgets('NavigationShell navigates between branches', (
@@ -139,23 +115,14 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.text('Books Content'), findsOneWidget);
 
+    // Tap Settings
+    await tester.tap(find.byIcon(Icons.settings));
+    await tester.pumpAndSettle();
+    expect(find.text('Settings Content'), findsOneWidget);
+
     // Tap Home
     await tester.tap(find.byIcon(Icons.home));
     await tester.pumpAndSettle();
     expect(find.text('Home Content'), findsOneWidget);
   });
-
-  testWidgets(
-    'NavigationShell redirects to signin for unauthenticated profile access',
-    (WidgetTester tester) async {
-      when(() => mockNavigationViewModel.isAuthenticated).thenReturn(false);
-      await pumpNavigationShell(tester);
-
-      // Tap Profile (unauthenticated)
-      await tester.tap(find.byIcon(Icons.person_outline));
-      await tester.pumpAndSettle();
-
-      expect(find.text('Signin Page'), findsOneWidget);
-    },
-  );
 }
