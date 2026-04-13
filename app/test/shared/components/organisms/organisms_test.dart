@@ -1,36 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:gatuno/shared/components/organisms/me_settings_list.dart';
+import 'package:gatuno/features/settings/presentation/components/organisms/me_settings_list.dart';
 import 'package:gatuno/shared/components/organisms/home_app_bar.dart';
 import 'package:gatuno/shared/components/molecules/user_profile_icon.dart';
 import 'package:gatuno/shared/components/molecules/login_icon.dart';
 
 void main() {
   group('Organisms', () {
-    testWidgets('MeSettingsList renders switch and logout button', (
-      tester,
-    ) async {
-      var switchToggled = false;
+    testWidgets('MeSettingsList renders logout button', (tester) async {
       await tester.pumpWidget(
-        MaterialApp(
+        const MaterialApp(
           home: Scaffold(
-            body: MeSettingsList(
-              sensitiveContentTitle: 'Sensitive',
-              sensitiveContentSubtitle: 'Desc',
-              isSensitiveContentEnabled: false,
-              onSensitiveContentChanged: (v) => switchToggled = v,
-              logoutButton: const Text('LOGOUT_BTN'),
-            ),
+            body: MeSettingsList(logoutButton: Text('LOGOUT_BTN')),
           ),
         ),
       );
 
-      expect(find.text('Sensitive'), findsOneWidget);
-      expect(find.text('Desc'), findsOneWidget);
       expect(find.text('LOGOUT_BTN'), findsOneWidget);
-
-      await tester.tap(find.byType(SwitchListTile));
-      expect(switchToggled, isTrue);
     });
 
     testWidgets('HomeAppBar renders correct icon based on auth', (

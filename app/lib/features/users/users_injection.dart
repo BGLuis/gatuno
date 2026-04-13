@@ -10,9 +10,7 @@ void initUsersInjection(GetIt sl) {
   sl.registerLazySingleton<UserStorage>(() => UserStorage());
 
   // Use Cases
-  sl.registerLazySingleton<UserService>(
-    () => UserService(sl<AuthService>(), sl<UserStorage>()),
-  );
+  sl.registerLazySingleton<UserService>(() => UserService(sl<AuthService>()));
 
   // View Models
   sl.registerFactory<MeViewModel>(() => MeViewModel(sl<UserService>()));

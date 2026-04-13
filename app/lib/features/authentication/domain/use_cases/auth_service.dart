@@ -3,6 +3,7 @@ import '../repositories/auth_repository.dart';
 import '../../data/data_sources/auth_local_data_source.dart';
 import '../../../../core/logging/logger.dart';
 import '../../../../core/utils/jwt_decoder.dart';
+import '../../../users/data/models/user_model.dart';
 
 class AuthService extends ChangeNotifier {
   final AuthRepository _authRepository;
@@ -11,6 +12,7 @@ class AuthService extends ChangeNotifier {
 
   bool _isInitialized = false;
   bool _isAuthenticated = false;
+  String? _token;
 
   AuthService(this._authRepository, this._authStorage) {
     _initAuth();
@@ -19,12 +21,23 @@ class AuthService extends ChangeNotifier {
   bool get isInitialized => _isInitialized;
   bool get authenticated => _isAuthenticated;
 
+  UserModel? get currentUser {
+    if (_token == null || _token!.isEmpty) return null;
+    try {
+      if (JwtDecoder.isExpired(_token!)) return null;
+      final payload = JwtDecoder.decode(_token!);
+      return UserModel.fromJwt(payload);
+    } catch (e) {
+      return null;
+    }
+  }
+
   Future<void>? _refreshFuture;
 
   Future<void> _initAuth() async {
-    final token = await _authStorage.getToken();
-    if (token != null && token.isNotEmpty) {
-      if (JwtDecoder.isExpired(token)) {
+    _token = await _authStorage.getToken();
+    if (_token != null && _token!.isNotEmpty) {
+      if (JwtDecoder.isExpired(_token!)) {
         AppLogger.i('Stored token is expired, attempting refresh', _logTag);
         try {
           await performTokenRefresh();
@@ -53,7 +66,8 @@ class AuthService extends ChangeNotifier {
     try {
       final response = await _authRepository.signIn(email, password);
 
-      await _authStorage.saveToken(response.token);
+      _token = response.token;
+      await _authStorage.saveToken(_token!);
 
       AppLogger.i(
         'SignIn completed and token saved for: $redactedEmail',
@@ -108,6 +122,7 @@ class AuthService extends ChangeNotifier {
       );
     }
     await _authStorage.clearToken();
+    _token = null;
     _isAuthenticated = false;
     AppLogger.i('Tokens cleared successfully', _logTag);
     notifyListeners();
@@ -118,10 +133,10 @@ class AuthService extends ChangeNotifier {
   }
 
   Future<bool> isAuthenticated() async {
-    final token = await _authStorage.getToken();
-    bool authenticated = token != null && token.isNotEmpty;
+    _token = await _authStorage.getToken();
+    bool authenticated = _token != null && _token!.isNotEmpty;
 
-    if (authenticated && JwtDecoder.isExpired(token)) {
+    if (authenticated && JwtDecoder.isExpired(_token!)) {
       AppLogger.i('Token expired in isAuthenticated check', _logTag);
       try {
         await performTokenRefresh();
@@ -161,7 +176,8 @@ class AuthService extends ChangeNotifier {
     AppLogger.i('Performing token refresh', _logTag);
     try {
       final response = await _authRepository.refreshToken();
-      await _authStorage.saveToken(response.token);
+      _token = response.token;
+      await _authStorage.saveToken(_token!);
       _isAuthenticated = true;
       _isInitialized = true;
       AppLogger.i('Token refresh success', _logTag);
