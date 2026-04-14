@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:gatuno/shared/components/templates/auth_template.dart';
+import 'package:gatuno/features/authentication/presentation/components/templates/auth_template.dart';
 import '../../../helpers/pump_app.dart';
 
 void main() {

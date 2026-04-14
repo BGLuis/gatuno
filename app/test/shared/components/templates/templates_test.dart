@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:gatuno/shared/components/templates/profile_template.dart';
-import 'package:gatuno/shared/components/templates/home_template.dart';
+import 'package:gatuno/features/users/presentation/components/templates/profile_template.dart';
+import 'package:gatuno/features/home/presentation/components/templates/home_template.dart';
 
 void main() {
   group('Templates', () {

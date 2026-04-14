@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '../atoms/app_avatar.dart';
-import '../atoms/app_clickable_action.dart';
+import 'package:gatuno/shared/components/atoms/app_avatar.dart';
+import 'package:gatuno/shared/components/atoms/app_clickable_action.dart';
 
 class UserProfileIcon extends StatelessWidget {
   final String? displayName;

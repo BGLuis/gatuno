@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:gatuno/features/settings/presentation/components/organisms/me_settings_list.dart';
-import 'package:gatuno/shared/components/organisms/home_app_bar.dart';
-import 'package:gatuno/shared/components/molecules/user_profile_icon.dart';
-import 'package:gatuno/shared/components/molecules/login_icon.dart';
+import 'package:gatuno/features/home/presentation/components/organisms/home_app_bar.dart';
+import 'package:gatuno/features/home/presentation/components/molecules/user_profile_icon.dart';
+import 'package:gatuno/features/home/presentation/components/molecules/login_icon.dart';
 
 void main() {
   group('Organisms', () {

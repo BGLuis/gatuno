@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gatuno/l10n/app_localizations.dart';
-import '../../../../shared/components/templates/home_template.dart';
+import '../components/templates/home_template.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});

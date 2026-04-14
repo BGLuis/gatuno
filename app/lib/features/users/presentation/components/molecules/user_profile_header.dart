@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '../atoms/app_avatar.dart';
-import '../atoms/app_text_skeleton.dart';
+import 'package:gatuno/shared/components/atoms/app_avatar.dart';
+import 'package:gatuno/shared/components/atoms/app_text_skeleton.dart';
 
 class UserProfileHeader extends StatelessWidget {
   final String? displayName;

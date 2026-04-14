@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../atoms/app_clickable_action.dart';
+import 'package:gatuno/shared/components/atoms/app_clickable_action.dart';
 
 class LoginIcon extends StatelessWidget {
   final String tooltip;
