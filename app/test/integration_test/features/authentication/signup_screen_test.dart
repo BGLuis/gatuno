@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:gatuno/features/authentication/presentation/views/signup_screen.dart';
-import 'package:gatuno/shared/components/organisms/signup_form.dart';
+import 'package:gatuno/features/authentication/presentation/components/organisms/signup_form.dart';
 import 'package:mocktail/mocktail.dart';
 import '../../../helpers/pump_app.dart';
 import '../../../helpers/test_injection.dart';

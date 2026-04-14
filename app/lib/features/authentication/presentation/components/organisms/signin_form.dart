@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:gatuno/l10n/app_localizations.dart';
-import '../../validators/email.dart';
-import '../atoms/app_button.dart';
-import '../atoms/app_text_field.dart';
+import 'package:gatuno/shared/validators/email.dart';
+import 'package:gatuno/shared/components/atoms/app_button.dart';
+import 'package:gatuno/shared/components/atoms/app_text_field.dart';
 
 class SignInForm extends StatefulWidget {
   final void Function(String email, String password) onSubmit;

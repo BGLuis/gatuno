@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:gatuno/shared/components/molecules/user_profile_header.dart';
-import 'package:gatuno/shared/components/molecules/user_profile_icon.dart';
+import 'package:gatuno/features/users/presentation/components/molecules/user_profile_header.dart';
+import 'package:gatuno/features/home/presentation/components/molecules/user_profile_icon.dart';
 
 void main() {
   group('Molecules', () {
